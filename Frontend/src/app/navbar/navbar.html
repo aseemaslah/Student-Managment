@@ -1,0 +1,68 @@
+<header class="shadow-sm ">
+    <nav class="navbar navbar-dark" style="background-color: #0d6efd;">
+        <div class="container-fluid d-flex align-items-center justify-content-between py-2">
+            <a class="navbar-brand fw-bold text-white" href="#">
+               Edu Manage <i class="bi bi-discord"></i>
+            </a>
+            <div class="d-flex align-items-center">
+                <button type="button" class="btn btn-light text-primary me-3 fw-semibold" data-bs-toggle="modal"
+                    data-bs-target="#myModal">
+                    Login
+                </button>
+                <div class="modal fade" id="myModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content border-0 shadow-lg">
+                            <div class="modal-header bg-primary text-white">
+                                <h5 class="modal-title fw-bold">Login Page</h5>
+                                <button type="button" class="btn-close btn-close-white"
+                                    data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="username" class="form-label fw-semibold">E-mail</label>
+                                        <input type="text" id="username" class="form-control" formControlName="username"
+                                            placeholder="Enter your Username" />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label fw-semibold">Password</label>
+                                        <input type="password" id="password" class="form-control"
+                                            formControlName="password" placeholder="Enter your password" />
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer bg-light">
+                              <button type="button" class="btn btn-outline-primary"
+                                    a href="/registration" >Sign Up</button>
+                                <button type="button" class="btn btn-outline-danger"
+                                    data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="dropdown me-3">
+                    <a class="dropdown-toggle text-white fw-bold text-decoration-none" href="#" role="button"
+                        data-bs-toggle="dropdown">More</a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                        <li><a class="dropdown-item d-flex justify-content-between fw-semibold" href="#">Help <i
+                                    class="bi bi-info-circle-fill"></i></a></li>
+                        <li><a class="dropdown-item d-flex justify-content-between fw-semibold" href="#">Settings<i
+                                    class="bi bi-gear-fill"></i></a></li>
+                    </ul>
+                </div>
+
+
+                <button class="btn btn-outline-primary text-white fw-bold position-relative" data-bs-toggle="offcanvas"
+                    data-bs-target="#demo">
+                    <i class="bi bi-cart3 fs-5"><span class="badge rounded-pill bg-danger ms-1 cartcount">
+                            
+                        </span></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+</header>
