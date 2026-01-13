@@ -1,0 +1,95 @@
+
+<div class="d-flex">
+
+  <!-- Sidebar -->
+  <div class="sidebar p-4">
+    <h4 class="logo">EduManage</h4>
+    <ul class="nav flex-column mt-4">
+      <li class="nav-item"><a class="nav-link" href="teacher.html">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link" href="mark-attendance.html">Mark Attendance</a></li>
+      <li class="nav-item"><a class="nav-link active" href="#">Exam Marks</a></li>
+      <li class="nav-item mt-auto"><a class="nav-link text-danger" href="#">Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- Main -->
+  <div class="flex-grow-1 p-4 bg-light">
+
+    <div class="top-bar">
+      <div class="title">
+        <h3>Enter Exam Marks</h3>
+        <p>Add and update student exam results</p>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card p-4 border-0 rounded-4 shadow-sm mb-4">
+      <div class="row g-3">
+
+        <div class="col-md-4">
+          <label>Class</label>
+          <select class="form-select">
+            <option>10 A</option>
+            <option>9 B</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label>Subject</label>
+          <select class="form-select">
+            <option>Math</option>
+            <option>Science</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label>Exam</label>
+          <select class="form-select">
+            <option>Mid Term</option>
+            <option>Final</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Student Marks -->
+    <div class="card p-4 border-0 rounded-4 shadow-sm">
+
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Roll No</th>
+            <th>Name</th>
+            <th>Marks</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>01</td>
+            <td>Arjun</td>
+            <td><input type="number" class="form-control w-50"></td>
+            <td>100</td>
+          </tr>
+
+          <tr>
+            <td>02</td>
+            <td>Sneha</td>
+            <td><input type="number" class="form-control w-50"></td>
+            <td>100</td>
+          </tr>
+        </tbody>
+
+      </table>
+
+      <div class="text-end mt-3">
+        <button class="btn btn-success">Save Marks</button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

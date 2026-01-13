@@ -1,47 +1,48 @@
-<app-navbar></app-navbar><!-- HERO -->
 <section class="hero d-flex align-items-center">
-  <div class="container text-center text-white">
-    <h1 class="fw-bold display-5">Student Management System</h1>
-    <p class="lead mt-3">
-      One platform for Students, Teachers and Administrators
-    </p>
-
-    <div class="mt-4">
-      <a href="student" class="btn btn-light btn-lg me-2">Student Login</a>
-      <a href="teacher" class="btn btn-outline-light btn-lg me-2">Teacher Login</a>
-      <a href="admin" class="btn btn-dark btn-lg">Admin Login</a>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section class="py-5">
   <div class="container">
-    <div class="row text-center g-4">
-      
-      <div class="col-md-4">
-        <div class="feature-card">
-          <h4>Students</h4>
-          <p>View marks, attendance, and personal details anytime.</p>
-        </div>
+    <div class="row align-items-center">
+
+      <!-- Left -->
+      <div class="col-md-6 text-white">
+        <h1 class="display-4 fw-bold">EduManage</h1>
+        <p class="lead mt-3">
+          One platform for Admins, Teachers and Students.
+          Manage classes, attendance and exams in one place.
+        </p>
       </div>
 
-      <div class="col-md-4">
-        <div class="feature-card">
-          <h4>Teachers</h4>
-          <p>Manage attendance, marks and class records easily.</p>
-        </div>
-      </div>
+      <!-- Right -->
+      <div class="col-md-5 offset-md-1">
+        <div class="login-card p-4">
+          <h4 class="text-center mb-3">Login</h4>
 
-      <div class="col-md-4">
-        <div class="feature-card">
-          <h4>Admins</h4>
-          <p>Full control over users, classes and system data.</p>
+          <form>
+            <div class="mb-3">
+              <label>Email</label>
+              <input type="email" class="form-control" placeholder="Enter email">
+            </div>
+
+            <div class="mb-3">
+              <label>Password</label>
+              <input type="password" class="form-control" placeholder="Enter password">
+            </div>
+
+            <div class="mb-3">
+              <label>Login as</label>
+              <select class="form-select">
+                <option>Select role</option>
+                <option>Admin</option>
+                <option>Teacher</option>
+                <option>Student</option>
+              </select>
+            </div>
+
+            <button class="btn btn-primary w-100">Login</button>
+          </form>
+
         </div>
       </div>
 
     </div>
   </div>
 </section>
-
-<app-footer></app-footer>

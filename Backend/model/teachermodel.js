@@ -1,28 +1,16 @@
 const mongoose = require('mongoose');
 
-const TeacherSchema = new mongoose.Schema({
+const teacherSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  },
 
-    Name : {
-        type: String,
-        required: true,
-    },
-    Subject : {
-        type: String,
-        required: true,
-    },  
-    Experience : {
-        type: Number,
-        required: true,
-    },
-    Email : {
-        type: String,
-        required: true,
-    },
-    Password : {
-        type: String,
-        required: true,
-    },
-    
+  employeeId: String,
+
+  subjectsTaught: [String],
+  classesAssigned: [String]
 });
 
-module.exports = mongoose.model('Teacher', TeacherSchema);
+export default mongoose.model("Teacher", teacherSchema);

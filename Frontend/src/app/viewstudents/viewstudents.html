@@ -1,0 +1,83 @@
+<div class="d-flex">
+
+  <!-- Sidebar -->
+  <div class="sidebar p-4">
+    <h4 class="logo">EduManage</h4>
+    <ul class="nav flex-column mt-4">
+      <li class="nav-item"><a class="nav-link" href="teacher.html">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link active" href="#">Students</a></li>
+      <li class="nav-item"><a class="nav-link" href="mark-attendance.html">Mark Attendance</a></li>
+      <li class="nav-item"><a class="nav-link" href="exam-marks.html">Exam Marks</a></li>
+      <li class="nav-item mt-auto"><a class="nav-link text-danger" href="#">Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- Main -->
+  <div class="flex-grow-1 p-4 bg-light">
+
+    <div class="top-bar">
+      <div class="title">
+        <h3>My Students</h3>
+        <p>Students under your classes</p>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card p-4 border-0 rounded-4 shadow-sm mb-4">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label>Class</label>
+          <select class="form-select">
+            <option>10 A</option>
+            <option>9 B</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label>Division</label>
+          <select class="form-select">
+            <option>A</option>
+            <option>B</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label>Search</label>
+          <input class="form-control" placeholder="Search name or roll no">
+        </div>
+      </div>
+    </div>
+
+    <!-- Student Table -->
+    <div class="card p-4 border-0 rounded-4 shadow-sm">
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>Roll No</th>
+            <th>Name</th>
+            <th>Class</th>
+            <th>Division</th>
+            <th>Attendance %</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>01</td>
+            <td>Arjun</td>
+            <td>10</td>
+            <td>A</td>
+            <td>92%</td>
+          </tr>
+          <tr>
+            <td>02</td>
+            <td>Sneha</td>
+            <td>10</td>
+            <td>A</td>
+            <td>85%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>

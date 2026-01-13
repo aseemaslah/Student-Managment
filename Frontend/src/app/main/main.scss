@@ -1,39 +1,17 @@
 $primary: #0d6efd;
-$dark: #1c1c1c;
 
-body {
-  font-family: "Segoe UI", sans-serif;
-}
-
-/* HERO SECTION */
 .hero {
-  height: 90vh;
+  min-height: 100vh;
   background: linear-gradient(
-      rgba(13, 110, 253, 0.8),
+      rgba(13, 110, 253, 0.85),
       rgba(13, 110, 253, 0.9)
     ),
     url("https://images.unsplash.com/photo-1584697964191-2d38a1a0e4f2") center / cover;
-
-  h1 {
-    letter-spacing: 1px;
-  }
 }
 
-/* FEATURE CARDS */
-.feature-card {
+/* Login box */
+.login-card {
   background: white;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
-
-  h4 {
-    color: $primary;
-    margin-bottom: 15px;
-  }
-
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-  }
+  border-radius: 15px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
 }

@@ -1,98 +1,92 @@
-<div class="container-fluid admin-shell">
+<div class="d-flex">
 
-  <!-- TOP BAR -->
-  <div class="admin-topbar">
-    <div>
-      <h3>Admin Dashboard</h3>
-      <p>Welcome back, Aseem</p>
-    </div>
-    <div class="admin-actions">
-      <input type="text" placeholder="Search students, teachers..." />
-      <button class="btn btn-primary">+ Add User</button>
-      <button class="btn btn-danger">Logout</button>
-    </div>
+  <!-- Sidebar -->
+  <div class="sidebar p-4">
+    <h4 class="logo">EduManage</h4>
+
+    <ul class="nav flex-column mt-4">
+      <li class="nav-item"><a class="nav-link active" href="#">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Add Admin</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Add Teacher</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Create Class</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Assign Teacher</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Reports</a></li>
+      <li class="nav-item mt-auto"><a class="nav-link text-danger" href="#">Logout</a></li>
+    </ul>
   </div>
 
-  <!-- STATS -->
-  <div class="row g-4 mt-4">
-    <div class="col-lg-3 col-md-6">
-      <div class="stat-card blue">
-        <h2>1,245</h2>
-        <p>Total Students</p>
-      </div>
-    </div>
+  <!-- Main -->
+  <div class="flex-grow-1 p-4 bg-light">
 
-    <div class="col-lg-3 col-md-6">
-      <div class="stat-card green">
-        <h2>86</h2>
-        <p>Teachers</p>
-      </div>
-    </div>
+    <h3>Admin Dashboard</h3>
+    <p class="text-muted">System overview</p>
 
-    <div class="col-lg-3 col-md-6">
-      <div class="stat-card orange">
-        <h2>32</h2>
-        <p>Classes</p>
-      </div>
-    </div>
-
-    <div class="col-lg-3 col-md-6">
-      <div class="stat-card purple">
-        <h2>98%</h2>
-        <p>Attendance Rate</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- MANAGEMENT -->
-  <div class="row mt-5 g-4">
-
-    <div class="col-lg-8">
-      <div class="glass-panel">
-        <h5>Recent Students</h5>
-
-        <table class="table admin-table mt-3">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Class</th>
-              <th>Status</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Ayaan Rahman</td>
-              <td>10-A</td>
-              <td><span class="badge bg-success">Active</span></td>
-              <td><button class="btn btn-sm btn-light">View</button></td>
-            </tr>
-            <tr>
-              <td>Sara Khan</td>
-              <td>9-B</td>
-              <td><span class="badge bg-warning">Pending</span></td>
-              <td><button class="btn btn-sm btn-light">View</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="col-lg-4">
-      <div class="glass-panel">
-        <h5>Quick Actions</h5>
-
-        <div class="quick-actions">
-          <button>Add Student</button>
-          <button>Add Teacher</button>
-          <button>Create Class</button>
-          <button>Assign Teacher</button>
-          <button>Assign Class</button>
-          <button>Students</button>
-          <button>Teachers</button>
-          <button>Classes</button>
+    <!-- Stats -->
+    <div class="row g-4 mt-3">
+      <div class="col-md-3">
+        <div class="card stat-card">
+          <h6>Total Students</h6>
+          <h2>520</h2>
         </div>
       </div>
+
+      <div class="col-md-3">
+        <div class="card stat-card">
+          <h6>Total Teachers</h6>
+          <h2>42</h2>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card stat-card">
+          <h6>Admins</h6>
+          <h2>5</h2>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card stat-card">
+          <h6>Classes</h6>
+          <h2>18</h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="row mt-5 g-4">
+
+      <div class="col-md-6">
+        <div class="action-card">
+          <h5>Add Teacher</h5>
+          <p>Create teacher accounts and assign subjects.</p>
+          <button class="btn btn-primary">Add Teacher</button>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="action-card">
+          <h5>Create Class</h5>
+          <p>Define class, division and structure.</p>
+          <button class="btn btn-outline-primary">Create Class</button>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="action-card">
+          <h5>Add Admin</h5>
+          <p>Grant full access to another administrator.</p>
+          <button class="btn btn-dark">Add Admin</button>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="action-card">
+          <h5>Assign Teachers</h5>
+          <p>Link teachers with their classes.</p>
+          <button class="btn btn-outline-dark">Assign</button>
+        </div>
+      </div>
+
     </div>
 
   </div>

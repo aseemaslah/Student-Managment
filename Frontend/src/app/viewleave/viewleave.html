@@ -1,0 +1,72 @@
+<div class="d-flex">
+
+  <!-- Sidebar -->
+  <div class="sidebar p-4">
+    <h4 class="logo">EduManage</h4>
+    <ul class="nav flex-column mt-4">
+      <li class="nav-item"><a class="nav-link" href="teacher.html">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link" href="mark-attendance.html">Mark Attendance</a></li>
+      <li class="nav-item"><a class="nav-link active" href="#">Leave Requests</a></li>
+      <li class="nav-item mt-auto"><a class="nav-link text-danger" href="#">Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- Main -->
+  <div class="flex-grow-1 p-4 bg-light">
+
+    <div class="top-bar">
+      <div class="title">
+        <h3>Leave Requests</h3>
+        <p>Approve or reject student leaves</p>
+      </div>
+    </div>
+
+    <div class="card p-4 border-0 rounded-4 shadow-sm">
+
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Class</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>Arjun</td>
+            <td>10 A</td>
+            <td>05 Mar</td>
+            <td>06 Mar</td>
+            <td>Fever</td>
+            <td><span class="badge bg-warning">Pending</span></td>
+            <td>
+              <button class="btn btn-success btn-sm">Approve</button>
+              <button class="btn btn-danger btn-sm">Reject</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Sneha</td>
+            <td>10 A</td>
+            <td>02 Mar</td>
+            <td>02 Mar</td>
+            <td>Family event</td>
+            <td><span class="badge bg-success">Approved</span></td>
+            <td>-</td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

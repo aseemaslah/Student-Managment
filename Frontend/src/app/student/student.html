@@ -1,76 +1,86 @@
-<div class="container-fluid student-shell">
+<div class="d-flex">
 
-  <!-- HEADER -->
-  <div class="student-header">
-    <div>
-      <h3>Student Dashboard</h3>
-      <p>Welcome back, ready for today?</p>
-    </div>
+  <!-- Sidebar -->
+  <div class="sidebar p-4">
+    <h4 class="logo">EduManage</h4>
+
+    <ul class="nav flex-column mt-4">
+      <li class="nav-item"><a class="nav-link active" href="#">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">My Attendance</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">My Marks</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Request Leave</a></li>
+      <li class="nav-item mt-auto"><a class="nav-link text-danger" href="#">Logout</a></li>
+    </ul>
   </div>
 
-  <!-- PROGRESS -->
-  <div class="row mt-4 g-4">
-    <div class="col-md-4">
-      <div class="progress-card blue">
-        <h4>92%</h4>
-        <p>Attendance</p>
+  <!-- Main -->
+  <div class="flex-grow-1 p-4 bg-light">
+
+    <div class="top-bar">
+      <div class="title">
+        <h3>Student Dashboard</h3>
+        <p>Your progress and records</p>
+      </div>
+
+      <div class="user">
+        <div class="avatar">S</div>
+        <div class="name">Student</div>
       </div>
     </div>
 
-    <div class="col-md-4">
-      <div class="progress-card green">
-        <h4>A+</h4>
-        <p>Overall Grade</p>
+    <!-- Stats -->
+    <div class="row g-4 mt-3">
+      <div class="col-md-4">
+        <div class="card stat-card">
+          <h6>Attendance</h6>
+          <h2>92%</h2>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card stat-card">
+          <h6>Subjects</h6>
+          <h2>6</h2>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card stat-card">
+          <h6>Exams Taken</h6>
+          <h2>12</h2>
+        </div>
       </div>
     </div>
 
-    <div class="col-md-4">
-      <div class="progress-card orange">
-        <h4>3</h4>
-        <p>Upcoming Tests</p>
-      </div>
-    </div>
-  </div>
+    <!-- Actions -->
+    <div class="row mt-5 g-4">
 
-  <!-- MAIN ACTIONS -->
-  <div class="row mt-5 g-4">
-    <div class="col-lg-4">
-      <div class="student-card">
-        <h5>My Attendance</h5>
-        <p>Track your daily presence</p>
-        <button>View Attendance</button>
+      <div class="col-md-6">
+        <div class="action-card">
+          <h5>View Attendance</h5>
+          <p>Check daily attendance records.</p>
+          <button class="btn btn-primary">Open</button>
+        </div>
       </div>
+
+      <div class="col-md-6">
+        <div class="action-card">
+          <h5>View Exam Results</h5>
+          <p>See marks and performance.</p>
+          <button class="btn btn-outline-primary">Open</button>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="action-card">
+          <h5>Request Leave</h5>
+          <p>Submit leave request to teacher.</p>
+          <button class="btn btn-dark">Request</button>
+        </div>
+      </div>
+
     </div>
 
-    <div class="col-lg-4">
-      <div class="student-card">
-        <h5>My Marks</h5>
-        <p>Check exam performance</p>
-        <button>View Marks</button>
-      </div>
-    </div>
-
-    <div class="col-lg-4">
-      <div class="student-card">
-        <h5>My Profile</h5>
-        <p>Update personal details</p>
-        <button>Open Profile</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ACTIVITY -->
-  <div class="row mt-5">
-    <div class="col-lg-8">
-      <div class="glass-panel">
-        <h5>Recent Updates</h5>
-        <ul class="activity-list">
-          <li>✔ Attendance marked for today</li>
-          <li>📝 Math test results uploaded</li>
-          <li>📅 New exam scheduled for Friday</li>
-        </ul>
-      </div>
-    </div>
   </div>
 
 </div>
