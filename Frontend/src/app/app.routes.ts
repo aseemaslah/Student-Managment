@@ -13,7 +13,6 @@ import { Createclass } from './createclass/createclass';
 import { Markattendance } from './markattendance/markattendance';
 import { Attendancereport } from './attendancereport/attendancereport';
 import { Entermarks } from './entermarks/entermarks';
-import path from 'path';
 import { Viewstudents } from './viewstudents/viewstudents';
 import { Viewresults } from './viewresults/viewresults';
 import { Viewteachers } from './viewteachers/viewteachers';
@@ -22,6 +21,8 @@ import { Addstudents } from './addstudents/addstudents';
 import { Reqleave } from './reqleave/reqleave';
 import { Viewleave } from './viewleave/viewleave';
 import { Adminsidebar } from './adminsidebar/adminsidebar';
+import { Teachersidebar } from './teachersidebar/teachersidebar';
+import { Studentsidebar } from './studentsidebar/studentsidebar';
 
 export const routes: Routes = [
 
@@ -116,6 +117,14 @@ export const routes: Routes = [
     {
         path: "adminsidebar",
         component: Adminsidebar
+    },
+    {
+        path: "teachersidebar",
+        component: Teachersidebar
+    },
+    {
+        path: "studentsidebar",
+        component: Studentsidebar
     }
 
 ];

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from "@angular/router";
+import { Studentsidebar } from "../studentsidebar/studentsidebar";
 
 @Component({
   selector: 'app-reqleave',
-  imports: [RouterLink],
+  imports: [ Studentsidebar],
   templateUrl: './reqleave.html',
   styleUrl: './reqleave.scss',
 })
