@@ -1,7 +1,7 @@
 <div class="d-flex">
 
   <!-- Sidebar -->
-<app-studentsidebar></app-studentsidebar>
+  <app-studentsidebar></app-studentsidebar>
   <!-- Main -->
   <div class="flex-grow-1 p-4 bg-light">
 
@@ -17,59 +17,59 @@
       </div>
     </div> -->
 
-    <!-- Stats -->
-    <div class="row g-4 mt-3">
-      <div class="col-md-4">
-        <div class="card stat-card">
-          <h6>Attendance</h6>
-          <h2>92%</h2>
+      <!-- Stats -->
+      <div class="row g-4 mt-3">
+        <div class="col-md-4">
+          <div class="card stat-card">
+            <h6>Attendance</h6>
+            <h2>92%</h2>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card stat-card">
+            <h6>Subjects</h6>
+            <h2>6</h2>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card stat-card">
+            <h6>Exams Taken</h6>
+            <h2>12</h2>
+          </div>
         </div>
       </div>
 
-      <div class="col-md-4">
-        <div class="card stat-card">
-          <h6>Subjects</h6>
-          <h2>6</h2>
-        </div>
-      </div>
+      <!-- Actions -->
+      <div class="row mt-5 g-4">
 
-      <div class="col-md-4">
-        <div class="card stat-card">
-          <h6>Exams Taken</h6>
-          <h2>12</h2>
+        <div class="col-md-6">
+          <div class="action-card">
+            <h5>View Attendance</h5>
+            <p>Check daily attendance records.</p>
+            <button class="btn btn-primary" routerLink="/viewattendance">Open</button>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Actions -->
-    <div class="row mt-5 g-4">
-
-      <div class="col-md-6">
-        <div class="action-card">
-          <h5>View Attendance</h5>
-          <p>Check daily attendance records.</p>
-          <button class="btn btn-primary" routerLink="/viewattendance">Open</button>
+        <div class="col-md-6">
+          <div class="action-card">
+            <h5>View Exam Results</h5>
+            <p>See marks and performance.</p>
+            <button class="btn btn-primary" routerLink="/viewresults">Open</button>
+          </div>
         </div>
-      </div>
 
-      <div class="col-md-6">
-        <div class="action-card">
-          <h5>View Exam Results</h5>
-          <p>See marks and performance.</p>
-          <button class="btn btn-primary" routerLink="/viewresults">Open</button>
+        <div class="col-md-12">
+          <div class="action-card">
+            <h5>Request Leave</h5>
+            <p>Submit leave request to teacher.</p>
+            <button class="btn btn-primary" routerLink="/reqleave">Request</button>
+          </div>
         </div>
-      </div>
 
-      <div class="col-md-12">
-        <div class="action-card">
-          <h5>Request Leave</h5>
-          <p>Submit leave request to teacher.</p>
-          <button class="btn btn-primary" routerLink="/reqleave">Request</button>
-        </div>
       </div>
 
     </div>
 
   </div>
-
-</div>
