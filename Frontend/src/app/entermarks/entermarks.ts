@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-entermarks',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './entermarks.html',
   styleUrl: './entermarks.scss',
 })

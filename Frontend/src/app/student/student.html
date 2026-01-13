@@ -6,10 +6,10 @@
 
     <ul class="nav flex-column mt-4">
       <li class="nav-item"><a class="nav-link active" href="#">Dashboard</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">My Attendance</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">My Marks</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">Request Leave</a></li>
-      <li class="nav-item mt-auto"><a class="nav-link text-danger" href="#">Logout</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/viewattendance">My Attendance</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/viewresults">My Marks</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/reqleave">Request Leave</a></li>
+      <li class="nav-item mt-auto"><a class="nav-link text-danger" routerLink="/main">Logout</a></li>
     </ul>
   </div>
 
@@ -22,11 +22,11 @@
         <p>Your progress and records</p>
       </div>
 
-      <div class="user">
+      <!-- <div class="user">
         <div class="avatar">S</div>
         <div class="name">Student</div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Stats -->
     <div class="row g-4 mt-3">
@@ -59,7 +59,7 @@
         <div class="action-card">
           <h5>View Attendance</h5>
           <p>Check daily attendance records.</p>
-          <button class="btn btn-primary">Open</button>
+          <button class="btn btn-primary" routerLink="/viewattendance">Open</button>
         </div>
       </div>
 
@@ -67,7 +67,7 @@
         <div class="action-card">
           <h5>View Exam Results</h5>
           <p>See marks and performance.</p>
-          <button class="btn btn-outline-primary">Open</button>
+          <button class="btn btn-outline-primary" routerLink="/viewresults">Open</button>
         </div>
       </div>
 
@@ -75,7 +75,7 @@
         <div class="action-card">
           <h5>Request Leave</h5>
           <p>Submit leave request to teacher.</p>
-          <button class="btn btn-dark">Request</button>
+          <button class="btn btn-dark" routerLink="/reqleave">Request</button>
         </div>
       </div>
 

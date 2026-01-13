@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-attendancereport',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './attendancereport.html',
   styleUrl: './attendancereport.scss',
 })

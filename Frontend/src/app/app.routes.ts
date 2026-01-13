@@ -21,6 +21,7 @@ import { Viewattendance } from './viewattendance/viewattendance';
 import { Addstudents } from './addstudents/addstudents';
 import { Reqleave } from './reqleave/reqleave';
 import { Viewleave } from './viewleave/viewleave';
+import { Adminsidebar } from './adminsidebar/adminsidebar';
 
 export const routes: Routes = [
 
@@ -111,6 +112,10 @@ export const routes: Routes = [
     {
         path: "viewleave",
         component: Viewleave
+    },
+    {
+        path: "adminsidebar",
+        component: Adminsidebar
     }
 
 ];
