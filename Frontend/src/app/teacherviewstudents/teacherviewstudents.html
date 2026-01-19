@@ -1,0 +1,57 @@
+<div class="d-flex">
+
+  <!-- Sidebar -->
+<app-teachersidebar></app-teachersidebar>
+
+  <!-- Main -->
+  <div class="flex-grow-1 p-4 bg-light">
+
+    <div class="top-bar">
+      <div class="title">
+        <h3>My Students</h3>
+        <p>Students in your classes</p>
+      </div>
+    </div>
+
+    <!-- Student Table -->
+    <div class="card p-4 border-0 rounded-4 shadow-sm">
+      <div *ngIf="loading" class="text-center p-4">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Loading students...</p>
+      </div>
+      
+      <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+      
+      <table *ngIf="!loading && !error" class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>Roll No</th>
+            <th>Name</th>
+            <th>Class</th>
+            <th>Division</th>
+            <th>Academic Year</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let student of students">
+            <td>{{student.rollNo}}</td>
+            <td>{{student.userId?.username}}</td>
+            <td>{{student.classId?.Class}}</td>
+            <td>{{student.classId?.Division}}</td>
+            <td>{{student.classId?.AcademicYear}}</td>
+            <td><span class="badge bg-success">Active</span></td>
+          </tr>
+          <tr *ngIf="students.length === 0">
+            <td colspan="6" class="text-center">No students found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>

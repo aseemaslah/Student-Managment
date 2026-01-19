@@ -1,10 +1,11 @@
-const mongpoose = require('mongoose');
+const mongoose = require('mongoose');
 
-const LeaveSchema = new mongpoose.Schema({
-    StudentID: { type: mongpoose.Schema.Types.ObjectId, ref: 'Student', required: true },
-    StartDate: { type: Date, required: true },
-    EndDate: { type: Date, required: true },
-    Reason: { type: String, required: true },
-    Status: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' }
+const LeaveSchema = new mongoose.Schema({
+    studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    startDate: { type: Date, required: true },
+    endDate: { type: Date, required: true },
+    reason: { type: String, required: true },
+    status: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' },
+    submittedAt: { type: Date, default: Date.now }
 });
-module.exports = mongpoose.model('Leave', LeaveSchema);
+module.exports = mongoose.model('Leave', LeaveSchema);

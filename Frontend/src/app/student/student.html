@@ -18,25 +18,38 @@
     </div> -->
 
       <!-- Stats -->
-      <div class="row g-4 mt-3">
-        <div class="col-md-4">
-          <div class="card stat-card">
-            <h6>Attendance</h6>
-            <h2>92%</h2>
+      <div *ngIf="loading" class="text-center p-4">
+        <div class="spinner-border" role="status"></div>
+        <p class="mt-2">Loading your dashboard...</p>
+      </div>
+      
+      <div *ngIf="!loading" class="row g-4 mt-3">
+        <div class="col-md-3">
+          <div class="card stat-card bg-primary text-white">
+            <h6>My Class</h6>
+            <h2 *ngIf="stats.myClass">{{stats.myClass.Class}} {{stats.myClass.Division}}</h2>
+            <h2 *ngIf="!stats.myClass">-</h2>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <div class="card stat-card bg-success text-white">
+            <h6>Classmates</h6>
+            <h2>{{stats.classmates}}</h2>
           </div>
         </div>
 
-        <div class="col-md-4">
-          <div class="card stat-card">
-            <h6>Subjects</h6>
-            <h2>6</h2>
+        <div class="col-md-3">
+          <div class="card stat-card bg-info text-white">
+            <h6>Total Days</h6>
+            <h2>{{stats.myTotalDays}}</h2>
           </div>
         </div>
 
-        <div class="col-md-4">
-          <div class="card stat-card">
-            <h6>Exams Taken</h6>
-            <h2>12</h2>
+        <div class="col-md-3">
+          <div class="card stat-card bg-warning text-white">
+            <h6>My Attendance</h6>
+            <h2>{{stats.myAttendancePercentage}}%</h2>
           </div>
         </div>
       </div>

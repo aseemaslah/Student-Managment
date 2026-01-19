@@ -4,6 +4,7 @@
 
       <!-- Left -->
       <div class="col-md-6 text-white">
+        <img src="assets/logo.png" alt="EduManage Logo" class="mb-4" style="width: 250px;">
         <h1 class="display-4 fw-bold">EduManage</h1>
         <p class="lead mt-3">
           One platform for Admins, Teachers and Students.
@@ -16,28 +17,18 @@
         <div class="login-card p-4">
           <h4 class="text-center mb-3">Login</h4>
 
-          <form>
+          <form (ngSubmit)="login()">
             <div class="mb-3">
-              <label>Email</label>
-              <input type="email" class="form-control" placeholder="Enter email">
+              <label>Username</label>
+              <input type="text" class="form-control" placeholder="Enter username" [(ngModel)]="username" name="username">
             </div>
 
             <div class="mb-3">
               <label>Password</label>
-              <input type="password" class="form-control" placeholder="Enter password">
+              <input type="password" class="form-control" placeholder="Enter password" [(ngModel)]="password" name="password">
             </div>
 
-            <div class="mb-3">
-              <label>Login as</label>
-              <select class="form-select">
-                <option>Select role</option>
-                <option>Admin</option>
-                <option>Teacher</option>
-                <option>Student</option>
-              </select>
-            </div>
-
-            <button class="btn btn-primary w-100" routerLink="/admin">Login</button>
+            <button class="btn btn-primary w-100" type="submit">Login</button>
           </form>
 
         </div>

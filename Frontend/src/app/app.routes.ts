@@ -14,6 +14,7 @@ import { Markattendance } from './markattendance/markattendance';
 import { Attendancereport } from './attendancereport/attendancereport';
 import { Entermarks } from './entermarks/entermarks';
 import { Viewstudents } from './viewstudents/viewstudents';
+import { Teacherviewstudents } from './teacherviewstudents/teacherviewstudents';
 import { Viewresults } from './viewresults/viewresults';
 import { Viewteachers } from './viewteachers/viewteachers';
 import { Viewattendance } from './viewattendance/viewattendance';
@@ -23,6 +24,8 @@ import { Viewleave } from './viewleave/viewleave';
 import { Adminsidebar } from './adminsidebar/adminsidebar';
 import { Teachersidebar } from './teachersidebar/teachersidebar';
 import { Studentsidebar } from './studentsidebar/studentsidebar';
+
+import { Studentattendance } from './studentattendance/studentattendance';
 
 export const routes: Routes = [
 
@@ -34,9 +37,6 @@ export const routes: Routes = [
         path: "",
         redirectTo: "main",
         pathMatch: "full"
-    }, {
-        path: "navbar",
-        component: Navbar
     },
     {
         path: "footer",
@@ -95,6 +95,10 @@ export const routes: Routes = [
         component: Viewstudents
     },
     {
+        path: "teacherviewstudents",
+        component: Teacherviewstudents
+    },
+    {
         path: "viewresults",
         component: Viewresults,
     },
@@ -105,6 +109,10 @@ export const routes: Routes = [
     {
         path: "viewattendance",
         component: Viewattendance
+    },
+    {
+        path: "studentattendance",
+        component: Studentattendance
     },
     {
         path: "reqleave",

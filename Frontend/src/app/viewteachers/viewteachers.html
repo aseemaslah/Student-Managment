@@ -30,31 +30,32 @@
 
     <!-- Teacher Table -->
     <div class="card p-4 border-0 rounded-4 shadow-sm">
-      <table class="table table-hover align-middle">
+      <div *ngIf="loading" class="text-center p-4">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Loading teachers...</p>
+      </div>
+      
+      <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+      
+      <table *ngIf="!loading && !error" class="table table-hover align-middle">
         <thead>
           <tr>
-            <th>Employee ID</th>
-            <th>Name</th>
-            <th>Subjects</th>
-            <th>Classes</th>
+            <th>ID</th>
+            <th>Username</th>
             <th>Status</th>
           </tr>
         </thead>
 
         <tbody>
-          <tr>
-            <td>T-101</td>
-            <td>Rahul Sharma</td>
-            <td>Math</td>
-            <td>10 A, 9 B</td>
+          <tr *ngFor="let teacher of teachers">
+            <td>{{teacher._id}}</td>
+            <td>{{teacher.username}}</td>
             <td><span class="badge bg-success">Active</span></td>
           </tr>
-          <tr>
-            <td>T-102</td>
-            <td>Neha Verma</td>
-            <td>Science</td>
-            <td>10 A</td>
-            <td><span class="badge bg-success">Active</span></td>
+          <tr *ngIf="teachers.length === 0">
+            <td colspan="3" class="text-center">No teachers found</td>
           </tr>
         </tbody>
       </table>

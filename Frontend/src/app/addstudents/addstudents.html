@@ -9,53 +9,43 @@
     <div class="top-bar">
       <div class="title">
         <h3>Add Student</h3>
-        <p>Register a new student</p>
+        <p>Add student to your assigned classes</p>
       </div>
     </div>
 
     <div class="card p-4 border-0 rounded-4 shadow-sm">
 
-      <form>
+      <form (ngSubmit)="onSubmit()">
         <div class="row g-3">
 
           <div class="col-md-6">
             <label>Student Name</label>
-            <input class="form-control">
+            <input class="form-control" [(ngModel)]="studentData.username" name="username" required>
           </div>
 
           <div class="col-md-6">
             <label>Roll No</label>
-            <input class="form-control">
+            <input class="form-control" [(ngModel)]="studentData.rollNo" name="rollNo" required>
           </div>
 
           <div class="col-md-6">
-            <label>Class</label>
-            <select class="form-select">
-              <option>10</option>
-              <option>9</option>
+            <label>Assigned Class</label>
+            <select class="form-select" [(ngModel)]="studentData.classId" name="classId" required>
+              <option value="" *ngIf="classes.length === 0">No classes assigned to you</option>
+              <option value="" *ngIf="classes.length > 0">Select Assigned Class</option>
+              <option *ngFor="let class of classes" [value]="class._id">{{class.Class}} {{class.Division}} ({{class.AcademicYear}})</option>
             </select>
-          </div>
-
-          <div class="col-md-6">
-            <label>Division</label>
-            <select class="form-select">
-              <option>A</option>
-              <option>B</option>
-            </select>
-          </div>
-
-          <div class="col-md-6">
-            <label>Email</label>
-            <input class="form-control">
+            <small class="text-muted" *ngIf="classes.length === 0">Ask admin to assign classes to you first</small>
+            <small class="text-muted" *ngIf="classes.length > 0">Only your assigned classes are shown</small>
           </div>
 
           <div class="col-md-6">
             <label>Password</label>
-            <input type="password" class="form-control">
+            <input type="password" class="form-control" [(ngModel)]="studentData.password" name="password" required>
           </div>
 
           <div class="col-md-12 text-end mt-3">
-            <button class="btn btn-primary">Add Student</button>
+            <button type="submit" class="btn btn-primary">Add Student</button>
           </div>
 
         </div>

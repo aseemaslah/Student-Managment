@@ -1,72 +1,81 @@
 <div class="d-flex">
 
   <!-- Sidebar -->
-<app-teachersidebar></app-teachersidebar>
+<app-adminsidebar></app-adminsidebar>
 
   <!-- Main -->
   <div class="flex-grow-1 p-4 bg-light">
 
     <div class="top-bar">
       <div class="title">
-        <h3>My Students</h3>
-        <p>Students under your classes</p>
+        <h3>All Students</h3>
+        <p>Registered students in the system</p>
       </div>
     </div>
 
-    <!-- Filters -->
-    <div class="card p-4 border-0 rounded-4 shadow-sm mb-4">
-      <div class="row g-3">
-        <div class="col-md-4">
-          <label>Class</label>
-          <select class="form-select">
-            <option>10 A</option>
-            <option>9 B</option>
-          </select>
+    <!-- Students by Class -->
+    <div *ngIf="loading" class="text-center p-4">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading students...</p>
+    </div>
+    
+    <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+    
+    <div *ngIf="!loading && !error">
+      <div *ngFor="let classGroup of classGroups" class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">
+            <i class="fas fa-users me-2"></i>
+            Class {{classGroup.class.Class}} {{classGroup.class.Division}}
+            <span class="badge bg-light text-primary ms-2">{{classGroup.class.AcademicYear}}</span>
+            <span class="badge bg-warning text-dark ms-2">{{classGroup.students.length}} Students</span>
+          </h5>
         </div>
-        <div class="col-md-4">
-          <label>Division</label>
-          <select class="form-select">
-            <option>A</option>
-            <option>B</option>
-          </select>
-        </div>
-        <div class="col-md-4">
-          <label>Search</label>
-          <input class="form-control" placeholder="Search name or roll no">
+        
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th class="ps-4">Roll No</th>
+                  <th>Student Name</th>
+                  <th>Username</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let student of classGroup.students">
+                  <td class="ps-4">
+                    <span class="badge bg-secondary">{{student.rollNo}}</span>
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="avatar-circle me-3 bg-primary text-white">
+                        {{student.userId?.username?.charAt(0).toUpperCase()}}
+                      </div>
+                      <strong>{{student.userId?.username}}</strong>
+                    </div>
+                  </td>
+                  <td>{{student.userId?.username}}</td>
+                  <td>
+                    <span class="badge bg-success">
+                      <i class="fas fa-check me-1"></i>Active
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
-
-    <!-- Student Table -->
-    <div class="card p-4 border-0 rounded-4 shadow-sm">
-      <table class="table table-hover align-middle">
-        <thead>
-          <tr>
-            <th>Roll No</th>
-            <th>Name</th>
-            <th>Class</th>
-            <th>Division</th>
-            <th>Attendance %</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr>
-            <td>01</td>
-            <td>Arjun</td>
-            <td>10</td>
-            <td>A</td>
-            <td>92%</td>
-          </tr>
-          <tr>
-            <td>02</td>
-            <td>Sneha</td>
-            <td>10</td>
-            <td>A</td>
-            <td>85%</td>
-          </tr>
-        </tbody>
-      </table>
+      
+      <div *ngIf="classGroups.length === 0" class="card border-0 shadow-sm text-center p-5">
+        <i class="fas fa-user-graduate fa-3x text-muted mb-3"></i>
+        <h5 class="text-muted">No Students Found</h5>
+        <p class="text-muted">No students have been registered in the system yet.</p>
+      </div>
     </div>
 
   </div>

@@ -15,31 +15,21 @@
 
     <div class="card p-4 border-0 rounded-4 shadow-sm">
 
-      <form>
+      <form (ngSubmit)="onSubmit()">
         <div class="row g-3">
 
           <div class="col-md-6">
-            <label>Name</label>
-            <input class="form-control">
-          </div>
-
-          <div class="col-md-6">
-            <label>Email</label>
-            <input class="form-control">
+            <label>Username</label>
+            <input class="form-control" [(ngModel)]="adminData.username" name="username" required>
           </div>
 
           <div class="col-md-6">
             <label>Password</label>
-            <input type="password" class="form-control">
-          </div>
-
-          <div class="col-md-6">
-            <label>Confirm Password</label>
-            <input type="password" class="form-control">
+            <input type="password" class="form-control" [(ngModel)]="adminData.password" name="password" required>
           </div>
 
           <div class="col-md-12 text-end mt-3">
-            <button class="btn btn-danger">Create Admin</button>
+            <button type="submit" class="btn btn-danger">Create Admin</button>
           </div>
 
         </div>

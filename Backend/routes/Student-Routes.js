@@ -3,11 +3,9 @@ const router = express.Router();
 const Student = require('../controllers/Student-Controller');
 const { auth, allow } = require("../middleware/auth");
 
-
-// Route to add a new admin
-router.get("/attendance", auth, allow("Student"), Student.myAttendance);
-router.get("/marks", auth, allow("Student"), Student.myMarks);
-router.post("/leave", auth, allow("Student"), Student.requestLeave);
-
+router.post('/submit-leave', auth, allow("Student"), Student.submitLeave);
+router.get('/attendance', auth, allow("Student"), Student.getStudentAttendance);
+router.get('/marks', auth, allow("Student"), Student.getStudentMarks);
+router.get('/leaves', auth, allow("Student"), Student.getStudentLeaves);
 
 module.exports = router;

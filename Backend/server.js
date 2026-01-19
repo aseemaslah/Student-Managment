@@ -14,9 +14,9 @@ const app=express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://127.0.0.1:27017/StudentManagement');
-
-mongoose.connection.once('open',()=>console.log('MongoDB connected Successfully'));
+mongoose.connect('mongodb://127.0.0.1:27017/StudentManagement')
+  .then(() => console.log('MongoDB connected Successfully'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 app.use('/admin', AdminRoutes);
 app.use('/auth', AuthRoutes);

@@ -8,80 +8,41 @@
     <div class="top-bar">
       <div class="title">
         <h3>Mark Attendance</h3>
-        <p>Select class and date</p>
+        <p>Select student and mark attendance</p>
       </div>
     </div>
 
-    <!-- Filters -->
-    <div class="card p-4 mb-4 border-0 rounded-4 shadow-sm">
-      <div class="row g-3">
-
-        <div class="col-md-4">
-          <label>Class</label>
-          <select class="form-select">
-            <option>10 A</option>
-            <option>9 B</option>
-          </select>
-        </div>
-
-        <div class="col-md-4">
-          <label>Subject</label>
-          <select class="form-select">
-            <option>Math</option>
-            <option>Science</option>
-          </select>
-        </div>
-
-        <div class="col-md-4">
-          <label>Date</label>
-          <input type="date" class="form-control">
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Student list -->
     <div class="card p-4 border-0 rounded-4 shadow-sm">
+      <form (ngSubmit)="onSubmit()">
+        <div class="row g-3">
 
-      <table class="table align-middle">
-        <thead>
-          <tr>
-            <th>Roll No</th>
-            <th>Student Name</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
+          <div class="col-md-4">
+            <label>Student</label>
+            <select class="form-select" [(ngModel)]="attendanceData.studentId" name="studentId" required>
+              <option value="">Select Student</option>
+              <option *ngFor="let student of students" [value]="student.userId?._id">{{student.rollNo}} - {{student.userId?.username}}</option>
+            </select>
+          </div>
 
-          <tr>
-            <td>01</td>
-            <td>Arjun</td>
-            <td>
-              <select class="form-select w-50">
-                <option>Present</option>
-                <option>Absent</option>
-              </select>
-            </td>
-          </tr>
+          <div class="col-md-4">
+            <label>Date</label>
+            <input type="date" class="form-control" [(ngModel)]="attendanceData.date" name="date" required>
+          </div>
 
-          <tr>
-            <td>02</td>
-            <td>Sneha</td>
-            <td>
-              <select class="form-select w-50">
-                <option>Present</option>
-                <option>Absent</option>
-              </select>
-            </td>
-          </tr>
+          <div class="col-md-4">
+            <label>Status</label>
+            <select class="form-select" [(ngModel)]="attendanceData.status" name="status" required>
+              <option value="Present">Present</option>
+              <option value="Absent">Absent</option>
+            </select>
+          </div>
 
-        </tbody>
-      </table>
+          <div class="col-md-12 text-end mt-3">
+            <button type="submit" class="btn btn-success">Mark Attendance</button>
+          </div>
 
-      <div class="text-end mt-3">
-        <button class="btn btn-success">Save Attendance</button>
-      </div>
-
+        </div>
+      </form>
     </div>
 
   </div>

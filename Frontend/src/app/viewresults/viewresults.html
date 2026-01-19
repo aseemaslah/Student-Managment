@@ -13,38 +13,19 @@
       </div>
     </div>
 
-    <!-- Summary -->
-    <div class="row g-4 mt-3">
-      <div class="col-md-4">
-        <div class="card stat-card">
-          <h6>Overall %</h6>
-          <h2>78%</h2>
+    <div class="card p-4 border-0 rounded-4 shadow-sm">
+      <div *ngIf="loading" class="text-center p-4">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
         </div>
+        <p class="mt-2">Loading your results...</p>
       </div>
-
-      <div class="col-md-4">
-        <div class="card stat-card">
-          <h6>Exams Taken</h6>
-          <h2>6</h2>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="card stat-card">
-          <h6>Subjects</h6>
-          <h2>5</h2>
-        </div>
-      </div>
-    </div>
-
-    <!-- Marks Table -->
-    <div class="card p-4 mt-4 border-0 rounded-4 shadow-sm">
-
-      <table class="table table-hover align-middle">
+      
+      <table *ngIf="!loading" class="table table-hover align-middle">
         <thead>
           <tr>
             <th>Subject</th>
-            <th>Exam</th>
+            <th>Exam Type</th>
             <th>Marks</th>
             <th>Total</th>
             <th>Percentage</th>
@@ -52,24 +33,18 @@
         </thead>
 
         <tbody>
-          <tr>
-            <td>Math</td>
-            <td>Mid Term</td>
-            <td>78</td>
-            <td>100</td>
-            <td>78%</td>
+          <tr *ngFor="let exam of examData">
+            <td>{{exam.subject}}</td>
+            <td>{{exam.examType}}</td>
+            <td>{{exam.marks}}</td>
+            <td>{{exam.total}}</td>
+            <td>{{(exam.marks / exam.total * 100).toFixed(1)}}%</td>
           </tr>
-
-          <tr>
-            <td>Science</td>
-            <td>Final</td>
-            <td>82</td>
-            <td>100</td>
-            <td>82%</td>
+          <tr *ngIf="examData.length === 0">
+            <td colspan="5" class="text-center">No exam results found</td>
           </tr>
         </tbody>
       </table>
-
     </div>
 
   </div>

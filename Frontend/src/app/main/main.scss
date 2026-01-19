@@ -1,17 +1,202 @@
-$primary: #0d6efd;
-
+/* ===============================
+   HERO BACKGROUND (SAFE)
+   =============================== */
 .hero {
   min-height: 100vh;
   background: linear-gradient(
-      rgba(13, 110, 253, 0.85),
-      rgba(13, 110, 253, 0.9)
-    ),
-    url("https://images.unsplash.com/photo-1584697964191-2d38a1a0e4f2") center / cover;
+    135deg,
+    #4545ff 0%,
+    #0b5ed7 45%,
+    #0a58ca 100%
+  );
+  position: relative;
+  overflow: hidden;
 }
 
-/* Login box */
-.login-card {
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+/* ===============================
+   LEFT CONTENT – SAFE REVEAL
+   =============================== */
+.hero-left > * {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: fadeUp 0.9s cubic-bezier(.22,1,.36,1) forwards;
 }
+
+.hero-left > *:nth-child(1) { animation-delay: .1s; }
+.hero-left > *:nth-child(2) { animation-delay: .2s; }
+.hero-left > *:nth-child(3) { animation-delay: .3s; }
+
+/* ===============================
+   LOGIN CARD – ENTER ONCE ONLY
+   =============================== */
+.login-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.18);
+  opacity: 0;
+  transform: translateY(18px) scale(.985);
+  animation: cardEnter 0.9s cubic-bezier(.22,1,.36,1) forwards;
+  animation-delay: .35s;
+}
+
+/* ===============================
+   INPUT MICRO-MOTION
+   =============================== */
+.login-card .form-control,
+.login-card .form-select {
+  transition:
+    border-color .25s ease,
+    box-shadow .25s ease,
+    transform .25s ease;
+}
+
+.login-card .form-control:focus,
+.login-card .form-select:focus {
+  transform: translateY(-1px);
+}
+
+/* ===============================
+   BUTTON FEEDBACK
+   =============================== */
+.login-card .btn {
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+.login-card .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(13,110,253,.35);
+}
+
+.login-card .btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* ===============================
+   KEYFRAMES (NO CONFLICTS)
+   =============================== */
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardEnter {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===============================
+   REDUCED MOTION SAFETY
+   =============================== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ===============================
+   HERO MOUSE AWARENESS
+   =============================== */
+.hero {
+  transition: background-position 0.6s ease;
+}
+
+.hero:hover {
+  background-position: 52% 48%;
+}
+
+/* ===============================
+   LOGIN CARD INTERACTION
+   =============================== */
+.login-card {
+  transition:
+    transform .35s cubic-bezier(.22,1,.36,1),
+    box-shadow .35s cubic-bezier(.22,1,.36,1);
+}
+
+.login-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 26px 60px rgba(0,0,0,.22);
+}
+
+.login-card:active {
+  transform: translateY(-1px);
+}
+
+/* ===============================
+   INPUT MOUSE RESPONSE
+   =============================== */
+.login-card .form-control,
+.login-card .form-select {
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease;
+}
+
+.login-card .form-control:hover,
+.login-card .form-select:hover {
+  transform: translateY(-1px);
+}
+
+.login-card .form-control:focus,
+.login-card .form-select:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(13,110,253,.2);
+}
+/* ===============================
+   BUTTON RIPPLE EFFECT
+   =============================== */
+.login-card .btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.login-card .btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(255,255,255,.35),
+    transparent 60%
+  );
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity .35s ease,
+    transform .35s ease;
+}
+
+.login-card .btn:active::after {
+  opacity: 1;
+  transform: scale(1.4);
+}
+/* ===============================
+   POINTER REFINEMENT
+   =============================== */
+button,
+select,
+input {
+  cursor: pointer;
+}
+
+input[type="email"],
+input[type="password"] {
+  cursor: text;
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+

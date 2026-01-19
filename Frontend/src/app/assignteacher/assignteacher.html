@@ -7,37 +7,56 @@
     <div class="top-bar">
       <div class="title">
         <h3>Assign Teacher to Class</h3>
-        <p>Link teachers and classes</p>
+        <p>Link teachers and classes with subjects</p>
       </div>
     </div>
 
     <div class="card p-4 border-0 rounded-4 shadow-sm">
 
-      <div class="row g-3">
+      <form (ngSubmit)="onSubmit()">
+        <div class="row g-3">
 
-        <div class="col-md-6">
-          <label>Teacher</label>
-          <select class="form-select">
-            <option>Select Teacher</option>
-            <option>Mr. Rahul</option>
-            <option>Ms. Neha</option>
-          </select>
+          <div class="col-md-6">
+            <label>Teacher</label>
+            <select class="form-select" [(ngModel)]="assignmentData.teacherId" name="teacherId" required>
+              <option value="" *ngIf="loadingTeachers">Loading teachers...</option>
+              <option value="" *ngIf="!loadingTeachers">Select Teacher</option>
+              <option *ngFor="let teacher of teachers" [value]="teacher._id">{{teacher.username}}</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label>Class</label>
+            <select class="form-select" [(ngModel)]="assignmentData.classId" name="classId" required>
+              <option value="" *ngIf="loadingClasses">Loading classes...</option>
+              <option value="" *ngIf="!loadingClasses">Select Class</option>
+              <option *ngFor="let class of classes" [value]="class._id">{{class.Class}} {{class.Division}} ({{class.AcademicYear}})</option>
+            </select>
+          </div>
+
+          <div class="col-md-12">
+            <label>Subjects</label>
+            <div class="input-group mb-2">
+              <select class="form-select" [(ngModel)]="selectedSubject" name="selectedSubject">
+                <option value="">Select Subject</option>
+                <option *ngFor="let subject of availableSubjects" [value]="subject">{{subject}}</option>
+              </select>
+              <button type="button" class="btn btn-outline-primary" (click)="addSubject()">Add</button>
+            </div>
+            <div class="subjects-list" *ngIf="assignmentData.subjects.length > 0">
+              <span *ngFor="let subject of assignmentData.subjects; let i = index" class="badge bg-primary me-2 mb-2">
+                {{subject}}
+                <button type="button" class="btn-close btn-close-white ms-1" (click)="removeSubject(i)"></button>
+              </span>
+            </div>
+          </div>
+
+          <div class="col-md-12 text-end mt-3">
+            <button type="submit" class="btn btn-primary">Assign</button>
+          </div>
+
         </div>
-
-        <div class="col-md-6">
-          <label>Class</label>
-          <select class="form-select">
-            <option>Select Class</option>
-            <option>10 A</option>
-            <option>9 B</option>
-          </select>
-        </div>
-
-        <div class="col-md-12 text-end mt-3">
-          <button class="btn btn-primary">Assign</button>
-        </div>
-
-      </div>
+      </form>
 
     </div>
 

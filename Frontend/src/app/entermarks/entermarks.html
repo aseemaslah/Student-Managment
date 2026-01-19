@@ -1,4 +1,3 @@
-
 <div class="d-flex">
 
   <!-- Sidebar -->
@@ -10,76 +9,53 @@
     <div class="top-bar">
       <div class="title">
         <h3>Enter Exam Marks</h3>
-        <p>Add and update student exam results</p>
+        <p>Add student exam results</p>
       </div>
     </div>
 
-    <!-- Filters -->
-    <div class="card p-4 border-0 rounded-4 shadow-sm mb-4">
-      <div class="row g-3">
-
-        <div class="col-md-4">
-          <label>Class</label>
-          <select class="form-select">
-            <option>10 A</option>
-            <option>9 B</option>
-          </select>
-        </div>
-
-        <div class="col-md-4">
-          <label>Subject</label>
-          <select class="form-select">
-            <option>Math</option>
-            <option>Science</option>
-          </select>
-        </div>
-
-        <div class="col-md-4">
-          <label>Exam</label>
-          <select class="form-select">
-            <option>Mid Term</option>
-            <option>Final</option>
-          </select>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Student Marks -->
     <div class="card p-4 border-0 rounded-4 shadow-sm">
+      <form (ngSubmit)="onSubmit()">
+        <div class="row g-3">
 
-      <table class="table align-middle">
-        <thead>
-          <tr>
-            <th>Roll No</th>
-            <th>Name</th>
-            <th>Marks</th>
-            <th>Total</th>
-          </tr>
-        </thead>
+          <div class="col-md-6">
+            <label>Student</label>
+            <select class="form-select" [(ngModel)]="marksData.studentId" name="studentId" required>
+              <option value="">Select Student</option>
+              <option *ngFor="let student of students" [value]="student.userId?._id">{{student.rollNo}} - {{student.userId?.username}}</option>
+            </select>
+          </div>
 
-        <tbody>
-          <tr>
-            <td>01</td>
-            <td>Arjun</td>
-            <td><input type="number" class="form-control w-50"></td>
-            <td>100</td>
-          </tr>
+          <div class="col-md-6">
+            <label>Subject</label>
+            <input class="form-control" [(ngModel)]="marksData.subject" name="subject" placeholder="Math, Science, etc." required>
+          </div>
 
-          <tr>
-            <td>02</td>
-            <td>Sneha</td>
-            <td><input type="number" class="form-control w-50"></td>
-            <td>100</td>
-          </tr>
-        </tbody>
+          <div class="col-md-4">
+            <label>Exam Type</label>
+            <select class="form-select" [(ngModel)]="marksData.examType" name="examType" required>
+              <option value="">Select Exam</option>
+              <option value="Mid Term">Mid Term</option>
+              <option value="Final">Final</option>
+              <option value="Unit Test">Unit Test</option>
+            </select>
+          </div>
 
-      </table>
+          <div class="col-md-4">
+            <label>Marks Obtained</label>
+            <input type="number" class="form-control" [(ngModel)]="marksData.marks" name="marks" required>
+          </div>
 
-      <div class="text-end mt-3">
-        <button class="btn btn-success">Save Marks</button>
-      </div>
+          <div class="col-md-4">
+            <label>Total Marks</label>
+            <input type="number" class="form-control" [(ngModel)]="marksData.total" name="total" required>
+          </div>
 
+          <div class="col-md-12 text-end mt-3">
+            <button type="submit" class="btn btn-success">Add Marks</button>
+          </div>
+
+        </div>
+      </form>
     </div>
 
   </div>

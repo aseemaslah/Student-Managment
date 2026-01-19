@@ -15,26 +15,26 @@
 
     <div class="card p-4 border-0 rounded-4 shadow-sm">
 
-      <form>
+      <form (ngSubmit)="onSubmit()">
         <div class="row g-3">
 
           <div class="col-md-6">
             <label>Class</label>
-            <input class="form-control" placeholder="e.g. 10, 11, 12">
+            <input class="form-control" placeholder="e.g. 10, 11, 12" [(ngModel)]="classData.Class" name="Class" required>
           </div>
 
           <div class="col-md-6">
             <label>Division</label>
-            <input class="form-control" placeholder="e.g. A, B, C">
+            <input class="form-control" placeholder="e.g. A, B, C" [(ngModel)]="classData.Division" name="Division" required>
           </div>
 
           <div class="col-md-12">
             <label>Academic Year</label>
-            <input class="form-control" placeholder="2025 - 2026">
+            <input class="form-control" placeholder="2025 - 2026" [(ngModel)]="classData.AcademicYear" name="AcademicYear" required>
           </div>
 
           <div class="col-md-12 text-end mt-3">
-            <button class="btn btn-primary">Create Class</button>
+            <button type="submit" class="btn btn-primary">Create Class</button>
           </div>
 
         </div>
