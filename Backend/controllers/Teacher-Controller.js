@@ -44,8 +44,27 @@ const viewAttendance = async(req,res)=>{
 };
 
 const addMarks = async(req,res)=>{
-  await ExamMark.create(req.body);
-  res.json("Marks saved");
+  try {
+    const { studentId, subject, examType, marks, total } = req.body;
+    
+    // Validate required fields
+    if (!studentId || !subject || !examType || marks === undefined || !total) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+    
+    // Create exam mark record
+    await ExamMark.create({
+      studentId,
+      subject,
+      examType,
+      marks: Number(marks),
+      total: Number(total)
+    });
+    
+    res.json({ message: "Marks saved successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 module.exports = { addStudent, getStudents, markAttendance, viewAttendance, addMarks };

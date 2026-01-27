@@ -15,26 +15,26 @@
 
     <div class="card p-4 border-0 rounded-4 shadow-sm">
 
-      <form>
+      <form (ngSubmit)="onSubmit()">
         <div class="row g-3">
 
           <div class="col-md-6">
             <label>From Date</label>
-            <input type="date" class="form-control">
+            <input type="date" class="form-control" [(ngModel)]="leaveData.startDate" name="startDate" required>
           </div>
 
           <div class="col-md-6">
             <label>To Date</label>
-            <input type="date" class="form-control">
+            <input type="date" class="form-control" [(ngModel)]="leaveData.endDate" name="endDate" required>
           </div>
 
           <div class="col-md-12">
             <label>Reason</label>
-            <textarea class="form-control" rows="4" placeholder="Explain briefly"></textarea>
+            <textarea class="form-control" rows="4" placeholder="Explain briefly" [(ngModel)]="leaveData.reason" name="reason" required></textarea>
           </div>
 
           <div class="col-md-12 text-end mt-3">
-            <button class="btn btn-primary">Submit Request</button>
+            <button type="submit" class="btn btn-primary">Submit Request</button>
           </div>
 
         </div>

@@ -62,13 +62,8 @@ const getStudentMarks = async (req, res) => {
       return res.status(401).json({ error: 'Student not authenticated' });
     }
 
-    // Get student profile
-    const studentProfile = await StudentProfile.findOne({ userId });
-    if (!studentProfile) {
-      return res.status(404).json({ error: 'Student profile not found' });
-    }
-
-    const marks = await ExamMark.find({ studentId: studentProfile._id })
+    // Find marks directly using userId since ExamMark.studentId references User model
+    const marks = await ExamMark.find({ studentId: userId })
       .sort({ examType: 1, subject: 1 });
 
     res.json(marks);

@@ -39,6 +39,17 @@ export class Entermarks implements OnInit {
   }
 
   onSubmit() {
+    if (!this.marksData.studentId || !this.marksData.subject || !this.marksData.examType || 
+        this.marksData.marks < 0 || this.marksData.total <= 0) {
+      alert('Please fill all fields with valid values');
+      return;
+    }
+
+    if (this.marksData.marks > this.marksData.total) {
+      alert('Marks obtained cannot be greater than total marks');
+      return;
+    }
+
     this.adminService.addExamMarks(this.marksData).subscribe({
       next: (response) => {
         alert('Exam marks added successfully!');
@@ -46,7 +57,7 @@ export class Entermarks implements OnInit {
         this.cdr.markForCheck();
       },
       error: (error) => {
-        alert('Error adding marks: ' + error.message);
+        alert('Error adding marks: ' + (error.error?.error || error.message));
       }
     });
   }

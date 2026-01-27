@@ -1,7 +1,7 @@
 <div class="d-flex">
 
   <!-- Sidebar -->
-<app-teachersidebar></app-teachersidebar>
+  <app-teachersidebar></app-teachersidebar>
 
   <!-- Main -->
   <div class="flex-grow-1 p-4 bg-light">
@@ -14,44 +14,68 @@
     </div>
 
     <div class="card p-4 border-0 rounded-4 shadow-sm">
-      <form (ngSubmit)="onSubmit()">
+      <form (ngSubmit)="onSubmit()" #marksForm="ngForm">
         <div class="row g-3">
 
           <div class="col-md-6">
-            <label>Student</label>
+            <label class="form-label fw-bold">Student *</label>
             <select class="form-select" [(ngModel)]="marksData.studentId" name="studentId" required>
               <option value="">Select Student</option>
-              <option *ngFor="let student of students" [value]="student.userId?._id">{{student.rollNo}} - {{student.userId?.username}}</option>
+              <option *ngFor="let student of students" [value]="student.userId?._id">
+                {{student.rollNo}} - {{student.userId?.username}}
+              </option>
             </select>
           </div>
 
           <div class="col-md-6">
-            <label>Subject</label>
-            <input class="form-control" [(ngModel)]="marksData.subject" name="subject" placeholder="Math, Science, etc." required>
-          </div>
+            <label class="form-label fw-bold">Subject *</label>
 
-          <div class="col-md-4">
-            <label>Exam Type</label>
-            <select class="form-select" [(ngModel)]="marksData.examType" name="examType" required>
-              <option value="">Select Exam</option>
-              <option value="Mid Term">Mid Term</option>
-              <option value="Final">Final</option>
-              <option value="Unit Test">Unit Test</option>
+            <select class="form-select" [(ngModel)]="marksData.subject" name="subjectType" required>
+              <option value="English">English</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="Science">Science</option>
+              <option value="Social Science">Social Science</option>
+              <option value="Hindi">Hindi</option>
+              <option value="Computer Science">Computer Science</option>
             </select>
           </div>
 
           <div class="col-md-4">
-            <label>Marks Obtained</label>
-            <input type="number" class="form-control" [(ngModel)]="marksData.marks" name="marks" required>
+            <label class="form-label fw-bold">Exam Type *</label>
+            <select class="form-select" [(ngModel)]="marksData.examType" name="examType" required>
+              <option value="">Select Exam Type</option>
+              <option value="Mid Term">Mid Term</option>
+              <option value="Final">Final</option>
+              <option value="Unit Test">Unit Test</option>
+              <option value="Quiz">Quiz</option>
+              <option value="Assignment">Assignment</option>
+            </select>
           </div>
 
           <div class="col-md-4">
-            <label>Total Marks</label>
-            <input type="number" class="form-control" [(ngModel)]="marksData.total" name="total" required>
+            <label class="form-label fw-bold">Marks Obtained *</label>
+            <input type="number" class="form-control" [(ngModel)]="marksData.marks" name="marks" min="0"
+              [max]="marksData.total" required>
           </div>
 
-          <div class="col-md-12 text-end mt-3">
-            <button type="submit" class="btn btn-success">Add Marks</button>
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Total Marks *</label>
+            <input type="number" class="form-control" [(ngModel)]="marksData.total" name="total" min="1" required>
+          </div>
+
+          <!-- @if (marksData.marks > 0 && marksData.total > 0) {
+            <div class="col-md-12">
+              <div class="alert alert-info d-flex align-items-center">
+                <i class="fas fa-calculator me-2"></i>
+                <span>Percentage: <strong>{{ ((marksData.marks / marksData.total) * 100).toFixed(1) }}%</strong></span>
+              </div>
+            </div>
+          } -->
+
+          <div class="col-md-12 text-end mt-4">
+            <button type="submit" class="btn btn-primary btn-lg px-4" [disabled]="!marksForm.valid">
+              <i class="fas fa-plus-circle me-2"></i>Add Marks
+            </button>
           </div>
 
         </div>

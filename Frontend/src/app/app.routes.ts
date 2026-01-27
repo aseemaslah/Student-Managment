@@ -20,6 +20,7 @@ import { Viewattendance } from './viewattendance/viewattendance';
 import { Addstudents } from './addstudents/addstudents';
 import { Reqleave } from './reqleave/reqleave';
 import { Viewleave } from './viewleave/viewleave';
+import { Viewadmins } from './viewadmins/viewadmins';
 import { Adminsidebar } from './adminsidebar/adminsidebar';
 import { Teachersidebar } from './teachersidebar/teachersidebar';
 import { Studentsidebar } from './studentsidebar/studentsidebar';
@@ -118,6 +119,11 @@ export const routes: Routes = [
     {
         path: "viewteachers",
         component: Viewteachers,
+        canActivate: [authGuard]
+    },
+    {
+        path: "viewadmins",
+        component: Viewadmins,
         canActivate: [authGuard]
     },
     {

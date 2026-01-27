@@ -2,160 +2,84 @@ body {
   background: #eef1f7;
   font-family: "Inter", "Segoe UI", sans-serif;
 }
-.sidebar {
-  width: 270px;
-  min-height: 100vh;
-  background: linear-gradient(180deg, #141526, #1f2140);
-  color: #d6d7e0;
-  position: sticky;
-  top: 0;
 
-  box-shadow:
-    8px 0 30px rgba(0, 0, 0, 0.35),
-    inset -1px 0 0 rgba(255, 255, 255, 0.05);
-
-  .logo {
-    font-size: 1.5rem;
+.top-bar {
+  margin-bottom: 2rem;
+  
+  .title h3 {
+    color: #2c3e50;
     font-weight: 700;
-    letter-spacing: 0.6px;
-    color: #6ea8fe;
+    margin-bottom: 0.5rem;
   }
-
-  .nav {
-    margin-top: 35px;
+  
+  .title p {
+    color: #6c757d;
+    margin: 0;
   }
+}
 
-  .nav-link {
-    color: rgba(255, 255, 255, 0.75);
-    padding: 14px 18px;
-    border-radius: 12px;
-    margin-bottom: 6px;
-    font-size: 0.95rem;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.35s ease;
+.card {
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
 
-    &::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, rgba(110, 168, 254, 0.18), transparent 70%);
-      opacity: 0;
-      transition: opacity 0.35s ease;
+.table {
+  border-radius: 12px;
+  overflow: hidden;
+  
+  thead {
+    background: linear-gradient(135deg, #343a40, #495057);
+    
+    th {
+      border: none;
+      font-weight: 600;
+      padding: 1rem;
     }
-
-    &:hover {
-      color: white;
-      transform: translateX(6px);
-
-      &::before {
-        opacity: 1;
+  }
+  
+  tbody {
+    tr {
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.01);
+      }
+      
+      td {
+        padding: 1rem;
+        border-color: #e9ecef;
+        vertical-align: middle;
       }
     }
-
-    &.active {
-      color: white;
-      background: linear-gradient(
-        90deg,
-        rgba(110, 168, 254, 0.25),
-        rgba(110, 168, 254, 0.05)
-      );
-      box-shadow: inset 4px 0 0 #6ea8fe;
-    }
   }
+  
+  .badge {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+  }
+}
 
-  .text-danger {
-    color: #ff6b6b !important;
+.spinner-border {
+  color: #0d6efd;
+}
 
+.text-muted {
+  .fa-chart-line {
+    color: #6c757d;
+    opacity: 0.7;
+  }
+}
+
+.summary-stats {
+  .col-md-4 > div {
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    
     &:hover {
-      color: #ff9a9a !important;
-    }
-  }
-}
-.flex-grow-1 {
-  background: #f3f5fb;
-}
-.stat-card {
-  background: linear-gradient(135deg, #ffffff, #f7f9ff);
-  padding: 26px;
-  border-radius: 18px;
-  border: none;
-
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-
-  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-
-  h6 {
-    color: #6c757d;
-    font-weight: 500;
-  }
-
-  h2 {
-    color: #0d6efd;
-    font-weight: 700;
-    margin-top: 8px;
-  }
-
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow:
-      0 20px 50px rgba(0, 0, 0, 0.18),
-      inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  }
-}
-.action-card {
-  position: relative;
-  background: linear-gradient(135deg, #ffffff, #f7f9ff);
-  padding: 32px;
-  border-radius: 20px;
-  border: 1px solid rgba(13, 110, 253, 0.08);
-  overflow: hidden;
-
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-
-  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-
-  h5 {
-    font-weight: 600;
-  }
-
-  p {
-    color: #6c757d;
-    font-size: 0.95rem;
-  }
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 4px;
-    width: 100%;
-    background: linear-gradient(90deg, #0d6efd, #6ea8fe);
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at top left, rgba(13, 110, 253, 0.12), transparent 60%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-  }
-
-  &:hover {
-    transform: translateY(-10px) scale(1.01);
-    box-shadow:
-      0 25px 60px rgba(0, 0, 0, 0.18),
-      inset 0 1px 0 rgba(255, 255, 255, 0.8);
-
-    &::after {
-      opacity: 1;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     }
   }
 }
