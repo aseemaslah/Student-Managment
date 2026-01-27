@@ -6,7 +6,9 @@ const { auth, allow } = require("../middleware/auth");
 
 // Route to add a new admin
 router.post("/add-student", auth, allow("Teacher"), Teacher.addStudent);
+router.get("/students", auth, allow("Teacher"), Teacher.getStudents);
 router.post("/attendance", auth, allow("Teacher"), Teacher.markAttendance);
+router.get("/attendance", auth, allow("Teacher"), Teacher.viewAttendance);
 router.post("/marks", auth, allow("Teacher"), Teacher.addMarks);
 
 

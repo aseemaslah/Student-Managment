@@ -2,6 +2,7 @@ const User = require("../model/User-Model");
 const StudentProfile = require("../model/Student-Model");
 const Attendance = require("../model/Attendance-Model");
 const ExamMark = require("../model/Exam-Marks-Model");
+const Class = require("../model/Class-Model");
 const bcrypt = require("bcryptjs");
 
 const addStudent = async(req,res)=>{
@@ -12,9 +13,34 @@ const addStudent = async(req,res)=>{
   res.json("Student added");
 };
 
+const getStudents = async(req,res)=>{
+  const assignedClass = await Class.findOne({ assignedTeacher: req.user.id });
+  if (!assignedClass) return res.status(404).json({ error: "No class assigned to teacher" });
+  
+  const students = await StudentProfile.find({ classId: assignedClass._id }).populate('userId', 'username');
+  res.json(students);
+};
+
 const markAttendance = async(req,res)=>{
-  await Attendance.create({ ...req.body, teacherId:req.user.id });
+  const { studentName, date, status } = req.body;
+  const user = await User.findOne({ username: studentName });
+  if (!user) return res.status(404).json({ error: "Student not found" });
+  
+  const student = await StudentProfile.findOne({ userId: user._id });
+  if (!student) return res.status(404).json({ error: "Student profile not found" });
+  
+  await Attendance.create({ studentId: student._id, studentName: user.username, teacherId: req.user.id, date, status });
   res.json("Attendance saved");
+};
+
+const viewAttendance = async(req,res)=>{
+  const attendance = await Attendance.find({ teacherId: req.user.id })
+    .populate({
+      path: 'studentId',
+      populate: { path: 'userId', select: 'username' }
+    })
+    .sort({ date: -1 });
+  res.json(attendance);
 };
 
 const addMarks = async(req,res)=>{
@@ -22,4 +48,4 @@ const addMarks = async(req,res)=>{
   res.json("Marks saved");
 };
 
-module.exports = { addStudent, markAttendance, addMarks };
+module.exports = { addStudent, getStudents, markAttendance, viewAttendance, addMarks };

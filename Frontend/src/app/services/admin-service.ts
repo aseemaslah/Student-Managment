@@ -41,10 +41,6 @@ export class AdminService {
     return this.http.post<any>('http://localhost:3000/admin/create-student', studentData);
   }
 
-  markAttendance(attendanceData: any) {
-    return this.http.post<any>('http://localhost:3000/admin/mark-attendance', attendanceData);
-  }
-
   addExamMarks(marksData: any) {
     return this.http.post<any>('http://localhost:3000/admin/add-exam-marks', marksData);
   }
@@ -92,6 +88,18 @@ export class AdminService {
   }
 
   getTeacherStudents() {
-    return this.http.get<any>('http://localhost:3000/admin/teacher-students');
+    return this.http.get<any>('http://localhost:3000/teacher/students');
+  }
+
+  markAttendance(attendanceData: any) {
+    return this.http.post<any>('http://localhost:3000/teacher/attendance', attendanceData);
+  }
+
+  viewAttendance() {
+    return this.http.get<any>('http://localhost:3000/teacher/attendance');
+  }
+
+  getStudentAttendance() {
+    return this.http.get<any>('http://localhost:3000/student/attendance');
   }
 }
