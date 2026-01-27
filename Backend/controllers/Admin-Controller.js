@@ -36,8 +36,8 @@ const createAdmin = async (req, res) => {
 
 const createClass = async (req, res) => {
   try {
-    console.log('=== CREATE CLASS REQUEST ===');
-    console.log('Request body:', JSON.stringify(req.body, null, 2));
+    // console.log('=== CREATE CLASS REQUEST ===');
+    // console.log('Request body:', JSON.stringify(req.body, null, 2));
     
     if (!req.body.Class || !req.body.Division || !req.body.AcademicYear) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -55,9 +55,9 @@ const createClass = async (req, res) => {
     console.log('Class created successfully:', newClass);
     res.json({ message: "Class created", data: newClass });
   } catch (error) {
-    console.error('=== CREATE CLASS ERROR ===');
-    console.error('Error name:', error.name);
-    console.error('Error message:', error.message);
+    // console.error('=== CREATE CLASS ERROR ===');
+    // console.error('Error name:', error.name);
+    // console.error('Error message:', error.message);
     res.status(500).json({ error: error.message, details: error.name });
   }
 };
@@ -142,9 +142,9 @@ const createStudent = async (req, res) => {
     
     res.json({ message: "Student created successfully" });
   } catch (error) {
-    console.error('=== CREATE STUDENT ERROR ===');
-    console.error('Error name:', error.name);
-    console.error('Error message:', error.message);
+    // console.error('=== CREATE STUDENT ERROR ===');
+    // console.error('Error name:', error.name);
+    // console.error('Error message:', error.message);
     
     if (error.code === 11000) {
       if (error.message.includes('username')) {
@@ -193,12 +193,12 @@ const markAttendance = async (req, res) => {
     }
     
     const attendanceRecord = await Attendance.create({ studentId, teacherId, date, status });
-    console.log('Attendance marked successfully:', attendanceRecord);
+    // console.log('Attendance marked successfully:', attendanceRecord);
     res.json({ message: "Attendance marked successfully" });
   } catch (error) {
-    console.error('=== MARK ATTENDANCE ERROR ===');
-    console.error('Error name:', error.name);
-    console.error('Error message:', error.message);
+    // console.error('=== MARK ATTENDANCE ERROR ===');
+    // console.error('Error name:', error.name);
+    // console.error('Error message:', error.message);
     res.status(500).json({ error: error.message });
   }
 };
@@ -489,6 +489,56 @@ const getTeacherStudents = async (req, res) => {
   }
 };
 
+const getDashboardStats = async (req, res) => {
+  try {
+    const totalTeachers = await User.countDocuments({ role: 'Teacher' });
+    const totalStudents = await User.countDocuments({ role: 'Student' });
+    const totalClasses = await Class.countDocuments();
+
+    res.json({ totalTeachers, totalStudents, totalClasses });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+const getTeacherDashboardStats = async (req, res) => {
+  try {
+    const teacherId = req.user?.id;
+    if (!teacherId) {
+      return res.status(401).json({ error: 'Teacher not authenticated' });
+    }
+    const classes = await Class.find({ assignedTeacher: teacherId });
+    const classIds = classes.map(cls => cls._id);
+    const totalStudents = await StudentProfile.countDocuments({ classId: { $in: classIds } });
+
+    res.json({ totalStudents });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getStudentDashboardStats = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ error: 'Student not authenticated' });
+    }
+    const studentProfile = await Student
+      .findOne({ userId })
+      .populate('classId', 'Class Division AcademicYear');
+    if (!studentProfile) {
+      return res.status(404).json({ error: 'Student profile not found' });
+    } 
+
+    res.json({ class: studentProfile.classId });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+
 module.exports = { 
   createTeacher, 
   createAdmin, 
@@ -507,5 +557,8 @@ module.exports = {
   getClassAttendanceSummary,
   getExamReport, 
   getTeacherClasses, 
-  getTeacherStudents 
+  getTeacherStudents ,
+  getDashboardStats,
+  getTeacherDashboardStats,
+  getStudentDashboardStats
 };

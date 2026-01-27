@@ -1,7 +1,7 @@
 <div class="d-flex">
 
   <!-- Sidebar -->
-<app-studentsidebar></app-studentsidebar>
+  <app-studentsidebar></app-studentsidebar>
 
   <!-- Main -->
   <div class="flex-grow-1 p-4 bg-light">
@@ -14,37 +14,85 @@
     </div>
 
     <div class="card p-4 border-0 rounded-4 shadow-sm">
-      <div *ngIf="loading" class="text-center p-4">
-        <div class="spinner-border" role="status">
-          <span class="visually-hidden">Loading...</span>
+      @if (loading) {
+        <div class="text-center p-4">
+          <div class="spinner-border" role="status"></div>
+          <p class="mt-2">Loading your results...</p>
         </div>
-        <p class="mt-2">Loading your results...</p>
-      </div>
-      
-      <table *ngIf="!loading" class="table table-hover align-middle">
-        <thead>
-          <tr>
-            <th>Subject</th>
-            <th>Exam Type</th>
-            <th>Marks</th>
-            <th>Total</th>
-            <th>Percentage</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr *ngFor="let exam of examData">
-            <td>{{exam.subject}}</td>
-            <td>{{exam.examType}}</td>
-            <td>{{exam.marks}}</td>
-            <td>{{exam.total}}</td>
-            <td>{{(exam.marks / exam.total * 100).toFixed(1)}}%</td>
-          </tr>
-          <tr *ngIf="examData.length === 0">
-            <td colspan="5" class="text-center">No exam results found</td>
-          </tr>
-        </tbody>
-      </table>
+      } @else if (examData.length === 0) {
+        <div class="text-center p-4 text-muted">
+          <i class="fas fa-chart-line fa-3x mb-3"></i>
+          <h5>No Exam Results Found</h5>
+          <p>Your exam results will appear here once they are entered by your teacher.</p>
+        </div>
+      } @else {
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Subject</th>
+                <th>Exam Type</th>
+                <th>Marks Obtained</th>
+                <th>Total Marks</th>
+                <th>Percentage</th>
+                <th>Grade</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (exam of examData; track exam._id) {
+                <tr>
+                  <td>
+                    <strong>{{ exam.subject }}</strong>
+                  </td>
+                  <td>
+                    <span class="badge bg-info">{{ exam.examType }}</span>
+                  </td>
+                  <td class="text-center">
+                    <span class="fw-bold">{{ exam.marks }}</span>
+                  </td>
+                  <td class="text-center">
+                    {{ exam.total }}
+                  </td>
+                  <td class="text-center">
+                    <span class="fw-bold" 
+                          [class]="calculatePercentage(exam.marks, exam.total) >= 60 ? 'text-success' : 'text-danger'">
+                      {{ calculatePercentage(exam.marks, exam.total) }}%
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    <span class="badge" 
+                          [class]="getGrade(calculatePercentage(exam.marks, exam.total)) === 'F' ? 'bg-danger' : 'bg-success'">
+                      {{ getGrade(calculatePercentage(exam.marks, exam.total)) }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Summary Stats -->
+        <div class="row mt-4">
+          <div class="col-md-4">
+            <div class="text-center p-3 bg-primary text-white rounded">
+              <h6>Total Subjects</h6>
+              <h4>{{ examData.length }}</h4>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="text-center p-3 bg-success text-white rounded">
+              <h6>Average Percentage</h6>
+              <h4>{{ getAveragePercentage() }}%</h4>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="text-center p-3 bg-info text-white rounded">
+              <h6>Overall Grade</h6>
+              <h4>{{ getGrade(getAveragePercentage()) }}</h4>
+            </div>
+          </div>
+        </div>
+      }
     </div>
 
   </div>

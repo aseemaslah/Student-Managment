@@ -22,4 +22,8 @@ export class StudentService {
   getMyLeaves() {
     return this.http.get<any>('http://localhost:3000/student/leaves');
   }
+
+  getDashboardStats() {
+    return this.http.get<any>('http://localhost:3000/student/dashboard-stats');
+  }
 }

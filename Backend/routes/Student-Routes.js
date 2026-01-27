@@ -7,5 +7,6 @@ router.post('/submit-leave', auth, allow("Student"), Student.submitLeave);
 router.get('/attendance', auth, allow("Student"), Student.getStudentAttendance);
 router.get('/marks', auth, allow("Student"), Student.getStudentMarks);
 router.get('/leaves', auth, allow("Student"), Student.getStudentLeaves);
+router.get('/dashboard-stats', auth, allow("Student"), Student.getDashboardStats);
 
 module.exports = router;

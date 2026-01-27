@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { Main } from './main/main';
-import { Navbar } from './navbar/navbar';
 import { Footer } from './footer/footer';
 import { Admin } from './admin/admin';
 import { Teacher } from './teacher/teacher';
@@ -24,8 +23,8 @@ import { Viewleave } from './viewleave/viewleave';
 import { Adminsidebar } from './adminsidebar/adminsidebar';
 import { Teachersidebar } from './teachersidebar/teachersidebar';
 import { Studentsidebar } from './studentsidebar/studentsidebar';
+import { authGuard } from './services/auth.guard';
 
-import { Studentattendance } from './studentattendance/studentattendance';
 
 export const routes: Routes = [
 
@@ -44,15 +43,18 @@ export const routes: Routes = [
     },
     {
         path: "admin",
-        component: Admin
+        component: Admin,
+        canActivate: [authGuard]
     },
     {
         path: "teacher",
-        component:Teacher
+        component:Teacher,
+        canActivate: [authGuard]
     },
     {
         path: "student",
-        component: Student
+        component: Student,
+        canActivate: [authGuard]
     },
     {
         path: "registration",
@@ -60,79 +62,99 @@ export const routes: Routes = [
     },
     {
         path: "addteacher",
-        component: Addteacher
+        component: Addteacher,
+        canActivate: [authGuard]
     },
     {
         path: "addadmin",
-        component: Addadmin
+        component: Addadmin,
+        canActivate: [authGuard]
     },
     {
         path: "addstudents",
-        component: Addstudents
+        component: Addstudents,
+        canActivate: [authGuard]
     },
     {
         path: "assignteachers",
-        component: Assignteacher
+        component: Assignteacher,
+        canActivate: [authGuard]
     },
     {
         path: "createclass",
-        component: Createclass   
+        component: Createclass,
+        canActivate: [authGuard]   
     },
     {
         path: "markattendance",
-        component: Markattendance
+        component: Markattendance,
+        canActivate: [authGuard]
     },
     {
         path: "attendancereport",
-        component: Attendancereport
+        component: Attendancereport,
+        canActivate: [authGuard]
     },
     {
         path: "entermarks",
-        component: Entermarks
+        component: Entermarks,
+        canActivate: [authGuard]
     },
     {
         path: "viewstudents",
-        component: Viewstudents
+        component: Viewstudents,
+        canActivate: [authGuard]
     },
     {
         path: "teacherviewstudents",
-        component: Teacherviewstudents
+        component: Teacherviewstudents,
+        canActivate: [authGuard]
     },
     {
         path: "viewresults",
         component: Viewresults,
+        canActivate: [authGuard]
     },
     {
         path: "viewteachers",
-        component: Viewteachers
+        component: Viewteachers,
+        canActivate: [authGuard]
     },
     {
         path: "viewattendance",
-        component: Viewattendance
+        component: Viewattendance,
+        canActivate: [authGuard]
     },
-    {
-        path: "studentattendance",
-        component: Studentattendance
-    },
+
     {
         path: "reqleave",
-        component: Reqleave
+        component: Reqleave,
+        canActivate: [authGuard]
     },
     {
         path: "viewleave",
-        component: Viewleave
+        component: Viewleave,
+        canActivate: [authGuard]
     },
     {
         path: "adminsidebar",
-        component: Adminsidebar
+        component: Adminsidebar,
+        canActivate: [authGuard]
     },
     {
         path: "teachersidebar",
-        component: Teachersidebar
+        component: Teachersidebar,
+        canActivate: [authGuard]
     },
     {
         path: "studentsidebar",
-        component: Studentsidebar
+        component: Studentsidebar,
+        canActivate: [authGuard]
+    },
+    {
+        path: "student",
+        component: Student,
+        canActivate: [authGuard]
     }
 
 ];

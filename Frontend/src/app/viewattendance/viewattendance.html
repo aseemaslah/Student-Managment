@@ -1,11 +1,12 @@
 <div class="d-flex">
 
   <!-- Sidebar -->
-<app-studentsidebar></app-studentsidebar>
+  <app-studentsidebar></app-studentsidebar>
 
   <!-- Main -->
   <div class="flex-grow-1 p-4 bg-light">
 
+    <!-- Header -->
     <div class="top-bar">
       <div class="title">
         <h3>My Attendance</h3>
@@ -13,71 +14,86 @@
       </div>
     </div>
 
-    <!-- Loading -->
-    <div *ngIf="loading" class="text-center p-4">
-      <div class="spinner-border" role="status"></div>
-      <p class="mt-2">Loading attendance...</p>
-    </div>
+    <!-- Loading OR Content -->
+    @if (loading) {
 
-    <!-- Error -->
-    <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+      <!-- Loading -->
+      <div class="text-center p-5">
+        <div class="spinner-border" role="status"></div>
+        <p class="mt-2">Loading attendance...</p>
+      </div>
 
-    <!-- Content -->
-    <div *ngIf="!loading && !error">
+    } @else {
+
       <!-- Summary -->
       <div class="row g-4 mt-3">
+
         <div class="col-md-4">
-          <div class="card stat-card">
+          <div class="card stat-card text-center">
             <h6>Overall</h6>
-            <h2>{{getAttendanceStats().percentage}}%</h2>
+            <h2>{{ percentage }}%</h2>
           </div>
         </div>
 
         <div class="col-md-4">
-          <div class="card stat-card">
+          <div class="card stat-card text-center">
             <h6>Present</h6>
-            <h2>{{getAttendanceStats().present}}</h2>
+            <h2>{{ present }}</h2>
           </div>
         </div>
 
         <div class="col-md-4">
-          <div class="card stat-card">
+          <div class="card stat-card text-center">
             <h6>Absent</h6>
-            <h2>{{getAttendanceStats().absent}}</h2>
+            <h2>{{ absent }}</h2>
           </div>
         </div>
+
       </div>
 
       <!-- Attendance Table -->
       <div class="card p-4 mt-4 border-0 rounded-4 shadow-sm">
-        <table class="table table-hover align-middle" *ngIf="attendance.length > 0">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Teacher</th>
-              <th>Status</th>
-            </tr>
-          </thead>
 
-          <tbody>
-            <tr *ngFor="let record of attendance">
-              <td>{{record.date | date:'dd MMM yyyy'}}</td>
-              <td>{{record.teacherId?.username || 'N/A'}}</td>
-              <td>
-                <span class="badge" [class]="record.status === 'Present' ? 'bg-success' : 'bg-danger'">
-                  {{record.status}}
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        
-        <div *ngIf="attendance.length === 0" class="text-center p-4">
-          <p class="text-muted">No attendance records found</p>
-        </div>
+        @if (attendance.length > 0) {
+
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Teacher</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (record of attendance; track record._id) {
+                <tr>
+                  <td>{{ record.date | date:'dd MMM yyyy' }}</td>
+                  <td>{{ record.teacherId?.username || 'N/A' }}</td>
+                  <td>
+                    <span
+                      class="badge"
+                      [class.bg-success]="record.status === 'Present'"
+                      [class.bg-danger]="record.status === 'Absent'">
+                      {{ record.status }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+        } @else {
+
+          <div class="text-center py-4">
+            <p class="text-muted mb-0">No attendance records found</p>
+          </div>
+
+        }
+
       </div>
-    </div>
+
+    }
 
   </div>
-
 </div>
