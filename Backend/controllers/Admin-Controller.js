@@ -508,11 +508,15 @@ const getTeacherDashboardStats = async (req, res) => {
     if (!teacherId) {
       return res.status(401).json({ error: 'Teacher not authenticated' });
     }
-    const classes = await Class.find({ assignedTeacher: teacherId });
+    const classes = await Class.find({ assignedTeacher: teacherId })
+      .select('Class Division AcademicYear');
     const classIds = classes.map(cls => cls._id);
     const totalStudents = await StudentProfile.countDocuments({ classId: { $in: classIds } });
 
-    res.json({ totalStudents });
+    res.json({ 
+      myClasses: classes,
+      totalStudents 
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

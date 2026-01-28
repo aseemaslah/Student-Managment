@@ -1,40 +1,82 @@
 <div class="d-flex">
 
   <!-- Sidebar -->
-<app-adminsidebar></app-adminsidebar>
+  <app-adminsidebar></app-adminsidebar>
 
   <!-- Main -->
   <div class="flex-grow-1 p-4 bg-light">
 
-    <div class="top-bar">
+    <!-- Header -->
+    <div class="top-bar mb-4">
       <div class="title">
         <h3>Create Class & Division</h3>
         <p>Define academic structure</p>
       </div>
     </div>
 
+    <!-- Card -->
     <div class="card p-4 border-0 rounded-4 shadow-sm">
 
-      <form (ngSubmit)="onSubmit()">
+      <form (ngSubmit)="onSubmit()" #classForm="ngForm">
         <div class="row g-3">
 
+          <!-- Class Dropdown -->
           <div class="col-md-6">
-            <label>Class</label>
-            <input class="form-control" placeholder="e.g. 10, 11, 12" [(ngModel)]="classData.Class" name="Class" required>
+            <label class="form-label">Class</label>
+            <select
+              class="form-select"
+              name="Class"
+              [(ngModel)]="classData.Class"
+              required
+            >
+              <option value="" disabled selected>Select Class</option>
+              @for (cls of classes; track cls) {
+                <option [value]="cls">{{ cls }}</option>
+              }
+            </select>
           </div>
 
+          <!-- Division Dropdown -->
           <div class="col-md-6">
-            <label>Division</label>
-            <input class="form-control" placeholder="e.g. A, B, C" [(ngModel)]="classData.Division" name="Division" required>
+            <label class="form-label">Division</label>
+            <select
+              class="form-select"
+              name="Division"
+              [(ngModel)]="classData.Division"
+              required
+            >
+              <option value="" disabled selected>Select Division</option>
+              @for (div of divisions; track div) {
+                <option [value]="div">{{ div }}</option>
+              }
+            </select>
           </div>
 
+          <!-- Academic Year (Advanced) -->
           <div class="col-md-12">
-            <label>Academic Year</label>
-            <input class="form-control" placeholder="2025 - 2026" [(ngModel)]="classData.AcademicYear" name="AcademicYear" required>
+            <label class="form-label">Academic Year</label>
+            <select
+              class="form-select"
+              name="AcademicYear"
+              [(ngModel)]="classData.AcademicYear"
+              required
+            >
+              <option value="" disabled selected>Select Academic Year</option>
+              @for (year of academicYears; track year) {
+                <option [value]="year">{{ year }}</option>
+              }
+            </select>
           </div>
 
-          <div class="col-md-12 text-end mt-3">
-            <button type="submit" class="btn btn-primary">Create Class</button>
+          <!-- Submit -->
+          <div class="col-md-12 text-end mt-4">
+            <button
+              type="submit"
+              class="btn btn-primary px-4"
+              [disabled]="classForm.invalid"
+            >
+              Create Class
+            </button>
           </div>
 
         </div>
@@ -43,5 +85,4 @@
     </div>
 
   </div>
-
 </div>

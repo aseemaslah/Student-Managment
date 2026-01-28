@@ -1,7 +1,5 @@
-<div class="d-flex">
-
-  <!-- Sidebar -->
-
+<div class="d-flex min-vh-100">
+   <!-- Sidebar -->
   <app-adminsidebar></app-adminsidebar>
 
   <!-- Main -->
@@ -10,41 +8,38 @@
     <h3>Admin Dashboard</h3>
     <p class="text-muted">System overview</p>
 
-    <!-- Stats -->
-    <div *ngIf="loading" class="text-center p-4">
-      <div class="spinner-border" role="status"></div>
-      <p class="mt-2">Loading dashboard...</p>
-    </div>
-    
-    <div *ngIf="!loading" class="row g-4 mt-3">
-      <div class="col-md-3">
-        <div class="card stat-card bg-primary text-white">
-          <h6>Total Students</h6>
-          <h2>{{stats.totalStudents}}</h2>
-        </div>
+    <!-- Loading / Stats -->
+    @if (loading) {
+      <div class="text-center p-4">
+        <div class="spinner-border" role="status"></div>
+        <p class="mt-2">Loading dashboard...</p>
       </div>
+    } @else {
+      <div class="row g-4 mt-3">
 
-      <div class="col-md-3">
-        <div class="card stat-card bg-success text-white">
-          <h6>Total Teachers</h6>
-          <h2>{{stats.totalTeachers}}</h2>
+        <div class="col-md-3">
+          <div class="card stat-card bg-primary text-white">
+            <h6>Total Students</h6>
+            <h2>{{ stats.totalStudents }}</h2>
+          </div>
         </div>
-      </div>
+  
+        <div class="col-md-3">
+          <div class="card stat-card bg-success text-white">
+            <h6>Total Teachers</h6>
+            <h2>{{ stats.totalTeachers }}</h2>
+          </div>
+        </div>
 
-      <div class="col-md-3">
-        <div class="card stat-card bg-info text-white">
-          <h6>Total Classes</h6>
-          <h2>{{stats.totalClasses}}</h2>
+        <div class="col-md-3">
+          <div class="card stat-card bg-info text-white">
+            <h6>Total Classes</h6>
+            <h2>{{ stats.totalClasses }}</h2>
+          </div>
         </div>
-      </div>
 
-      <div class="col-md-3">
-        <div class="card stat-card bg-warning text-white">
-          <h6>Attendance Rate</h6>
-          <h2>{{stats.attendancePercentage}}%</h2>
-        </div>
       </div>
-    </div>
+    }
 
     <!-- Actions -->
     <div class="row mt-5 g-4">
@@ -61,7 +56,9 @@
         <div class="action-card">
           <h5>Create Class</h5>
           <p>Define class, division and structure.</p>
-          <button class="btn btn-outline-primary" routerLink="/createclass">Create Class</button>
+          <button class="btn btn-outline-primary" routerLink="/createclass">
+            Create Class
+          </button>
         </div>
       </div>
 
@@ -77,7 +74,9 @@
         <div class="action-card">
           <h5>Assign Teachers</h5>
           <p>Link teachers with their classes.</p>
-          <button class="btn btn-outline-dark" routerLink="/assignteachers">Assign</button>
+          <button class="btn btn-outline-dark" routerLink="/assignteachers">
+            Assign
+          </button>
         </div>
       </div>
 
@@ -85,20 +84,23 @@
         <div class="action-card">
           <h5>View Teachers</h5>
           <p>View teachers with their classes.</p>
-          <button class="btn btn-outline-dark" routerLink="/viewteachers">View</button>
+          <button class="btn btn-outline-dark" routerLink="/viewteachers">
+            View
+          </button>
         </div>
       </div>
 
-      <div class="col-md-6">
+      <!-- <div class="col-md-6">
         <div class="action-card">
           <h5>View Admins</h5>
           <p>View all administrators in the system.</p>
-          <button class="btn btn-outline-dark" routerLink="/viewadmins">View</button>
+          <button class="btn btn-outline-dark" routerLink="/viewadmins">
+            View
+          </button>
         </div>
-      </div>
+      </div> -->
 
     </div>
 
   </div>
-
 </div>
