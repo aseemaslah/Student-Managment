@@ -6,7 +6,7 @@ import { RouterLink, Router } from "@angular/router";
   imports: [RouterLink],
   templateUrl: './studentsidebar.html',
   styleUrl: './studentsidebar.scss',
-})
+}) 
 export class Studentsidebar {
   private router = inject(Router);
 
