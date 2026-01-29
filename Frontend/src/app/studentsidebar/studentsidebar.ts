@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Component, inject } from '@angular/core';
+import { RouterLink, Router } from "@angular/router";
 
 @Component({
   selector: 'app-studentsidebar',
@@ -8,5 +8,10 @@ import { RouterLink } from "@angular/router";
   styleUrl: './studentsidebar.scss',
 })
 export class Studentsidebar {
+  private router = inject(Router);
 
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/main']);
+  }
 }

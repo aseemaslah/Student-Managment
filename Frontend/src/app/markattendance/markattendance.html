@@ -1,7 +1,8 @@
 <div class="d-flex">
 
   <!-- Sidebar -->
-<app-teachersidebar></app-teachersidebar>
+  <app-teachersidebar></app-teachersidebar>
+
   <!-- Main -->
   <div class="flex-grow-1 p-4 bg-light">
 
@@ -16,29 +17,56 @@
       <form (ngSubmit)="onSubmit()">
         <div class="row g-3">
 
+          <!-- Student -->
           <div class="col-md-4">
-            <label>Student</label>
-            <select class="form-select" [(ngModel)]="attendanceData.studentId" name="studentId" required>
+            <label class="form-label">Student</label>
+            <select
+              class="form-select"
+              [(ngModel)]="attendanceData.studentId"
+              name="studentId"
+              required
+            >
               <option value="">Select Student</option>
-              <option *ngFor="let student of students" [value]="student.userId?._id">{{student.rollNo}} - {{student.userId?.username}}</option>
+
+              @for (student of students; track student._id) {
+                <option [value]="student.userId?._id">
+                  {{ student.rollNo }} - {{ student.userId?.username }}
+                </option>
+              }
             </select>
           </div>
 
+          <!-- Date -->
           <div class="col-md-4">
-            <label>Date</label>
-            <input type="date" class="form-control" [(ngModel)]="attendanceData.date" name="date" required>
+            <label class="form-label">Date</label>
+            <input
+              type="date"
+              class="form-control"
+              [(ngModel)]="attendanceData.date"
+              name="date"
+              required
+            />
           </div>
 
+          <!-- Status -->
           <div class="col-md-4">
-            <label>Status</label>
-            <select class="form-select" [(ngModel)]="attendanceData.status" name="status" required>
+            <label class="form-label">Status</label>
+            <select
+              class="form-select"
+              [(ngModel)]="attendanceData.status"
+              name="status"
+              required
+            >
               <option value="Present">Present</option>
               <option value="Absent">Absent</option>
             </select>
           </div>
 
+          <!-- Submit -->
           <div class="col-md-12 text-end mt-3">
-            <button type="submit" class="btn btn-success">Mark Attendance</button>
+            <button type="submit" class="btn btn-success">
+              Mark Attendance
+            </button>
           </div>
 
         </div>
@@ -46,5 +74,4 @@
     </div>
 
   </div>
-
 </div>
