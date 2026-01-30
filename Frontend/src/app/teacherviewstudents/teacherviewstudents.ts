@@ -46,4 +46,32 @@ export class Teacherviewstudents implements OnInit {
       }
     });
   }
+  onDeleteStudent(studentId: string) {
+    this.adminService.deleteStudent(studentId).subscribe({
+      next: () => {
+        console.log('Student deleted:', studentId);
+        this.students = this.students.filter(s => s._id !== studentId);
+        this.cdr.markForCheck();
+      },
+      error: (error) => {
+        console.error('Error deleting student:', error);
+      }
+    });
+  }
+onEditStudent(student: any) {
+    const currentUsername = student.userId?.username;
+    const newUsername = prompt('Enter new username:', currentUsername);
+    if (newUsername && newUsername !== currentUsername) {
+      this.adminService.updateStudent(student._id, { username: newUsername }).subscribe({
+        next: () => {
+          this.loadStudents();
+        },
+        error: (error) => {
+          console.error('Error updating student:', error);
+          alert('Failed to update student');
+        }
+      });
+    }
+  }
+
 }

@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -6,14 +6,22 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class TeacherService {
-  private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/teacher';
 
-  getLeaveRequests(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/leave-requests`);
+  private API = 'http://localhost:3000/api/teachers';
+
+  constructor(private http: HttpClient) {}
+
+  getTeachers(): Observable<any[]> {
+    return this.http.get<any[]>(this.API);
   }
 
-  updateLeaveStatus(leaveId: number, status: string): Observable<any> {
-    return this.http.put(`${this.apiUrl}/leave-requests/${leaveId}/status`, { status });
+  updateTeacher(id: string, data: any): Observable<any> {
+    return this.http.put(`${this.API}/${id}`, data);
   }
+
+  deleteTeacher(id: string): Observable<any> {
+    return this.http.delete(`${this.API}/${id}`);
+  }
+
+  
 }

@@ -27,5 +27,8 @@ router.get("/dashboard-stats", Admin.getDashboardStats);
 router.get("/teacher-dashboard-stats", auth, Admin.getTeacherDashboardStats);
 router.get("/student-dashboard-stats", auth, Admin.getStudentDashboardStats);
 router.get("/exam-report", Admin.getExamReport);
+router.put("/update-teacher/:id", auth, allow("Admin"), Admin.updateTeacher);
+router.delete("/delete-teacher/:id", auth, allow("Admin"), Admin.DeleteTeacher);
+
 
 module.exports = router;

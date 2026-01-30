@@ -542,6 +542,35 @@ const getStudentDashboardStats = async (req, res) => {
 };
 
 
+const DeleteTeacher = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const teacher = await User.findByIdAndDelete(id);
+    res.json({ message: 'Teacher deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updateTeacher = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { username, password } = req.body;
+    const updateData = { username };
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updateData.password = hashedPassword;
+    }
+    const teacher = await User.findByIdAndUpdate(id, updateData, { new: true });
+    res.json({ message: 'Teacher updated successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+
+
 
 module.exports = { 
   createTeacher, 
@@ -564,5 +593,7 @@ module.exports = {
   getTeacherStudents ,
   getDashboardStats,
   getTeacherDashboardStats,
-  getStudentDashboardStats
+  getStudentDashboardStats,
+  DeleteTeacher,
+  updateTeacher,
 };

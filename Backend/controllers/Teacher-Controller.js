@@ -17,7 +17,9 @@ const getStudents = async(req,res)=>{
   const assignedClass = await Class.findOne({ assignedTeacher: req.user.id });
   if (!assignedClass) return res.status(404).json({ error: "No class assigned to teacher" });
   
-  const students = await StudentProfile.find({ classId: assignedClass._id }).populate('userId', 'username');
+  const students = await StudentProfile.find({ classId: assignedClass._id })
+    .populate('userId', 'username')
+    .populate('classId', 'Class Division AcademicYear');
   res.json(students);
 };
 
@@ -67,4 +69,46 @@ const addMarks = async(req,res)=>{
   }
 };
 
-module.exports = { addStudent, getStudents, markAttendance, viewAttendance, addMarks };
+const DeleteStudent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const studentProfile = await StudentProfile
+      .findByIdAndDelete(id);
+    if (!studentProfile) {
+      return res.status(404).json({ error: 'Student profile not found' });
+    }
+    await User.findByIdAndDelete(studentProfile.userId);
+    res.json({ message: 'Student deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updateStudent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { username, password } = req.body;
+    
+    const studentProfile = await StudentProfile.findById(id);
+    if (!studentProfile) {
+      return res.status(404).json({ error: 'Student profile not found' });
+    }
+
+    const updateData = {};
+    if (username) updateData.username = username;
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updateData.password = hashedPassword;
+    }
+    
+    if (Object.keys(updateData).length > 0) {
+      await User.findByIdAndUpdate(studentProfile.userId, updateData);
+    }
+    
+    res.json({ message: 'Student updated successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { addStudent, getStudents, markAttendance, viewAttendance, addMarks, DeleteStudent, updateStudent };

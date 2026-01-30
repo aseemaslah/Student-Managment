@@ -39,4 +39,32 @@ export class Viewteachers implements OnInit {
       }
     });
   }
+  updateTeacher(teacher: any) {
+    const currentUsername = teacher.userId?.username;
+    const newUsername = prompt('Enter new username:', currentUsername);
+    if (newUsername && newUsername !== currentUsername) {
+      this.adminService.updateTeacher(teacher._id, { username: newUsername }).subscribe({
+        next: () => {
+          this.loadTeachers();
+        },
+        error: (error) => {
+          console.error('Error updating teacher:', error);
+          alert('Failed to update teacher');
+        }
+      });
+    }
+  }
+
+  deleteTeacher(teacherId: string) {
+    this.adminService.deleteTeacher(teacherId).subscribe({
+      next: () => {
+        console.log('Teacher deleted:', teacherId);
+        this.teachers = this.teachers.filter(t => t._id !== teacherId);
+        this.cdr.markForCheck();
+      },
+      error: (error) => {
+        console.error('Error deleting teacher:', error);
+      }
+    });
+  } 
 }

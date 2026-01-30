@@ -1,10 +1,12 @@
 <div class="d-flex">
 
   <!-- Sidebar -->
-<app-adminsidebar></app-adminsidebar>
+  <app-adminsidebar></app-adminsidebar>
+
   <!-- Main -->
   <div class="flex-grow-1 p-4 bg-light">
 
+    <!-- Top Bar -->
     <div class="top-bar">
       <div class="title">
         <h3>Teachers</h3>
@@ -12,53 +14,72 @@
       </div>
     </div>
 
-    <!-- Search & Filter -->
-    <div class="card p-4 border-0 rounded-4 shadow-sm mb-4">
-      <div class="row g-3">
-        <div class="col-md-4">
-          <input class="form-control" placeholder="Search teacher">
-        </div>
-        <div class="col-md-4">
-          <select class="form-select">
-            <option>All Subjects</option>
-            <option>Math</option>
-            <option>Science</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
     <!-- Teacher Table -->
     <div class="card p-4 border-0 rounded-4 shadow-sm">
-      <div *ngIf="loading" class="text-center p-4">
-        <div class="spinner-border" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-        <p class="mt-2">Loading teachers...</p>
-      </div>
-      
-      <div *ngIf="error" class="alert alert-danger">{{error}}</div>
-      
-      <table *ngIf="!loading && !error" class="table table-hover align-middle">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Status</th>
-          </tr>
-        </thead>
 
-        <tbody>
-          <tr *ngFor="let teacher of teachers">
-            <td>{{teacher._id}}</td>
-            <td>{{teacher.username}}</td>
-            <td><span class="badge bg-success">Active</span></td>
-          </tr>
-          <tr *ngIf="teachers.length === 0">
-            <td colspan="3" class="text-center">No teachers found</td>
-          </tr>
-        </tbody>
-      </table>
+      @if (loading) {
+        <div class="text-center p-4">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-2">Loading teachers...</p>
+        </div>
+      }
+
+      @if (error) {
+        <div class="alert alert-danger">
+          {{ error }}
+        </div>
+      }
+
+      @if (!loading && !error) {
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Status</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (teacher of teachers; track teacher._id) {
+              <tr>
+                <td>{{ teacher.username }}</td>
+
+                <td>
+                  <span class="badge bg-success">Active</span>
+                </td>
+
+                <td class="text-end">
+                  <button
+                    class="btn btn-sm btn-outline-primary me-2"
+                    (click)="updateTeacher(teacher)"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    class="btn btn-sm btn-outline-danger"
+                    (click)="deleteTeacher(teacher._id)"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            }
+
+            @if (teachers.length === 0) {
+              <tr>
+                <td colspan="3" class="text-center">
+                  No teachers found
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+
     </div>
 
   </div>

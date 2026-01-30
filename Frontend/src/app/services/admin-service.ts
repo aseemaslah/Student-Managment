@@ -102,4 +102,20 @@ export class AdminService {
   getStudentAttendance() {
     return this.http.get<any>('http://localhost:3000/student/attendance');
   }
+
+  updateTeacher(teacherId: string, updateData: any) {
+    return this.http.put<any>(`http://localhost:3000/admin/update-teacher/${teacherId}`, updateData);
+  }
+
+  deleteTeacher(teacherId: string) {
+    return this.http.delete<any>(`http://localhost:3000/admin/delete-teacher/${teacherId}`);
+  }
+
+  updateStudent(studentId: string, updateData: any) {
+    return this.http.put<any>(`http://localhost:3000/teacher/update-student/${studentId}`, updateData);
+  }
+
+  deleteStudent(studentId: string) {
+    return this.http.delete<any>(`http://localhost:3000/teacher/delete-student/${studentId}`);
+  }
 }
