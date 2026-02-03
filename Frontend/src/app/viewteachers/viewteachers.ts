@@ -1,70 +1,156 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
-import { RouterLink } from "@angular/router";
-import { Adminsidebar } from "../adminsidebar/adminsidebar";
-import { AdminService } from '../services/admin-service';
+import {
+  Component,
+  inject,
+  OnInit,
+  ChangeDetectorRef
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
+
+import { Adminsidebar } from '../adminsidebar/adminsidebar';
+import { AdminService } from '../services/admin-service';
+import { Teacher } from '../teacher/teacher';
+
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-viewteachers',
-  imports: [Adminsidebar, CommonModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    Adminsidebar
+  ],
   templateUrl: './viewteachers.html',
   styleUrl: './viewteachers.scss',
 })
 export class Viewteachers implements OnInit {
+
   private adminService = inject(AdminService);
+  private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
+
   teachers: any[] = [];
+  classes: any[] = [];
+
   loading = true;
-  error = '';
+  saving = false;
+
+  editTeacherForm!: FormGroup;
+  selectedTeacherId = '';
 
   ngOnInit() {
+    this.initForm();
     this.loadTeachers();
+    this.loadClasses();
   }
 
+  /* ================= FORM ================= */
+  initForm() {
+    this.editTeacherForm = this.fb.group({
+      username: ['', Validators.required],
+      password: [''],
+      assignedClass: [null] 
+    });
+  }
+
+  /* ================= LOAD TEACHERS ================= */
   loadTeachers() {
     this.loading = true;
     this.cdr.markForCheck();
+
     this.adminService.getTeachers().subscribe({
-      next: (data) => {
-        console.log('Teachers loaded:', data);
+      next: (data: any) => {
         this.teachers = data || [];
         this.loading = false;
         this.cdr.markForCheck();
       },
-      error: (error) => {
-        console.error('Error loading teachers:', error);
-        this.error = 'Failed to load teachers';
+      error: (err) => {
+        console.error('Failed to load teachers', err);
         this.loading = false;
         this.cdr.markForCheck();
       }
     });
   }
-  updateTeacher(teacher: any) {
-    const currentUsername = teacher.userId?.username;
-    const newUsername = prompt('Enter new username:', currentUsername);
-    if (newUsername && newUsername !== currentUsername) {
-      this.adminService.updateTeacher(teacher._id, { username: newUsername }).subscribe({
-        next: () => {
-          this.loadTeachers();
-        },
-        error: (error) => {
-          console.error('Error updating teacher:', error);
-          alert('Failed to update teacher');
-        }
-      });
-    }
-  }
 
-  deleteTeacher(teacherId: string) {
-    this.adminService.deleteTeacher(teacherId).subscribe({
-      next: () => {
-        console.log('Teacher deleted:', teacherId);
-        this.teachers = this.teachers.filter(t => t._id !== teacherId);
+  /* ================= LOAD CLASSES ================= */
+  loadClasses() {
+    this.adminService.getClasses().subscribe({
+      next: (data: any) => {
+        this.classes = data || [];
         this.cdr.markForCheck();
       },
-      error: (error) => {
-        console.error('Error deleting teacher:', error);
+      error: (err) => {
+        console.error('Failed to load classes', err);
       }
     });
-  } 
+  }
+
+  /* ================= OPEN MODAL ================= */
+  openEditModal(teacher: any) {
+    this.selectedTeacherId = teacher._id;
+
+    this.editTeacherForm.patchValue({
+      username: teacher.userId?.username || teacher.username,
+      password: '',
+      assignedClass: teacher.assignedClass?._id || null
+    });
+
+    const modal = new bootstrap.Modal(
+      document.getElementById('editTeacherModal')
+    );
+    modal.show();
+  }
+
+  /* ================= UPDATE TEACHER ================= */
+  updateTeacher() {
+    if (this.editTeacherForm.invalid) return;
+
+    this.saving = true;
+
+    const payload: any = {
+      username: this.editTeacherForm.value.username,
+      classId: this.editTeacherForm.value.assignedClass
+    };
+
+    if (this.editTeacherForm.value.password) {
+      payload.password = this.editTeacherForm.value.password;
+    }
+
+    this.adminService.updateTeacher(this.selectedTeacherId, payload).subscribe({
+      next: () => {
+        this.saving = false;
+        this.loadTeachers();
+
+        const modalEl = document.getElementById('editTeacherModal');
+        bootstrap.Modal.getInstance(modalEl)?.hide();
+      },
+      error: (err) => {
+        console.error('Update failed', err);
+        this.saving = false;
+      }
+    });
+  }
+
+  deleteTeacher(id: string) {
+    this.adminService.deleteTeacher(id).subscribe({
+      next: () => {
+        this.teachers = this.teachers.filter(t => t._id !== id);
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Delete failed', err);
+      }
+    });
+  }
+
+
+
+  
+ 
 }

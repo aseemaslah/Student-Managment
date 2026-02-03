@@ -14,31 +14,26 @@ export class Teacher implements OnInit {
   private adminService = inject(AdminService);
   private cdr = inject(ChangeDetectorRef);
   
-  stats = {
-    myClasses: 0,
-    myStudents: 0,
-    myAttendanceRecords: 0,
-    myAttendancePercentage: 0
-  };
-  
-  loading = true;
+myClasses: any[] = [];
+totalStudents = 0;
 
-  ngOnInit() {
-    this.loadTeacherStats();
-  }
+ngOnInit() {
+  this.loadDashboardStats();
+}
 
-  loadTeacherStats() {
-    this.adminService.getTeacherDashboardStats().subscribe({
-      next: (data) => {
-        this.stats = data;
-        this.loading = false;
-        this.cdr.markForCheck();
-      },
-      error: (error) => {
-        console.error('Error loading teacher stats:', error);
-        this.loading = false;
-        this.cdr.markForCheck();
-      }
-    });
-  }
+loadDashboardStats() {
+  this.adminService.getTeacherDashboardStats().subscribe({
+    next: (res) => {
+      console.log(res); // 🔍 always log once
+
+      this.myClasses = res.myClasses || [];
+      this.totalStudents = res.totalStudents || 0;
+      this.cdr.markForCheck();
+    },
+    error: (err) => {
+      console.error('Failed to load dashboard stats', err);
+    }
+  });
+}
+
 }

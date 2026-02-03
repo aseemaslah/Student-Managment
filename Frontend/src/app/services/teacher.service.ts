@@ -23,5 +23,8 @@ export class TeacherService {
     return this.http.delete(`${this.API}/${id}`);
   }
 
+
+
+
   
 }

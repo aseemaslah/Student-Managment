@@ -5,9 +5,9 @@ import { inject, Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class AdminService {
-  
 
-  private http=inject(HttpClient);
+
+  private http = inject(HttpClient);
 
   createTeacher(teacherData: any) {
     return this.http.post<any>('http://localhost:3000/admin/create-teacher', teacherData);
@@ -38,7 +38,7 @@ export class AdminService {
   }
 
   createStudent(studentData: any) {
-    return this.http.post<any>('http://localhost:3000/admin/create-student', studentData);
+    return this.http.post<any>('http://localhost:3000/teacher/add-student', studentData);
   }
 
   addExamMarks(marksData: any) {
@@ -49,7 +49,7 @@ export class AdminService {
     const params = new URLSearchParams();
     if (filters?.startDate) params.append('startDate', filters.startDate);
     if (filters?.endDate) params.append('endDate', filters.endDate);
-    
+
     const queryString = params.toString();
     const url = queryString ? `http://localhost:3000/admin/teacher-attendance-report?${queryString}` : 'http://localhost:3000/admin/teacher-attendance-report';
     return this.http.get<any>(url);
@@ -92,7 +92,7 @@ export class AdminService {
   }
 
   markAttendance(attendanceData: any) {
-    return this.http.post<any>('http://localhost:3000/teacher/attendance', attendanceData);
+    return this.http.post<any>('http://localhost:3000/teacher/addattendance', attendanceData);
   }
 
   viewAttendance() {
@@ -118,4 +118,7 @@ export class AdminService {
   deleteStudent(studentId: string) {
     return this.http.delete<any>(`http://localhost:3000/teacher/delete-student/${studentId}`);
   }
+
+
+
 }

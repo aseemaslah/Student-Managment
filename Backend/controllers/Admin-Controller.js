@@ -9,9 +9,11 @@ const Teacher = require("../model/Teacher-Model");
 const createTeacher = async (req, res) => {
   try {
     const hash = await bcrypt.hash(req.body.password, 10);
+
+    const username = req.body.username.toLowerCase().trim();
     await User.create({ 
-      username: req.body.username, 
-      password: hash, 
+      username: username,
+      password: hash,
       role: "Teacher" 
     });
     res.json("Teacher created");
@@ -24,7 +26,7 @@ const createAdmin = async (req, res) => {
   try {
     const hash = await bcrypt.hash(req.body.password, 10);
     await User.create({ 
-      username: req.body.username, 
+      username: req.body.username.toLowerCase(), 
       password: hash, 
       role: "Admin" 
     });
@@ -93,69 +95,65 @@ const getTeachers = async (req, res) => {
 
 const getClasses = async (req, res) => {
   try {
-    const classes = await Class.find().select('_id Class Division AcademicYear');
+    const classes = await Class.find().select('_id Class Division AcademicYear assignedTeacher');
     res.json(classes);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-const createStudent = async (req, res) => {
-  try {
-    console.log('=== CREATE STUDENT REQUEST ===');
-    console.log('Request body:', JSON.stringify(req.body, null, 2));
+// const createStudent = async (req, res) => {
+//   try {
+//     console.log('=== CREATE STUDENT REQUEST ===');
+//     console.log('Request body:', JSON.stringify(req.body, null, 2));
     
-    const { username, password, rollNo, classId } = req.body;
+//     const { username, password, rollNo, classId } = req.body;
     
-    if (!username || !password || !rollNo || !classId) {
-      return res.status(400).json({ error: 'Missing required fields' });
-    }
+//     if (!username || !password || !rollNo || !classId) {
+//       return res.status(400).json({ error: 'Missing required fields' });
+//     }
     
-    // Check if username already exists
-    const existingUser = await User.findOne({ username });
-    if (existingUser) {
-      return res.status(400).json({ error: `Username '${username}' already exists. Please choose a different username.` });
-    }
+//     // Check if username already exists
+//     const existingUser = await User.findOne({ username });
+//     if (existingUser) {
+//       return res.status(400).json({ error: `Username '${username}' already exists. Please choose a different username.` });
+//     }
     
-    // Check if roll number already exists in the same class
-    const existingStudent = await StudentProfile.findOne({ rollNo, classId });
-    if (existingStudent) {
-      return res.status(400).json({ error: `Roll number '${rollNo}' already exists in this class.` });
-    }
+//     // Check if roll number already exists in the same class
+//     const existingStudent = await StudentProfile.findOne({ rollNo, classId });
+//     if (existingStudent) {
+//       return res.status(400).json({ error: `Roll number '${rollNo}' already exists in this class.` });
+//     }
     
-    // Create user account
-    const hash = await bcrypt.hash(password, 10);
-    const user = await User.create({ 
-      username, 
-      password: hash, 
-      role: "Student" 
-    });
-    console.log('User created:', user._id);
+//     // Create user account
+//     const hash = await bcrypt.hash(password, 10);
+//     const user = await User.create({ 
+//       username, 
+//       password: hash, 
+//       role: "Student" 
+//     });
+//     console.log('User created:', user._id);
     
-    // Create student profile
-    const studentProfile = await StudentProfile.create({
-      userId: user._id,
-      rollNo,
-      classId
-    });
-    console.log('Student profile created:', studentProfile);
+//     // Create student profile
+//     const studentProfile = await StudentProfile.create({
+//       userId: user._id,
+//       rollNo,
+//       classId
+//     });
+//     console.log('Student profile created:', studentProfile);
     
-    res.json({ message: "Student created successfully" });
-  } catch (error) {
-    // console.error('=== CREATE STUDENT ERROR ===');
-    // console.error('Error name:', error.name);
-    // console.error('Error message:', error.message);
+//     res.json({ message: "Student created successfully" });
+//   } catch (error) {
+//     if (error.code === 11000) {
+//       if (error.message.includes('username')) {
+//         return res.status(400).json({ error: 'Username already exists. Please choose a different username.' });
+//       }
+//       return res.status(400).json({ error: 'Duplicate entry found.' });
+//     }
     
-    if (error.code === 11000) {
-      if (error.message.includes('username')) {
-        return res.status(400).json({ error: 'Username already exists. Please choose a different username.' });
-      }
-      return res.status(400).json({ error: 'Duplicate entry found.' });
-    }
-    
-    res.status(500).json({ error: error.message });
-  }
-};
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 const getStudents = async (req, res) => {
   try {
@@ -168,40 +166,40 @@ const getStudents = async (req, res) => {
   }
 };
 
-const markAttendance = async (req, res) => {
-  try {
-    console.log('=== MARK ATTENDANCE REQUEST ===');
-    console.log('Request body:', JSON.stringify(req.body, null, 2));
-    console.log('JWT User:', req.user);
+// const markAttendance = async (req, res) => {
+//   try {
+//     console.log('=== MARK ATTENDANCE REQUEST ===');
+//     console.log('Request body:', JSON.stringify(req.body, null, 2));
+//     console.log('JWT User:', req.user);
     
-    const { studentId, date, status } = req.body;
-    const teacherId = req.user?.id; // Get teacher ID from JWT
+//     const { studentId, date, status } = req.body;
+//     const teacherId = req.user?.id; // Get teacher ID from JWT
     
-    if (!studentId || !teacherId || !date || !status) {
-      return res.status(400).json({ error: 'Missing required fields' });
-    }
+//     if (!studentId || !teacherId || !date || !status) {
+//       return res.status(400).json({ error: 'Missing required fields' });
+//     }
     
-    // Check if attendance already marked for this student on this date
-    const existingAttendance = await Attendance.findOne({ studentId, date });
-    if (existingAttendance) {
-      // Update existing attendance
-      existingAttendance.status = status;
-      existingAttendance.teacherId = teacherId;
-      await existingAttendance.save();
-      console.log('Attendance updated:', existingAttendance);
-      return res.json({ message: "Attendance updated successfully" });
-    }
+//     // Check if attendance already marked for this student on this date
+//     const existingAttendance = await Attendance.findOne({ studentId, date });
+//     if (existingAttendance) {
+//       // Update existing attendance
+//       existingAttendance.status = status;
+//       existingAttendance.teacherId = teacherId;
+//       await existingAttendance.save();
+//       console.log('Attendance updated:', existingAttendance);
+//       return res.json({ message: "Attendance updated successfully" });
+//     }
     
-    const attendanceRecord = await Attendance.create({ studentId, teacherId, date, status });
-    // console.log('Attendance marked successfully:', attendanceRecord);
-    res.json({ message: "Attendance marked successfully" });
-  } catch (error) {
-    // console.error('=== MARK ATTENDANCE ERROR ===');
-    // console.error('Error name:', error.name);
-    // console.error('Error message:', error.message);
-    res.status(500).json({ error: error.message });
-  }
-};
+//     const attendanceRecord = await Attendance.create({ studentId, teacherId, date, status });
+//     // console.log('Attendance marked successfully:', attendanceRecord);
+//     res.json({ message: "Attendance marked successfully" });
+//   } catch (error) {
+//     // console.error('=== MARK ATTENDANCE ERROR ===');
+//     // console.error('Error name:', error.name);
+//     // console.error('Error message:', error.message);
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 const addExamMarks = async (req, res) => {
   try {
@@ -213,70 +211,70 @@ const addExamMarks = async (req, res) => {
   }
 };
 
-const getTeacherAttendanceReport = async (req, res) => {
-  try {
-    console.log('=== GET TEACHER ATTENDANCE REPORT ===');
-    const teacherId = req.user?.id;
-    console.log('Teacher ID:', teacherId);
+// const getTeacherAttendanceReport = async (req, res) => {
+//   try {
+//     console.log('=== GET TEACHER ATTENDANCE REPORT ===');
+//     const teacherId = req.user?.id;
+//     console.log('Teacher ID:', teacherId);
     
-    if (!teacherId) {
-      return res.status(401).json({ error: 'Teacher not authenticated' });
-    }
+//     if (!teacherId) {
+//       return res.status(401).json({ error: 'Teacher not authenticated' });
+//     }
 
-    // Get teacher's assigned classes
-    const teacherClasses = await Class.find({ assignedTeacher: teacherId });
-    console.log('Teacher classes:', teacherClasses);
-    const classIds = teacherClasses.map(cls => cls._id);
-    console.log('Class IDs:', classIds);
+//     // Get teacher's assigned classes
+//     const teacherClasses = await Class.find({ assignedTeacher: teacherId });
+//     console.log('Teacher classes:', teacherClasses);
+//     const classIds = teacherClasses.map(cls => cls._id);
+//     console.log('Class IDs:', classIds);
 
-    if (classIds.length === 0) {
-      console.log('No classes assigned to teacher');
-      return res.json([]);
-    }
+//     if (classIds.length === 0) {
+//       console.log('No classes assigned to teacher');
+//       return res.json([]);
+//     }
 
-    // Get students from teacher's classes
-    const students = await StudentProfile.find({ classId: { $in: classIds } });
-    console.log('Students in teacher classes:', students.length);
-    const studentIds = students.map(s => s._id);
-    console.log('Student IDs:', studentIds);
+//     // Get students from teacher's classes
+//     const students = await StudentProfile.find({ classId: { $in: classIds } });
+//     console.log('Students in teacher classes:', students.length);
+//     const studentIds = students.map(s => s._id);
+//     console.log('Student IDs:', studentIds);
 
-    // Check all attendance records first
-    const allAttendance = await Attendance.find();
-    console.log('Total attendance records in DB:', allAttendance.length);
+//     // Check all attendance records first
+//     const allAttendance = await Attendance.find();
+//     console.log('Total attendance records in DB:', allAttendance.length);
 
-    // Get attendance for these students
-    const { startDate, endDate } = req.query;
-    let filter = { studentId: { $in: studentIds } };
+//     // Get attendance for these students
+//     const { startDate, endDate } = req.query;
+//     let filter = { studentId: { $in: studentIds } };
     
-    if (startDate && endDate) {
-      filter.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
-    }
+//     if (startDate && endDate) {
+//       filter.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
+//     }
     
-    console.log('Filter:', filter);
+//     console.log('Filter:', filter);
 
-    const attendance = await Attendance.find(filter)
-      .populate({
-        path: 'studentId',
-        populate: [
-          { path: 'userId', select: 'username' },
-          { path: 'classId', select: 'Class Division AcademicYear' }
-        ]
-      })
-      .populate('teacherId', 'username')
-      .sort({ date: -1 });
+//     const attendance = await Attendance.find(filter)
+//       .populate({
+//         path: 'studentId',
+//         populate: [
+//           { path: 'userId', select: 'username' },
+//           { path: 'classId', select: 'Class Division AcademicYear' }
+//         ]
+//       })
+//       .populate('teacherId', 'username')
+//       .sort({ date: -1 });
 
-    console.log('Filtered attendance records:', attendance.length);
-    console.log('Sample attendance record:', attendance[0]);
-    res.json(attendance)
-      .sort({ date: -1 });
+//     console.log('Filtered attendance records:', attendance.length);
+//     console.log('Sample attendance record:', attendance[0]);
+//     res.json(attendance)
+//       .sort({ date: -1 });
 
-    console.log('Filtered attendance records:', attendance.length);
-    res.json(attendance);
-  } catch (error) {
-    console.error('Error in getTeacherAttendanceReport:', error);
-    res.status(500).json({ error: error.message });
-  }
-};
+//     console.log('Filtered attendance records:', attendance.length);
+//     res.json(attendance);
+//   } catch (error) {
+//     console.error('Error in getTeacherAttendanceReport:', error);
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 const getTeacherClassSummary = async (req, res) => {
   try {
@@ -572,6 +570,11 @@ const updateTeacher = async (req, res) => {
 
 
 
+
+
+
+
+
 module.exports = { 
   createTeacher, 
   createAdmin, 
@@ -580,10 +583,10 @@ module.exports = {
   getTeachers, 
   getClasses, 
   getStudents, 
-  createStudent, 
-  markAttendance, 
+  // createStudent, 
+  // markAttendance, 
   addExamMarks, 
-  getTeacherAttendanceReport,
+  // getTeacherAttendanceReport,
   getTeacherClassSummary,
   debugAttendance,
   getStudentAttendanceSummary,
@@ -596,4 +599,7 @@ module.exports = {
   getStudentDashboardStats,
   DeleteTeacher,
   updateTeacher,
+  
+
+
 };

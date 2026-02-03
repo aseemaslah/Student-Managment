@@ -30,7 +30,7 @@
 
               @for (student of students; track student._id) {
                 <option [value]="student.userId?._id">
-                  {{ student.rollNo }} - {{ student.userId?.username }}
+                  {{ student.userId?.username }}
                 </option>
               }
             </select>

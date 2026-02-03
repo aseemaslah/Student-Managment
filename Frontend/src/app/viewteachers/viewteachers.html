@@ -6,82 +6,140 @@
   <!-- Main -->
   <div class="flex-grow-1 p-4 bg-light">
 
-    <!-- Top Bar -->
-    <div class="top-bar">
-      <div class="title">
-        <h3>Teachers</h3>
-        <p>All registered teachers</p>
-      </div>
+    <div class="top-bar mb-4">
+      <h3>Teachers</h3>
+      <p>All registered teachers</p>
     </div>
 
-    <!-- Teacher Table -->
     <div class="card p-4 border-0 rounded-4 shadow-sm">
 
       @if (loading) {
-        <div class="text-center p-4">
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-          <p class="mt-2">Loading teachers...</p>
-        </div>
+      <div class="text-center py-5">
+        <div class="spinner-border"></div>
+        <p class="mt-2">Loading teachers...</p>
+      </div>
       }
 
-      @if (error) {
-        <div class="alert alert-danger">
-          {{ error }}
-        </div>
-      }
+      @if (!loading) {
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Assigned Class</th>
+            <th>Status</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
 
-      @if (!loading && !error) {
-        <table class="table table-hover align-middle">
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Status</th>
-              <th class="text-end">Actions</th>
-            </tr>
-          </thead>
+        <tbody>
+          @for (teacher of teachers; track teacher._id) {
+          <tr>
+            <td>
+              {{ teacher.userId?.username || teacher.username }}
+            </td>
 
-          <tbody>
-            @for (teacher of teachers; track teacher._id) {
-              <tr>
-                <td>{{ teacher.username }}</td>
+            <td>
+              @if (teacher.assignedClass?._id) {
+              <span class="badge bg-primary">
+                {{ teacher.assignedClass.Class }} {{ teacher.assignedClass.Division }}
+                ({{ teacher.assignedClass.AcademicYear }})
+              </span>
+              } @else {
+              <span class="text-muted">Not Assigned</span>
+              }
+            </td>
 
-                <td>
-                  <span class="badge bg-success">Active</span>
-                </td>
 
-                <td class="text-end">
-                  <button
-                    class="btn btn-sm btn-outline-primary me-2"
-                    (click)="updateTeacher(teacher)"
-                  >
-                    Edit
-                  </button>
+            <td>
+              <span class="badge bg-success">Active</span>
+            </td>
 
-                  <button
-                    class="btn btn-sm btn-outline-danger"
-                    (click)="deleteTeacher(teacher._id)"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            }
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary me-2" (click)="openEditModal(teacher)">
+                Edit
+              </button>
 
-            @if (teachers.length === 0) {
-              <tr>
-                <td colspan="3" class="text-center">
-                  No teachers found
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteTeacher(teacher._id)">
+                Delete
+              </button>
+            </td>
+          </tr>
+          }
+
+          @if (teachers.length === 0) {
+          <tr>
+            <td colspan="4" class="text-center">
+              No teachers found
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
       }
 
     </div>
-
   </div>
+</div>
 
+<!-- ================= EDIT MODAL ================= -->
+
+<div class="modal fade" id="editTeacherModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Teacher</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <form [formGroup]="editTeacherForm" (ngSubmit)="updateTeacher()">
+
+        <div class="modal-body">
+
+          <!-- Username -->
+          <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-control" formControlName="username" />
+          </div>
+
+          <!-- Password -->
+          <div class="mb-3">
+            <label class="form-label">New Password</label>
+            <input type="password" class="form-control" formControlName="password"
+              placeholder="Leave blank to keep old password" />
+          </div>
+
+          <hr />
+
+          <!-- Assigned Class -->
+          <div class="mb-3">
+            <label class="form-label">Assigned Class</label>
+            <select class="form-select" formControlName="assignedClass">
+              <option [ngValue]="null">-- Not Assigned --</option>
+
+              @for (cls of classes; track cls._id) {
+              <option [ngValue]="cls._id">
+                {{ cls.Class }} {{ cls.Division }}
+                ({{ cls.AcademicYear }})
+              </option>
+              }
+            </select>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+            Cancel
+          </button>
+
+          <button class="btn btn-primary" [disabled]="editTeacherForm.invalid || saving">
+            {{ saving ? 'Updating...' : 'Update' }}
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
 </div>
