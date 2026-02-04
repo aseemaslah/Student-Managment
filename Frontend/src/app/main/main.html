@@ -19,16 +19,34 @@
 
           <form (ngSubmit)="login()">
             <div class="mb-3">
-              <label>Username</label>
-              <input type="text" class="form-control" placeholder="Enter username" [(ngModel)]="username" name="username">
+              <label class="form-label fw-semibold">Username</label>
+              <div class="input-group">
+                <span class="input-group-text border-end-0 bg-white text-muted">
+                  <i class="bi bi-person"></i>
+                </span>
+                <input type="text" class="form-control border-start-0" placeholder="Enter username"
+                  [(ngModel)]="username" name="username">
+              </div>
             </div>
 
             <div class="mb-3">
-              <label>Password</label>
-              <input type="password" class="form-control" placeholder="Enter password" [(ngModel)]="password" name="password">
+              <label class="form-label fw-semibold">Password</label>
+              <div class="input-group">
+                <span class="input-group-text border-end-0 bg-white text-muted">
+                  <i class="bi bi-lock"></i>
+                </span>
+                <input [type]="showPassword ? 'text' : 'password'" class="form-control border-start-0"
+                  placeholder="Enter password" [(ngModel)]="password" name="password">
+                <button class="btn btn-outline-secondary border-start-0 bg-white text-muted" type="button"
+                  (click)="showPassword = !showPassword">
+                  <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                </button>
+              </div>
             </div>
 
-            <button class="btn btn-primary w-100" type="submit">Login</button>
+            <button class="btn btn-primary w-100 py-2 fw-bold mt-2" type="submit">
+              <i class="bi bi-box-arrow-in-right me-2"></i>Login
+            </button>
           </form>
 
         </div>

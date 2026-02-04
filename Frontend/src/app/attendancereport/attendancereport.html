@@ -14,17 +14,12 @@
     <!-- View Toggle -->
     <div class="mb-4">
       <div class="btn-group">
-        <button
-          class="btn btn-outline-primary"
-          [class.active]="viewMode === 'summary'"
-          (click)="viewMode = 'summary'">
+        <button class="btn btn-outline-primary" [class.active]="viewMode === 'summary'"
+          (click)="setViewMode('summary')">
           Class Summary
         </button>
-
-        <button
-          class="btn btn-outline-primary"
-          [class.active]="viewMode === 'records'"
-          (click)="viewMode = 'records'">
+        <button class="btn btn-outline-primary" [class.active]="viewMode === 'records'"
+          (click)="setViewMode('records')">
           Attendance Records
         </button>
       </div>
@@ -32,129 +27,125 @@
 
     <!-- Date Filter -->
     @if (viewMode === 'records') {
-      <div class="row mb-4">
-        <div class="col-md-4">
-          <label class="form-label">Start Date</label>
-          <input type="date" class="form-control"
-                 [(ngModel)]="startDate"
-                 (change)="onDateFilterChange()">
-        </div>
-
-        <div class="col-md-4">
-          <label class="form-label">End Date</label>
-          <input type="date" class="form-control"
-                 [(ngModel)]="endDate"
-                 (change)="onDateFilterChange()">
-        </div>
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <label class="form-label">Start Date</label>
+        <input type="date" class="form-control" [(ngModel)]="startDate" (change)="onDateFilterChange()">
       </div>
+
+      <div class="col-md-4">
+        <label class="form-label">End Date</label>
+        <input type="date" class="form-control" [(ngModel)]="endDate" (change)="onDateFilterChange()">
+      </div>
+    </div>
     }
 
     <!-- Loading -->
     @if (loading) {
-      <div class="text-center py-5">
-        <div class="spinner-border"></div>
-        <p class="mt-2 text-muted">Loading...</p>
-      </div>
+    <div class="text-center py-5">
+      <div class="spinner-border"></div>
+      <p class="mt-2 text-muted">Loading...</p>
+    </div>
     }
 
     <!-- ================= SUMMARY VIEW ================= -->
     @if (!loading && viewMode === 'summary') {
 
-      @for (classData of classSummaries; track $index) {
-        <div class="mb-4 bg-white p-3 border rounded">
+    @for (classData of classSummaries; track $index) {
+    <div class="mb-4 bg-white p-3 border rounded">
 
-          <h5 class="mb-3">
-            Class {{ classData.class.Class }}
-            {{ classData.class.Division }}
-            ({{ classData.class.AcademicYear }})
-          </h5>
+      <h5 class="mb-3">
+        Class {{ classData.class.Class }}
+        {{ classData.class.Division }}
+        ({{ classData.class.AcademicYear }})
+      </h5>
 
-          <table class="table table-sm table-bordered">
-            <thead class="table-light">
-              <tr>
-                <th>Student</th>
-                <th>Roll No</th>
-                <th>Total</th>
-                <th>Present</th>
-                <th>Absent</th>
-                <th>%</th>
-                <th>Status</th>
-              </tr>
-            </thead>
+      <table class="table table-sm table-bordered">
+        <thead class="table-light">
+          <tr>
+            <th>Student</th>
+            <th>Roll No</th>
+            <th>Total</th>
+            <th>Present</th>
+            <th>Absent</th>
+            <th>%</th>
+            <th>Status</th>
+          </tr>
+        </thead>
 
-            <tbody>
-              @for (s of classData.students; track $index) {
-                <tr>
-                  <td>{{ s.student.userId?.username }}</td>
-                  <td>{{ s.student.rollNo }}</td>
-                  <td>{{ s.total }}</td>
-                  <td class="text-success">{{ s.present }}</td>
-                  <td class="text-danger">{{ s.absent }}</td>
-                  <td>{{ s.percentage }}%</td>
-                  <td>{{ getAttendanceStatus(s.percentage) }}</td>
-                </tr>
-              }
+        <tbody>
+          @for (s of classData.students; track $index) {
+          <tr>
+            <td>{{ s.student.userId?.username }}</td>
+            <td>{{ s.student.rollNo }}</td>
+            <td>{{ s.total }}</td>
+            <td class="text-success">{{ s.present }}</td>
+            <td class="text-danger">{{ s.absent }}</td>
+            <td>{{ s.percentage }}%</td>
+            <td>{{ getAttendanceStatus(s.percentage) }}</td>
+          </tr>
+          }
 
-              @if (classData.students.length === 0) {
-                <tr>
-                  <td colspan="7" class="text-center text-muted">
-                    No students found
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      }
+          @if (classData.students.length === 0) {
+          <tr>
+            <td colspan="7" class="text-center text-muted">
+              No students found
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    }
 
-      @if (classSummaries.length === 0) {
-        <p class="text-muted">No classes assigned.</p>
-      }
+    @if (classSummaries.length === 0) {
+    <p class="text-muted">No classes assigned.</p>
+    }
     }
 
     <!-- ================= RECORDS VIEW ================= -->
     @if (!loading && viewMode === 'records') {
 
-      <div class="bg-white border rounded p-3">
-        <h5 class="mb-3">Attendance Records</h5>
+    <div class="bg-white border rounded p-3">
+      <h5 class="mb-3">Attendance Records</h5>
 
-        <table class="table table-sm table-bordered">
-          <thead class="table-light">
-            <tr>
-              <th>Student</th>
-              <th>Roll No</th>
-              <th>Class</th>
-              <th>Date</th>
-              <th>Status</th>
-              <th>Teacher</th>
-            </tr>
-          </thead>
+      <table class="table table-sm table-bordered">
+        <thead class="table-light">
+          <tr>
+            <th>Student</th>
+            <th>Roll No</th>
+            <th>Class</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Teacher</th>
+          </tr>
+        </thead>
 
-          <tbody>
-            @for (r of attendanceData; track $index) {
-              <tr>
-                <td>{{ r.studentId?.userId?.username }}</td>
-                <td>{{ r.studentId?.rollNo }}</td>
-                <td>
-                  {{ r.studentId?.classId?.Class }}
-                  {{ r.studentId?.classId?.Division }}
-                </td>
-                <td>{{ r.date | date:'shortDate' }}</td>
-                <td>{{ r.status }}</td>
-                <td>{{ r.teacherId?.username }}</td>
-              </tr>
-            }
+        <tbody>
+          @for (r of attendanceData; track $index) {
+          <tr>
+            <td>{{ r.studentId?.userId?.username }}</td>
+            <td>{{ r.studentId?.rollNo }}</td>
+            <td>
+              {{ r.studentId?.classId?.Class }}
+              {{ r.studentId?.classId?.Division }}
+            </td>
+            <td>{{ r.date | date:'shortDate' }}</td>
+            <td>{{ r.status }}</td>
+            <td>{{ r.teacherId?.username }}</td>
+          </tr>
+          }
 
-            @if (attendanceData.length === 0) {
-              <tr>
-                <td colspan="6" class="text-center text-muted">
-                  No records found
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
+          @if (attendanceData.length === 0) {
+          <tr>
+            <td colspan="6" class="text-center text-muted">
+              No records found
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
     }
 
   </div>

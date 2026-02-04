@@ -20,18 +20,13 @@
           <!-- Student -->
           <div class="col-md-4">
             <label class="form-label">Student</label>
-            <select
-              class="form-select"
-              [(ngModel)]="attendanceData.studentId"
-              name="studentId"
-              required
-            >
+            <select class="form-select" [(ngModel)]="attendanceData.studentId" name="studentId" required>
               <option value="">Select Student</option>
 
               @for (student of students; track student._id) {
-                <option [value]="student.userId?._id">
-                  {{ student.userId?.username }}
-                </option>
+              <option [value]="student._id">
+                {{ student.userId?.username }}
+              </option>
               }
             </select>
           </div>
@@ -39,24 +34,13 @@
           <!-- Date -->
           <div class="col-md-4">
             <label class="form-label">Date</label>
-            <input
-              type="date"
-              class="form-control"
-              [(ngModel)]="attendanceData.date"
-              name="date"
-              required
-            />
+            <input type="date" class="form-control" [(ngModel)]="attendanceData.date" name="date" required />
           </div>
 
           <!-- Status -->
           <div class="col-md-4">
             <label class="form-label">Status</label>
-            <select
-              class="form-select"
-              [(ngModel)]="attendanceData.status"
-              name="status"
-              required
-            >
+            <select class="form-select" [(ngModel)]="attendanceData.status" name="status" required>
               <option value="Present">Present</option>
               <option value="Absent">Absent</option>
             </select>

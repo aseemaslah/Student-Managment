@@ -13,18 +13,27 @@ import { FormsModule } from '@angular/forms';
 export class Attendancereport implements OnInit {
   private adminService = inject(AdminService);
   private cdr = inject(ChangeDetectorRef);
-  
+
   attendanceData: any[] = [];
   classSummaries: any[] = [];
   loading = true;
   viewMode: 'records' | 'summary' = 'summary';
-  
+
   startDate = '';
   endDate = '';
   selectedClassIndex = 0;
 
   ngOnInit() {
     this.loadClassSummary();
+  }
+
+  setViewMode(mode: 'records' | 'summary') {
+    this.viewMode = mode;
+    if (this.viewMode === 'summary') {
+      this.loadClassSummary();
+    } else {
+      this.loadAttendanceRecords();
+    }
   }
 
   loadClassSummary() {
@@ -48,7 +57,7 @@ export class Attendancereport implements OnInit {
     const filters: any = {};
     if (this.startDate) filters.startDate = this.startDate;
     if (this.endDate) filters.endDate = this.endDate;
-    
+
     this.adminService.getTeacherAttendanceReport(filters).subscribe({
       next: (data) => {
         this.attendanceData = data || [];

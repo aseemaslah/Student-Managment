@@ -76,28 +76,34 @@ const markAttendance = async (req, res) => {
     console.log('JWT User:', req.user);
 
     const { studentId, date, status } = req.body;
-    const teacherId = req.user?.id; // Get teacher ID from JWT
+    const teacherId = req.user?.id;
 
     if (!studentId || !teacherId || !date || !status) {
+      console.log('Mark Attendance: Missing fields');
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Check if attendance already marked for this student on this date
-    const existingAttendance = await Attendance.findOne({ studentId, date });
+    let targetStudentId = studentId;
+    const profile = await StudentProfile.findOne({ userId: studentId });
+    if (profile) {
+      console.log('Mark Attendance: Found profile for userId, using studentProfileId:', profile._id);
+      targetStudentId = profile._id;
+    }
+
+    const existingAttendance = await Attendance.findOne({ studentId: targetStudentId, date });
     if (existingAttendance) {
-      // Update existing attendance
       existingAttendance.status = status;
       existingAttendance.teacherId = teacherId;
       await existingAttendance.save();
-      console.log('Attendance updated:', existingAttendance);
+      console.log('Attendance updated successfully');
       return res.json({ message: "Attendance updated successfully" });
     }
 
-    const attendanceRecord = await Attendance.create({ studentId, teacherId, date, status });
-    // console.log('Attendance marked successfully:', attendanceRecord);
+    const attendanceRecord = await Attendance.create({ studentId: targetStudentId, teacherId, date, status });
+    console.log('Attendance created successfully:', attendanceRecord._id);
     res.json({ message: "Attendance marked successfully" });
   } catch (error) {
-
+    console.error('Error in markAttendance:', error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -264,6 +270,105 @@ const updateLeaveStatus = async (req, res) => {
   }
 };
 
+const getTeacherAttendanceReport = async (req, res) => {
+  try {
+    const teacherId = req.user?.id;
+    if (!teacherId) {
+      return res.status(401).json({ error: 'Teacher not authenticated' });
+    }
+
+    // Get teacher's assigned classes
+    const teacherClasses = await Class.find({ assignedTeacher: teacherId });
+    const classIds = teacherClasses.map(cls => cls._id);
+
+    if (classIds.length === 0) {
+      return res.json([]);
+    }
+
+    // Get students from teacher's classes
+    const students = await StudentProfile.find({ classId: { $in: classIds } });
+    const studentIds = students.map(s => s._id);
+    const userIds = students.map(s => s.userId);
+
+    // Get attendance for these students (checking both potential ID types)
+    const { startDate, endDate } = req.query;
+    let filter = {
+      studentId: { $in: [...studentIds, ...userIds] }
+    };
+
+    if (startDate && endDate) {
+      filter.date = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate)
+      };
+    }
+
+    const attendance = await Attendance.find(filter)
+      .populate({
+        path: 'studentId',
+        populate: [
+          { path: 'userId', select: 'username' },
+          { path: 'classId', select: 'Class Division AcademicYear' }
+        ]
+      })
+      .populate('teacherId', 'username')
+      .sort({ date: -1 });
+
+    res.json(attendance);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getTeacherClassSummary = async (req, res) => {
+  try {
+    const teacherId = req.user?.id;
+    if (!teacherId) {
+      return res.status(401).json({ error: 'Teacher not authenticated' });
+    }
+
+    // Get teacher's assigned classes
+    const teacherClasses = await Class.find({ assignedTeacher: teacherId })
+      .select('Class Division AcademicYear');
+
+    const summaries = [];
+
+    for (const classInfo of teacherClasses) {
+      const students = await StudentProfile.find({ classId: classInfo._id })
+        .populate('userId', 'username');
+
+      const classStudents = [];
+
+      for (const student of students) {
+        // Support both StudentProfile ID and User ID for backward compatibility
+        const attendance = await Attendance.find({
+          studentId: { $in: [student._id, student.userId] }
+        });
+        const total = attendance.length;
+        const present = attendance.filter(record => record.status === 'Present').length;
+        const percentage = total > 0 ? ((present / total) * 100).toFixed(1) : 0;
+
+        classStudents.push({
+          student,
+          total,
+          present,
+          absent: total - present,
+          percentage: parseFloat(percentage)
+        });
+      }
+
+      summaries.push({
+        class: classInfo,
+        students: classStudents
+      });
+    }
+
+    res.json(summaries);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   addStudent,
   getStudents,
@@ -273,5 +378,7 @@ module.exports = {
   DeleteStudent,
   updateStudent,
   getStudentLeaves,
-  updateLeaveStatus
+  updateLeaveStatus,
+  getTeacherAttendanceReport,
+  getTeacherClassSummary
 };

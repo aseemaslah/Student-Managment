@@ -51,12 +51,12 @@ export class AdminService {
     if (filters?.endDate) params.append('endDate', filters.endDate);
 
     const queryString = params.toString();
-    const url = queryString ? `http://localhost:3000/admin/teacher-attendance-report?${queryString}` : 'http://localhost:3000/admin/teacher-attendance-report';
+    const url = queryString ? `http://localhost:3000/teacher/teacher-attendance-report?${queryString}` : 'http://localhost:3000/teacher/teacher-attendance-report';
     return this.http.get<any>(url);
   }
 
   getTeacherClassSummary() {
-    return this.http.get<any>('http://localhost:3000/admin/teacher-class-summary');
+    return this.http.get<any>('http://localhost:3000/teacher/teacher-class-summary');
   }
 
   getStudentAttendanceSummary(studentId: string) {

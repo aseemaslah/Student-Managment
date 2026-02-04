@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [ Footer, CommonModule, FormsModule],
+  imports: [Footer, CommonModule, FormsModule],
   templateUrl: './main.html',
   styleUrl: './main.scss',
 })
@@ -17,6 +17,7 @@ export class Main {
 
   username: string = '';
   password: string = '';
+  showPassword: boolean = false;
 
   private authService = inject(AuthService);
   private router = inject(Router);
