@@ -119,6 +119,18 @@ export class AdminService {
     return this.http.delete<any>(`http://localhost:3000/teacher/delete-student/${studentId}`);
   }
 
+  getAdmins() {
+    return this.http.get<any>('http://localhost:3000/admin/admins');
+  }
+
+  updateAdmin(adminId: string, updateData: any) {
+    return this.http.put<any>(`http://localhost:3000/admin/update-admin/${adminId}`, updateData);
+  }
+
+  deleteAdmin(adminId: string) {
+    return this.http.delete<any>(`http://localhost:3000/admin/delete-admin/${adminId}`);
+  }
+
 
 
 }

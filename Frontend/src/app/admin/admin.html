@@ -1,5 +1,5 @@
 <div class="d-flex min-vh-100">
-   <!-- Sidebar -->
+  <!-- Sidebar -->
   <app-adminsidebar></app-adminsidebar>
 
   <!-- Main -->
@@ -10,35 +10,35 @@
 
     <!-- Loading / Stats -->
     @if (loading) {
-      <div class="text-center p-4">
-        <div class="spinner-border" role="status"></div>
-        <p class="mt-2">Loading dashboard...</p>
-      </div>
+    <div class="text-center p-4">
+      <div class="spinner-border" role="status"></div>
+      <p class="mt-2">Loading dashboard...</p>
+    </div>
     } @else {
-      <div class="row g-4 mt-3">
+    <div class="row g-4 mt-3">
 
-        <div class="col-md-3">
-          <div class="card stat-card bg-primary text-white">
-            <h6>Total Students</h6>
-            <h2>{{ stats.totalStudents }}</h2>
-          </div>
+      <div class="col-md-3">
+        <div class="card stat-card bg-primary text-white">
+          <h6>Total Students</h6>
+          <h2>{{ stats.totalStudents }}</h2>
         </div>
-  
-        <div class="col-md-3">
-          <div class="card stat-card bg-success text-white">
-            <h6>Total Teachers</h6>
-            <h2>{{ stats.totalTeachers }}</h2>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="card stat-card bg-info text-white">
-            <h6>Total Classes</h6>
-            <h2>{{ stats.totalClasses }}</h2>
-          </div>
-        </div>
-
       </div>
+
+      <div class="col-md-3">
+        <div class="card stat-card bg-success text-white">
+          <h6>Total Teachers</h6>
+          <h2>{{ stats.totalTeachers }}</h2>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card stat-card bg-info text-white">
+          <h6>Total Classes</h6>
+          <h2>{{ stats.totalClasses }}</h2>
+        </div>
+      </div>
+
+    </div>
     }
 
     <!-- Actions -->
@@ -90,7 +90,7 @@
         </div>
       </div>
 
-      <!-- <div class="col-md-6">
+      <div class="col-md-6">
         <div class="action-card">
           <h5>View Admins</h5>
           <p>View all administrators in the system.</p>
@@ -98,7 +98,7 @@
             View
           </button>
         </div>
-      </div> -->
+      </div>
 
     </div>
 

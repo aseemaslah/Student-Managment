@@ -1,0 +1,67 @@
+.top-bar {
+  h3 {
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 0.25rem;
+  }
+  p {
+    color: #64748b;
+  }
+}
+
+.card {
+  transition: transform 0.2s;
+  background: white;
+}
+
+.table {
+  th {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    color: #64748b;
+  }
+
+  td {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    color: #1e293b;
+  }
+}
+
+.badge {
+  padding: 0.5em 1em;
+  font-weight: 500;
+  border-radius: 50px;
+}
+
+.btn-outline-primary {
+  border-color: #e2e8f0;
+  color: #3b82f6;
+  &:hover {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+  }
+}
+
+.btn-outline-danger {
+  border-color: #e2e8f0;
+  color: #ef4444;
+  &:hover {
+    background-color: #ef4444;
+    border-color: #ef4444;
+    color: white;
+  }
+}
+
+.form-control:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.modal-content {
+  overflow: hidden;
+}

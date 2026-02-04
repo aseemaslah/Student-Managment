@@ -31,7 +31,7 @@ const addStudent = async (req, res) => {
     // Create user account
     const hash = await bcrypt.hash(password, 10);
     const user = await User.create({
-      username: username.toLowerCase().trim(),
+      username: username.toUpperCase().trim(),
       password: hash,
       role: "Student"
     });

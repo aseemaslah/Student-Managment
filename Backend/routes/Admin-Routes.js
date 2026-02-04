@@ -22,6 +22,9 @@ router.get("/dashboard-stats", Admin.getDashboardStats);
 router.get("/teacher-dashboard-stats", auth, Admin.getTeacherDashboardStats);
 router.get("/student-dashboard-stats", auth, Admin.getStudentDashboardStats);
 router.get("/exam-report", Admin.getExamReport);
+router.get("/admins", auth, allow("Admin"), Admin.getAdmins);
+router.put("/update-admin/:id", auth, allow("Admin"), Admin.updateAdmin);
+router.delete("/delete-admin/:id", auth, allow("Admin"), Admin.deleteAdmin);
 router.put("/update-teacher/:id", auth, allow("Admin"), Admin.updateTeacher);
 router.delete("/delete-teacher/:id", auth, allow("Admin"), Admin.DeleteTeacher);
 
