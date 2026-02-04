@@ -131,6 +131,14 @@ export class AdminService {
     return this.http.delete<any>(`http://localhost:3000/admin/delete-admin/${adminId}`);
   }
 
+  getStudentLeaves() {
+    return this.http.get<any>('http://localhost:3000/teacher/leaves');
+  }
+
+  updateLeaveStatus(leaveId: string, status: string) {
+    return this.http.put<any>(`http://localhost:3000/teacher/leaves/${leaveId}/status`, { status });
+  }
+
 
 
 }

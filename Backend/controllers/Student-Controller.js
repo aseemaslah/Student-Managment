@@ -18,7 +18,7 @@ const submitLeave = async (req, res) => {
     }
 
     const { startDate, endDate, reason } = req.body;
-    
+
     const leave = await Leave.create({
       studentId: studentProfile._id,
       startDate,
@@ -93,6 +93,7 @@ const getStudentLeaves = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 const getDashboardStats = async (req, res) => {
   try {

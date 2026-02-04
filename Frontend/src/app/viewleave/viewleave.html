@@ -1,61 +1,95 @@
 <div class="d-flex">
 
   <!-- Sidebar -->
-<app-teachersidebar></app-teachersidebar>
+  <app-teachersidebar></app-teachersidebar>
 
   <!-- Main -->
-  <div class="flex-grow-1 p-4 bg-light">
+  <div class="flex-grow-1 p-4 bg-light min-vh-100">
 
-    <div class="top-bar">
+    <div class="top-bar mb-4">
       <div class="title">
-        <h3>Leave Requests</h3>
-        <p>Approve or reject student leaves</p>
+        <h3 class="fw-bold text-dark">Leave Requests</h3>
+        <p class="text-muted">Approve or reject student leaves from your class</p>
       </div>
     </div>
 
     <div class="card p-4 border-0 rounded-4 shadow-sm">
 
-      <table class="table align-middle">
-        <thead>
-          <tr>
-            <th>Student</th>
-            <th>Class</th>
-            <th>From</th>
-            <th>To</th>
-            <th>Reason</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
+      @if (loading) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary"></div>
+        <p class="mt-2 text-muted">Loading leave requests...</p>
+      </div>
+      } @else {
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="bg-light">
+            <tr>
+              <th>Student</th>
+              <th>Class</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Reason</th>
+              <th>Status</th>
+              <th class="text-end">Action</th>
+            </tr>
+          </thead>
 
-        <tbody>
+          <tbody>
+            @for (leave of leaves; track leave._id) {
+            <tr>
+              <td>
+                <div class="fw-bold">{{ leave.studentId?.userId?.username }}</div>
+              </td>
+              <td>
+                <span class="badge bg-secondary-subtle text-secondary border">
+                  {{ leave.studentId?.classId?.Class }} {{ leave.studentId?.classId?.Division }}
+                </span>
+              </td>
+              <td>{{ leave.startDate | date:'dd MMM yyyy' }}</td>
+              <td>{{ leave.endDate | date:'dd MMM yyyy' }}</td>
+              <td>
+                <div class="text-wrap" style="max-width: 200px;">
+                  {{ leave.reason }}
+                </div>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="{
+                      'bg-warning-subtle text-warning border border-warning': leave.status === 'Pending',
+                      'bg-success-subtle text-success border border-success': leave.status === 'Approved',
+                      'bg-danger-subtle text-danger border border-danger': leave.status === 'Rejected'
+                    }">
+                  {{ leave.status }}
+                </span>
+              </td>
+              <td class="text-end">
+                @if (leave.status === 'Pending') {
+                <button class="btn btn-success btn-sm me-2 px-3 rounded-pill"
+                  (click)="updateStatus(leave._id, 'Approved')">
+                  Approve
+                </button>
+                <button class="btn btn-danger btn-sm px-3 rounded-pill" (click)="updateStatus(leave._id, 'Rejected')">
+                  Reject
+                </button>
+                } @else {
+                <span class="text-muted small">Processed</span>
+                }
+              </td>
+            </tr>
+            }
 
-          <tr>
-            <td>Arjun</td>
-            <td>10 A</td>
-            <td>05 Mar</td>
-            <td>06 Mar</td>
-            <td>Fever</td>
-            <td><span class="badge bg-warning">Pending</span></td>
-            <td>
-              <button class="btn btn-success btn-sm">Approve</button>
-              <button class="btn btn-danger btn-sm">Reject</button>
-            </td>
-          </tr>
+            @if (leaves.length === 0) {
+            <tr>
+              <td colspan="7" class="text-center py-5 text-muted">
+                <i class="bi bi-info-circle me-2"></i> No leave requests found
+              </td>
+            </tr>
+            }
+          </tbody>
 
-          <tr>
-            <td>Sneha</td>
-            <td>10 A</td>
-            <td>02 Mar</td>
-            <td>02 Mar</td>
-            <td>Family event</td>
-            <td><span class="badge bg-success">Approved</span></td>
-            <td>-</td>
-          </tr>
-
-        </tbody>
-
-      </table>
+        </table>
+      </div>
+      }
 
     </div>
 

@@ -9,7 +9,7 @@ export class TeacherService {
 
   private API = 'http://localhost:3000/api/teachers';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getTeachers(): Observable<any[]> {
     return this.http.get<any[]>(this.API);
@@ -26,5 +26,6 @@ export class TeacherService {
 
 
 
-  
+
+
 }

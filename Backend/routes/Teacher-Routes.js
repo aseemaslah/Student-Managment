@@ -12,6 +12,6 @@ router.get("/attendance", auth, allow("Teacher"), Teacher.viewAttendance);
 router.post("/marks", auth, allow("Teacher"), Teacher.addMarks);
 router.put("/update-student/:id", auth, allow("Teacher"), Teacher.updateStudent);
 router.delete("/delete-student/:id", auth, allow("Teacher"), Teacher.DeleteStudent);
-
-
+router.get("/leaves", auth, allow("Teacher"), Teacher.getStudentLeaves);
+router.put("/leaves/:id/status", auth, allow("Teacher"), Teacher.updateLeaveStatus);
 module.exports = router;
