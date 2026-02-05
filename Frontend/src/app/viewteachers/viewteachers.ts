@@ -1,16 +1,6 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  ChangeDetectorRef
-} from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Adminsidebar } from '../adminsidebar/adminsidebar';
 import { AdminService } from '../services/admin-service';
@@ -50,16 +40,14 @@ export class Viewteachers implements OnInit {
     this.loadClasses();
   }
 
-  /* ================= FORM ================= */
   initForm() {
     this.editTeacherForm = this.fb.group({
       username: ['', Validators.required],
       password: [''],
-      assignedClass: [null] 
+      assignedClass: [null]
     });
   }
 
-  /* ================= LOAD TEACHERS ================= */
   loadTeachers() {
     this.loading = true;
     this.cdr.markForCheck();
@@ -78,7 +66,6 @@ export class Viewteachers implements OnInit {
     });
   }
 
-  /* ================= LOAD CLASSES ================= */
   loadClasses() {
     this.adminService.getClasses().subscribe({
       next: (data: any) => {
@@ -91,7 +78,6 @@ export class Viewteachers implements OnInit {
     });
   }
 
-  /* ================= OPEN MODAL ================= */
   openEditModal(teacher: any) {
     this.selectedTeacherId = teacher._id;
 
@@ -106,8 +92,6 @@ export class Viewteachers implements OnInit {
     );
     modal.show();
   }
-
-  /* ================= UPDATE TEACHER ================= */
   updateTeacher() {
     if (this.editTeacherForm.invalid) return;
 
@@ -151,6 +135,6 @@ export class Viewteachers implements OnInit {
 
 
 
-  
- 
+
+
 }

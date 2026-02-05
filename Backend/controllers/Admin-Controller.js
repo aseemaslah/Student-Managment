@@ -57,9 +57,7 @@ const createClass = async (req, res) => {
     console.log('Class created successfully:', newClass);
     res.json({ message: "Class created", data: newClass });
   } catch (error) {
-    // console.error('=== CREATE CLASS ERROR ===');
-    // console.error('Error name:', error.name);
-    // console.error('Error message:', error.message);
+
     res.status(500).json({ error: error.message, details: error.name });
   }
 };
@@ -87,7 +85,19 @@ const assignTeacher = async (req, res) => {
 const getTeachers = async (req, res) => {
   try {
     const teachers = await User.find({ role: 'Teacher' }).select('_id username');
-    res.json(teachers);
+
+    // Find assigned class for each teacher
+    const teachersWithClasses = await Promise.all(teachers.map(async (teacher) => {
+      const assignedClass = await Class.findOne({ assignedTeacher: teacher._id })
+        .select('_id Class Division AcademicYear');
+
+      return {
+        ...teacher.toObject(),
+        assignedClass: assignedClass || null
+      };
+    }));
+
+    res.json(teachersWithClasses);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -102,58 +112,7 @@ const getClasses = async (req, res) => {
   }
 };
 
-// const createStudent = async (req, res) => {
-//   try {
-//     console.log('=== CREATE STUDENT REQUEST ===');
-//     console.log('Request body:', JSON.stringify(req.body, null, 2));
 
-//     const { username, password, rollNo, classId } = req.body;
-
-//     if (!username || !password || !rollNo || !classId) {
-//       return res.status(400).json({ error: 'Missing required fields' });
-//     }
-
-//     // Check if username already exists
-//     const existingUser = await User.findOne({ username });
-//     if (existingUser) {
-//       return res.status(400).json({ error: `Username '${username}' already exists. Please choose a different username.` });
-//     }
-
-//     // Check if roll number already exists in the same class
-//     const existingStudent = await StudentProfile.findOne({ rollNo, classId });
-//     if (existingStudent) {
-//       return res.status(400).json({ error: `Roll number '${rollNo}' already exists in this class.` });
-//     }
-
-//     // Create user account
-//     const hash = await bcrypt.hash(password, 10);
-//     const user = await User.create({ 
-//       username, 
-//       password: hash, 
-//       role: "Student" 
-//     });
-//     console.log('User created:', user._id);
-
-//     // Create student profile
-//     const studentProfile = await StudentProfile.create({
-//       userId: user._id,
-//       rollNo,
-//       classId
-//     });
-//     console.log('Student profile created:', studentProfile);
-
-//     res.json({ message: "Student created successfully" });
-//   } catch (error) {
-//     if (error.code === 11000) {
-//       if (error.message.includes('username')) {
-//         return res.status(400).json({ error: 'Username already exists. Please choose a different username.' });
-//       }
-//       return res.status(400).json({ error: 'Duplicate entry found.' });
-//     }
-
-//     res.status(500).json({ error: error.message });
-//   }
-// };
 
 const getStudents = async (req, res) => {
   try {
@@ -166,40 +125,6 @@ const getStudents = async (req, res) => {
   }
 };
 
-// const markAttendance = async (req, res) => {
-//   try {
-//     console.log('=== MARK ATTENDANCE REQUEST ===');
-//     console.log('Request body:', JSON.stringify(req.body, null, 2));
-//     console.log('JWT User:', req.user);
-
-//     const { studentId, date, status } = req.body;
-//     const teacherId = req.user?.id; // Get teacher ID from JWT
-
-//     if (!studentId || !teacherId || !date || !status) {
-//       return res.status(400).json({ error: 'Missing required fields' });
-//     }
-
-//     // Check if attendance already marked for this student on this date
-//     const existingAttendance = await Attendance.findOne({ studentId, date });
-//     if (existingAttendance) {
-//       // Update existing attendance
-//       existingAttendance.status = status;
-//       existingAttendance.teacherId = teacherId;
-//       await existingAttendance.save();
-//       console.log('Attendance updated:', existingAttendance);
-//       return res.json({ message: "Attendance updated successfully" });
-//     }
-
-//     const attendanceRecord = await Attendance.create({ studentId, teacherId, date, status });
-//     // console.log('Attendance marked successfully:', attendanceRecord);
-//     res.json({ message: "Attendance marked successfully" });
-//   } catch (error) {
-//     // console.error('=== MARK ATTENDANCE ERROR ===');
-//     // console.error('Error name:', error.name);
-//     // console.error('Error message:', error.message);
-//     res.status(500).json({ error: error.message });
-//   }
-// };
 
 const addExamMarks = async (req, res) => {
   try {
@@ -211,70 +136,7 @@ const addExamMarks = async (req, res) => {
   }
 };
 
-// const getTeacherAttendanceReport = async (req, res) => {
-//   try {
-//     console.log('=== GET TEACHER ATTENDANCE REPORT ===');
-//     const teacherId = req.user?.id;
-//     console.log('Teacher ID:', teacherId);
 
-//     if (!teacherId) {
-//       return res.status(401).json({ error: 'Teacher not authenticated' });
-//     }
-
-//     // Get teacher's assigned classes
-//     const teacherClasses = await Class.find({ assignedTeacher: teacherId });
-//     console.log('Teacher classes:', teacherClasses);
-//     const classIds = teacherClasses.map(cls => cls._id);
-//     console.log('Class IDs:', classIds);
-
-//     if (classIds.length === 0) {
-//       console.log('No classes assigned to teacher');
-//       return res.json([]);
-//     }
-
-//     // Get students from teacher's classes
-//     const students = await StudentProfile.find({ classId: { $in: classIds } });
-//     console.log('Students in teacher classes:', students.length);
-//     const studentIds = students.map(s => s._id);
-//     console.log('Student IDs:', studentIds);
-
-//     // Check all attendance records first
-//     const allAttendance = await Attendance.find();
-//     console.log('Total attendance records in DB:', allAttendance.length);
-
-//     // Get attendance for these students
-//     const { startDate, endDate } = req.query;
-//     let filter = { studentId: { $in: studentIds } };
-
-//     if (startDate && endDate) {
-//       filter.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
-//     }
-
-//     console.log('Filter:', filter);
-
-//     const attendance = await Attendance.find(filter)
-//       .populate({
-//         path: 'studentId',
-//         populate: [
-//           { path: 'userId', select: 'username' },
-//           { path: 'classId', select: 'Class Division AcademicYear' }
-//         ]
-//       })
-//       .populate('teacherId', 'username')
-//       .sort({ date: -1 });
-
-//     console.log('Filtered attendance records:', attendance.length);
-//     console.log('Sample attendance record:', attendance[0]);
-//     res.json(attendance)
-//       .sort({ date: -1 });
-
-//     console.log('Filtered attendance records:', attendance.length);
-//     res.json(attendance);
-//   } catch (error) {
-//     console.error('Error in getTeacherAttendanceReport:', error);
-//     res.status(500).json({ error: error.message });
-//   }
-// };
 
 const getTeacherClassSummary = async (req, res) => {
   try {
@@ -347,79 +209,79 @@ const debugAttendance = async (req, res) => {
   }
 };
 
-const getStudentAttendanceSummary = async (req, res) => {
-  try {
-    const { studentId } = req.params;
+// const getStudentAttendanceSummary = async (req, res) => {
+//   try {
+//     const { studentId } = req.params;
 
-    const attendance = await Attendance.find({ studentId })
-      .populate({
-        path: 'studentId',
-        populate: {
-          path: 'userId',
-          select: 'username'
-        }
-      })
-      .sort({ date: -1 });
+//     const attendance = await Attendance.find({ studentId })
+//       .populate({
+//         path: 'studentId',
+//         populate: {
+//           path: 'userId',
+//           select: 'username'
+//         }
+//       })
+//       .sort({ date: -1 });
 
-    const total = attendance.length;
-    const present = attendance.filter(record => record.status === 'Present').length;
-    const absent = total - present;
-    const percentage = total > 0 ? ((present / total) * 100).toFixed(2) : 0;
+//     const total = attendance.length;
+//     const present = attendance.filter(record => record.status === 'Present').length;
+//     const absent = total - present;
+//     const percentage = total > 0 ? ((present / total) * 100).toFixed(2) : 0;
 
-    res.json({
-      student: attendance[0]?.studentId,
-      total,
-      present,
-      absent,
-      percentage,
-      records: attendance
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+//     res.json({
+//       student: attendance[0]?.studentId,
+//       total,
+//       present,
+//       absent,
+//       percentage,
+//       records: attendance
+//     });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
-const getClassAttendanceSummary = async (req, res) => {
-  try {
-    const { classId } = req.params;
+// const getClassAttendanceSummary = async (req, res) => {
+//   try {
+//     const { classId } = req.params;
 
-    // Get all students in the class
-    const students = await StudentProfile.find({ classId })
-      .populate('userId', 'username');
+//     // Get all students in the class
+//     const students = await StudentProfile.find({ classId })
+//       .populate('userId', 'username');
 
-    const summaries = [];
+//     const summaries = [];
 
-    for (const student of students) {
-      const attendance = await Attendance.find({ studentId: student._id });
-      const total = attendance.length;
-      const present = attendance.filter(record => record.status === 'Present').length;
-      const percentage = total > 0 ? ((present / total) * 100).toFixed(2) : 0;
+//     for (const student of students) {
+//       const attendance = await Attendance.find({ studentId: student._id });
+//       const total = attendance.length;
+//       const present = attendance.filter(record => record.status === 'Present').length;
+//       const percentage = total > 0 ? ((present / total) * 100).toFixed(2) : 0;
 
-      summaries.push({
-        student: student,
-        total,
-        present,
-        absent: total - present,
-        percentage
-      });
-    }
+//       summaries.push({
+//         student: student,
+//         total,
+//         present,
+//         absent: total - present,
+//         percentage
+//       });
+//     }
 
-    res.json(summaries);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+//     res.json(summaries);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
-const getExamReport = async (req, res) => {
-  try {
-    const marks = await ExamMark.find()
-      .populate('studentId', 'username')
-      .sort({ examType: 1 });
-    res.json(marks);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+// const getExamReport = async (req, res) => {
+//   try {
+//     const marks = await ExamMark.find()
+//       .populate('studentId', 'username')
+//       .sort({ examType: 1 });
+//     res.json(marks);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 const getTeacherClasses = async (req, res) => {
   try {
@@ -454,38 +316,38 @@ const getTeacherClasses = async (req, res) => {
   }
 };
 
-const getTeacherStudents = async (req, res) => {
-  try {
-    console.log('=== GET TEACHER STUDENTS DEBUG ===');
-    console.log('JWT User:', req.user);
+// const getTeacherStudents = async (req, res) => {
+//   try {
+//     console.log('=== GET TEACHER STUDENTS DEBUG ===');
+//     console.log('JWT User:', req.user);
 
-    const teacherId = req.user?.id;
-    console.log('Teacher ID from JWT:', teacherId);
+//     const teacherId = req.user?.id;
+//     console.log('Teacher ID from JWT:', teacherId);
 
-    if (!teacherId) {
-      console.log('No teacher ID found in JWT');
-      return res.status(401).json({ error: 'Teacher not authenticated' });
-    }
+//     if (!teacherId) {
+//       console.log('No teacher ID found in JWT');
+//       return res.status(401).json({ error: 'Teacher not authenticated' });
+//     }
 
-    const teacherClasses = await Class.find({ assignedTeacher: teacherId });
-    console.log('Teacher classes found:', teacherClasses);
+//     const teacherClasses = await Class.find({ assignedTeacher: teacherId });
+//     console.log('Teacher classes found:', teacherClasses);
 
-    const classIds = teacherClasses.map(cls => cls._id);
-    console.log('Class IDs:', classIds);
+//     const classIds = teacherClasses.map(cls => cls._id);
+//     console.log('Class IDs:', classIds);
 
-    const students = await StudentProfile.find({ classId: { $in: classIds } })
-      .populate('userId', 'username')
-      .populate('classId', 'Class Division AcademicYear');
+//     const students = await StudentProfile.find({ classId: { $in: classIds } })
+//       .populate('userId', 'username')
+//       .populate('classId', 'Class Division AcademicYear');
 
-    console.log('Students found:', students.length);
-    console.log('Students data:', students);
+//     console.log('Students found:', students.length);
+//     console.log('Students data:', students);
 
-    res.json(students);
-  } catch (error) {
-    console.error('Error getting teacher students:', error);
-    res.status(500).json({ error: error.message });
-  }
-};
+//     res.json(students);
+//   } catch (error) {
+//     console.error('Error getting teacher students:', error);
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 const getDashboardStats = async (req, res) => {
   try {
@@ -520,24 +382,24 @@ const getTeacherDashboardStats = async (req, res) => {
   }
 };
 
-const getStudentDashboardStats = async (req, res) => {
-  try {
-    const userId = req.user?.id;
-    if (!userId) {
-      return res.status(401).json({ error: 'Student not authenticated' });
-    }
-    const studentProfile = await Student
-      .findOne({ userId })
-      .populate('classId', 'Class Division AcademicYear');
-    if (!studentProfile) {
-      return res.status(404).json({ error: 'Student profile not found' });
-    }
+// const getStudentDashboardStats = async (req, res) => {
+//   try {
+//     const userId = req.user?.id;
+//     if (!userId) {
+//       return res.status(401).json({ error: 'Student not authenticated' });
+//     }
+//     const studentProfile = await Student
+//       .findOne({ userId })
+//       .populate('classId', 'Class Division AcademicYear');
+//     if (!studentProfile) {
+//       return res.status(404).json({ error: 'Student profile not found' });
+//     }
 
-    res.json({ class: studentProfile.classId });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+//     res.json({ class: studentProfile.classId });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 
 const DeleteTeacher = async (req, res) => {
@@ -553,13 +415,28 @@ const DeleteTeacher = async (req, res) => {
 const updateTeacher = async (req, res) => {
   try {
     const { id } = req.params;
-    const { username, password } = req.body;
+    const { username, password, classId } = req.body;
+
     const updateData = { username };
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
       updateData.password = hashedPassword;
     }
-    const teacher = await User.findByIdAndUpdate(id, updateData, { new: true });
+
+    // Update teacher user info
+    await User.findByIdAndUpdate(id, updateData, { new: true });
+
+    // Handle class assignment if classId is provided
+    if (classId !== undefined) {
+      // First, remove this teacher from any class they might already be assigned to
+      await Class.updateMany({ assignedTeacher: id }, { $unset: { assignedTeacher: "" } });
+
+      // Then, if a new classId is provided, assign the teacher to it
+      if (classId) {
+        await Class.findByIdAndUpdate(classId, { assignedTeacher: id });
+      }
+    }
+
     res.json({ message: 'Teacher updated successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -624,14 +501,14 @@ module.exports = {
   // getTeacherAttendanceReport,
   getTeacherClassSummary,
   debugAttendance,
-  getStudentAttendanceSummary,
-  getClassAttendanceSummary,
-  getExamReport,
+  // getStudentAttendanceSummary,
+  // getClassAttendanceSummary,
+  // getExamReport,
   getTeacherClasses,
-  getTeacherStudents,
+  // getTeacherStudents,
   getDashboardStats,
   getTeacherDashboardStats,
-  getStudentDashboardStats,
+  // getStudentDashboardStats,
   DeleteTeacher,
   updateTeacher,
   getAdmins,
