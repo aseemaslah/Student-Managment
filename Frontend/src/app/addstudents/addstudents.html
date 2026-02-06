@@ -1,7 +1,7 @@
 <div class="d-flex">
 
   <!-- Sidebar -->
-<app-teachersidebar></app-teachersidebar>
+  <app-teachersidebar></app-teachersidebar>
 
   <!-- Main -->
   <div class="flex-grow-1 p-4 bg-light">
@@ -31,12 +31,32 @@
           <div class="col-md-6">
             <label>Assigned Class</label>
             <select class="form-select" [(ngModel)]="studentData.classId" name="classId" required>
-              <option value="" *ngIf="classes.length === 0">No classes assigned to you</option>
-              <option value="" *ngIf="classes.length > 0">Select Assigned Class</option>
-              <option *ngFor="let class of classes" [value]="class._id">{{class.Class}} {{class.Division}} ({{class.AcademicYear}})</option>
+
+              @if (classes.length === 0) {
+              <option value="">No classes assigned to you</option>
+              } @else {
+              <option value="">Select Assigned Class</option>
+
+              @for (class of classes; track class._id) {
+              <option [value]="class._id">
+                {{ class.Class }} {{ class.Division }} ({{ class.AcademicYear }})
+              </option>
+              }
+              }
+
             </select>
-            <small class="text-muted" *ngIf="classes.length === 0">Ask admin to assign classes to you first</small>
-            <small class="text-muted" *ngIf="classes.length > 0">Only your assigned classes are shown</small>
+
+            @if (classes.length === 0) {
+            <small class="text-muted">
+              Ask admin to assign classes to you first
+            </small>
+            }
+
+            @if (classes.length > 0) {
+            <small class="text-muted">
+              Only your assigned classes are shown
+            </small>
+            }
           </div>
 
           <div class="col-md-6">
@@ -45,7 +65,9 @@
           </div>
 
           <div class="col-md-12 text-end mt-3">
-            <button type="submit" class="btn btn-primary">Add Student</button>
+            <button type="submit" class="btn btn-primary">
+              Add Student
+            </button>
           </div>
 
         </div>

@@ -48,8 +48,8 @@
 
           <!-- Submit -->
           <div class="col-md-12 text-end mt-3">
-            <button type="submit" class="btn btn-success">
-              Mark Attendance
+            <button type="submit" class="btn btn-success" [disabled]="loading">
+              {{ loading ? 'Saving...' : 'Mark Attendance' }}
             </button>
           </div>
 

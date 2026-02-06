@@ -14,9 +14,9 @@ import { CommonModule } from '@angular/common';
 export class Addstudents implements OnInit {
   private adminService = inject(AdminService);
   private cdr = inject(ChangeDetectorRef);
-  
+
   classes: any[] = [];
-  
+
   studentData = {
     username: '',
     password: '',
@@ -33,7 +33,7 @@ export class Addstudents implements OnInit {
 
   loadClasses() {
     console.log('Loading teacher classes...');
-    
+
     // Check if user is logged in
     const token = localStorage.getItem('token');
     if (!token) {
@@ -41,7 +41,7 @@ export class Addstudents implements OnInit {
       alert('Please login first');
       return;
     }
-    
+
     this.adminService.getTeacherClasses().subscribe({
       next: (data) => {
         console.log('Teacher classes loaded:', data);
@@ -70,12 +70,12 @@ export class Addstudents implements OnInit {
   onSubmit() {
     console.log('=== SUBMITTING STUDENT DATA ===');
     console.log('Student data:', JSON.stringify(this.studentData, null, 2));
-    
+
     if (!this.studentData.username || !this.studentData.password || !this.studentData.rollNo || !this.studentData.classId) {
       alert('Please fill all required fields');
       return;
     }
-    
+
     this.adminService.createStudent(this.studentData).subscribe({
       next: (response) => {
         console.log('Student creation response:', response);
@@ -86,14 +86,14 @@ export class Addstudents implements OnInit {
       error: (error) => {
         console.error('=== STUDENT CREATION ERROR ===');
         console.error('Full error object:', error);
-        
+
         let errorMessage = 'Error adding student';
         if (error.error && error.error.error) {
           errorMessage = error.error.error;
         } else if (error.message) {
           errorMessage = error.message;
         }
-        
+
         alert(errorMessage);
       }
     });

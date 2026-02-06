@@ -417,7 +417,7 @@ const updateTeacher = async (req, res) => {
     const { id } = req.params;
     const { username, password, classId } = req.body;
 
-    const updateData = { username };
+    const updateData = { username: username.toUpperCase().trim() };
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
       updateData.password = hashedPassword;
@@ -456,7 +456,7 @@ const updateAdmin = async (req, res) => {
   try {
     const { id } = req.params;
     const { username, password } = req.body;
-    const updateData = { username };
+    const updateData = { username: username.toUpperCase().trim() };
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
       updateData.password = hashedPassword;

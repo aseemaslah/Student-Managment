@@ -12,13 +12,23 @@ import { AdminService } from '../services/admin-service';
 })
 export class Addadmin {
   private adminService = inject(AdminService);
-  
+
   adminData = {
     username: '',
     password: ''
   };
 
+  showPassword = false;
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
   onSubmit() {
+    if (!this.adminData.username || !this.adminData.password) {
+      alert('Please fill all required fields');
+      return;
+    }
     this.adminService.createAdmin(this.adminData).subscribe({
       next: (response) => {
         alert('Admin created successfully!');

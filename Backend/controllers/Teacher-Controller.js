@@ -90,16 +90,33 @@ const markAttendance = async (req, res) => {
       targetStudentId = profile._id;
     }
 
-    const existingAttendance = await Attendance.findOne({ studentId: targetStudentId, date });
-    if (existingAttendance) {
-      existingAttendance.status = status;
-      existingAttendance.teacherId = teacherId;
-      await existingAttendance.save();
-      console.log('Attendance updated successfully');
-      return res.json({ message: "Attendance updated successfully" });
+    const queryDate = new Date(date);
+    const startOfDay = new Date(queryDate.setUTCHours(0, 0, 0, 0));
+    const endOfDay = new Date(queryDate.setUTCHours(23, 59, 59, 999));
+
+    // Get both potential IDs (Profile ID and User ID) to check for existence
+    let studentIdsToSearch = [targetStudentId];
+    const studentWithUser = await StudentProfile.findById(targetStudentId);
+    if (studentWithUser) {
+      studentIdsToSearch.push(studentWithUser.userId);
     }
 
-    const attendanceRecord = await Attendance.create({ studentId: targetStudentId, teacherId, date, status });
+    const existingAttendance = await Attendance.findOne({
+      studentId: { $in: studentIdsToSearch },
+      date: { $gte: startOfDay, $lte: endOfDay }
+    });
+
+    if (existingAttendance) {
+      console.log('Attendance already exists for this day');
+      return res.status(400).json({ error: "Attendance already marked for this student on this day" });
+    }
+
+    const attendanceRecord = await Attendance.create({
+      studentId: targetStudentId,
+      teacherId,
+      date: startOfDay, // Store as normalized UTC midnight
+      status
+    });
     console.log('Attendance created successfully:', attendanceRecord._id);
     res.json({ message: "Attendance marked successfully" });
   } catch (error) {
@@ -173,13 +190,13 @@ const updateStudent = async (req, res) => {
     if (username) {
       // Check if username is already taken by another user
       const existingUser = await User.findOne({
-        username: username.toLowerCase().trim(),
+        username: username.toUpperCase().trim(),
         _id: { $ne: studentProfile.userId } // Exclude current user
       });
       if (existingUser) {
         return res.status(400).json({ error: 'Username already exists' });
       }
-      userUpdateData.username = username.toLowerCase().trim();
+      userUpdateData.username = username.toUpperCase().trim();
     }
 
     if (password) {

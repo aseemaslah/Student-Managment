@@ -1,32 +1,60 @@
 <app-adminsidebar></app-adminsidebar>
+
 <div class="main-content p-4">
   <h2 class="mb-4">Add New Teacher</h2>
-  <form>
+
+  <form #teacherForm="ngForm" novalidate>
 
     <div class="row g-3">
 
+      <!-- Username -->
       <div class="col-md-6">
         <label>Username</label>
-        <input
-          class="form-control"
-          [(ngModel)]="teacherData.username"
-          name="username">
+        <input class="form-control" name="username" [(ngModel)]="teacherData.username" #username="ngModel" required
+          minlength="3" />
+
+        @if (username.touched && username.errors?.['required']) {
+        <small class="text-danger">
+          Username is required
+        </small>
+        }
+
+        @if (username.touched && username.errors?.['minlength']) {
+        <small class="text-danger">
+          Username must be at least 3 characters
+        </small>
+        }
       </div>
 
+      <!-- Password -->
       <div class="col-md-6">
         <label>Password</label>
-        <input
-          type="password"
-          class="form-control"
-          [(ngModel)]="teacherData.password"
-          name="password">
+
+        <div class="input-group">
+          <input [type]="showPassword ? 'text' : 'password'" class="form-control" name="password"
+            [(ngModel)]="teacherData.password" #password="ngModel" required minlength="3" />
+
+          <button type="button" class="btn btn-outline-secondary" (click)="togglePassword()">
+            {{ showPassword ? 'Hide' : 'Show' }}
+          </button>
+        </div>
+
+        @if (password.touched && password.errors?.['required']) {
+        <small class="text-danger">
+          Password is required
+        </small>
+        }
+
+        @if (password.touched && password.errors?.['minlength']) {
+        <small class="text-danger">
+          Password must be at least 6 characters
+        </small>
+        }
       </div>
 
+      <!-- Submit -->
       <div class="col-md-12 text-end mt-3">
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="createTeacher()">
+        <button type="button" class="btn btn-primary" [disabled]="teacherForm.invalid" (click)="createTeacher()">
           Create Teacher
         </button>
       </div>

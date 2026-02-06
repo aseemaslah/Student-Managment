@@ -1,7 +1,7 @@
 <div class="d-flex">
 
   <!-- Sidebar -->
-<app-adminsidebar></app-adminsidebar>
+  <app-adminsidebar></app-adminsidebar>
 
   <!-- Main -->
   <div class="flex-grow-1 p-4 bg-light">
@@ -15,28 +15,66 @@
 
     <div class="card p-4 border-0 rounded-4 shadow-sm">
 
-      <form (ngSubmit)="onSubmit()">
+      <form #adminForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+
         <div class="row g-3">
 
+          <!-- Username -->
           <div class="col-md-6">
             <label>Username</label>
-            <input class="form-control" [(ngModel)]="adminData.username" name="username" required>
+            <input class="form-control" name="username" [(ngModel)]="adminData.username" #username="ngModel" required
+              minlength="3" />
+
+            @if (username.touched && username.errors?.['required']) {
+            <small class="text-danger">
+              Username is required
+            </small>
+            }
+
+            @if (username.touched && username.errors?.['minlength']) {
+            <small class="text-danger">
+              Username must be at least 3 characters
+            </small>
+            }
           </div>
 
+          <!-- Password -->
           <div class="col-md-6">
             <label>Password</label>
-            <input type="password" class="form-control" [(ngModel)]="adminData.password" name="password" required>
+
+            <div class="input-group">
+              <input [type]="showPassword ? 'text' : 'password'" class="form-control" name="password"
+                [(ngModel)]="adminData.password" #password="ngModel" required minlength="3" />
+
+              <button type="button" class="btn btn-outline-secondary" (click)="togglePassword()">
+                {{ showPassword ? 'Hide' : 'Show' }}
+              </button>
+            </div>
+
+            @if (password.touched && password.errors?.['required']) {
+            <small class="text-danger">
+              Password is required
+            </small>
+            }
+
+            @if (password.touched && password.errors?.['minlength']) {
+            <small class="text-danger">
+              Password must be at least 6 characters
+            </small>
+            }
           </div>
 
+          <!-- Submit -->
           <div class="col-md-12 text-end mt-3">
-            <button type="submit" class="btn btn-danger">Create Admin</button>
+            <button type="submit" class="btn btn-danger" [disabled]="adminForm.invalid">
+              Create Admin
+            </button>
           </div>
 
         </div>
       </form>
 
     </div>
-
   </div>
 
 </div>

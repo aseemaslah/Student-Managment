@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 export class Markattendance implements OnInit {
   private adminService = inject(AdminService);
   private cdr = inject(ChangeDetectorRef);
-  
+
   students: any[] = [];
   attendanceData = {
     studentId: '',
@@ -35,25 +35,31 @@ export class Markattendance implements OnInit {
     });
   }
 
+  loading = false;
+
   onSubmit() {
     console.log('Submitting attendance data:', this.attendanceData);
-    
+
     if (!this.attendanceData.studentId || !this.attendanceData.date) {
       alert('Please select a student and date');
       return;
     }
-    
+
+    this.loading = true;
     this.adminService.markAttendance(this.attendanceData).subscribe({
       next: (response) => {
         console.log('Attendance response:', response);
         alert('Attendance marked successfully!');
         this.attendanceData.studentId = '';
+        this.loading = false;
         this.cdr.markForCheck();
       },
       error: (error) => {
         console.error('Full attendance error:', error);
         const errorMessage = error.error?.error || error.message || 'Error marking attendance';
         alert(errorMessage);
+        this.loading = false;
+        this.cdr.markForCheck();
       }
     });
   }

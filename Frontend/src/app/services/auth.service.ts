@@ -10,43 +10,35 @@ import { isPlatformBrowser } from '@angular/common';
 export class AuthService {
   private http = inject(HttpClient);
   private platformId = inject(PLATFORM_ID);
+
   private currentUserSubject = new BehaviorSubject<any>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
-  private initialized = false;
 
   constructor() {
-    // Don't initialize immediately - wait for first method call
-  }
-
-  private ensureInitialized() {
-    if (!this.initialized && isPlatformBrowser(this.platformId)) {
+    if (isPlatformBrowser(this.platformId)) {
       const user = localStorage.getItem('currentUser');
       if (user) {
         this.currentUserSubject.next(JSON.parse(user));
       }
-      this.initialized = true;
     }
   }
 
   login(username: string, password: string): Observable<any> {
-    this.ensureInitialized();
     return this.http.post<any>('http://localhost:3000/auth/login', { username, password })
       .pipe(
         tap(response => {
-          console.log('AuthService - Login response:', response);
-          if (response && response.token && isPlatformBrowser(this.platformId)) {
+          if (response?.token) {
             localStorage.setItem('token', response.token);
-            if (response.user) {
-              localStorage.setItem('currentUser', JSON.stringify(response.user));
-              this.currentUserSubject.next(response.user);
-            }
+          }
+          if (response?.user) {
+            localStorage.setItem('currentUser', JSON.stringify(response.user));
+            this.currentUserSubject.next(response.user);
           }
         })
       );
   }
 
   logout() {
-    this.ensureInitialized();
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('token');
       localStorage.removeItem('currentUser');
@@ -54,28 +46,18 @@ export class AuthService {
     this.currentUserSubject.next(null);
   }
 
-  getCurrentUser() {
-    this.ensureInitialized();
-    return this.currentUserSubject.value;
-  }
-
   isLoggedIn(): boolean {
-    this.ensureInitialized();
     if (isPlatformBrowser(this.platformId)) {
       return !!localStorage.getItem('token');
     }
-    return false;
+    return true;
   }
 
   getUserRole(): string {
-    this.ensureInitialized();
-    const user = this.getCurrentUser();
-    return user?.role || '';
+    return this.currentUserSubject.value?.role || '';
   }
 
   getUserId(): string {
-    this.ensureInitialized();
-    const user = this.getCurrentUser();
-    return user?._id || '';
+    return this.currentUserSubject.value?._id || '';
   }
 }

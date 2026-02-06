@@ -16,24 +16,24 @@
 
     <!-- Loading / Stats -->
     @if (myClasses.length > 0) {
-      @for (cls of myClasses; track cls._id) {
-      <div class="row g-4">
-        <div class="col-md-3">
-          <div class="card stat-card bg-primary text-white">
-            <h6>My Classes</h6>
-            <h2>{{ cls.Class }} {{ cls.Division }}
-        ({{ cls.AcademicYear }})</h2>
-          </div>
+    @for (cls of myClasses; track cls._id) {
+    <div class="row g-4">
+      <div class="col-md-3">
+        <div class="card stat-card bg-primary text-white">
+          <h6>My Classes</h6>
+          <h2>{{ cls.Class }} {{ cls.Division }}
+            ({{ cls.AcademicYear }})</h2>
         </div>
       </div>
+    </div>
     }
     } @else {
-      <div class="alert alert-info">
-        You are not assigned to any classes yet.
-      </div>
-    } 
-   
-  
+    <div class="alert alert-info">
+      You are not assigned to any classes yet.
+    </div>
+    }
+
+
 
     <!-- Actions -->
     <div class="row mt-5 g-4">
