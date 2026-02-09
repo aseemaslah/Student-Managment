@@ -386,6 +386,128 @@ const getTeacherClassSummary = async (req, res) => {
   }
 };
 
+const bulkMarkAttendance = async (req, res) => {
+  try {
+    const { attendanceRecords } = req.body;
+    const teacherId = req.user?.id;
+
+    if (!Array.isArray(attendanceRecords) || attendanceRecords.length === 0) {
+      return res.status(400).json({ error: 'No attendance records provided' });
+    }
+
+    const results = [];
+    for (const record of attendanceRecords) {
+      const { studentId, date, status } = record;
+
+      if (!studentId || !date || !status) continue;
+
+      let targetStudentId = studentId;
+      const profile = await StudentProfile.findOne({ userId: studentId });
+      if (profile) {
+        targetStudentId = profile._id;
+      }
+
+      const queryDate = new Date(date);
+      const startOfDay = new Date(queryDate.setUTCHours(0, 0, 0, 0));
+      const endOfDay = new Date(queryDate.setUTCHours(23, 59, 59, 999));
+
+      // Find both Profile ID and User ID to check for existence
+      let studentIdsToSearch = [targetStudentId];
+      const studentWithUser = await StudentProfile.findById(targetStudentId);
+      if (studentWithUser) {
+        studentIdsToSearch.push(studentWithUser.userId);
+      }
+
+      // We use await instead of bulkWrite to reuse existing logic for duplicates check
+      // However, for bulkMarkAttendance we can decide to overwrite or skip
+      // For this implementation, we will UPSERT or SKIP if exists.
+      // Let's go with UPSERT (update if exists, insert if not) to make it resilient.
+
+      await Attendance.findOneAndUpdate(
+        {
+          studentId: { $in: studentIdsToSearch },
+          date: { $gte: startOfDay, $lte: endOfDay }
+        },
+        {
+          studentId: targetStudentId,
+          teacherId,
+          date: startOfDay,
+          status
+        },
+        { upsert: true, new: true }
+      );
+    }
+
+    res.json({ message: "Bulk attendance processed successfully" });
+  } catch (error) {
+    console.error('Error in bulkMarkAttendance:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const bulkAddMarks = async (req, res) => {
+  try {
+
+    const { examData } = req.body;
+
+    if (!examData || !Array.isArray(examData)) {
+      return res.status(400).json({ error: 'Invalid marks data format' });
+    }
+
+    const results = [];
+    for (const mark of examData) {
+      const { studentId, subject, examType, marks, total } = mark;
+
+      if (!studentId || !subject || !examType || marks === undefined || !total) {
+        results.push({
+          studentId,
+          subject,
+          examType,
+          marks,
+          total,
+          error: 'Missing required fields'
+        });
+        continue;
+      }
+
+      try {
+        await ExamMark.create({
+          studentId,
+          subject,
+          examType,
+          marks: Number(marks),
+          total: Number(total)
+        });
+        results.push({
+          studentId,
+          subject,
+          examType,
+          marks,
+          total,
+          success: true
+        });
+      } catch (error) {
+        results.push({
+          studentId,
+          subject,
+          examType,
+          marks,
+          total,
+          error: error.message
+        });
+      }
+    }
+
+    res.json({
+      message: 'Bulk marks processed successfully',
+      results
+    });
+  } catch (error) {
+    console.error('Error in bulkAddMarks:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   addStudent,
   getStudents,
@@ -397,5 +519,7 @@ module.exports = {
   getStudentLeaves,
   updateLeaveStatus,
   getTeacherAttendanceReport,
-  getTeacherClassSummary
+  getTeacherClassSummary,
+  bulkMarkAttendance,
+  bulkAddMarks
 };

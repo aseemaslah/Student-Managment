@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 export class Viewresults implements OnInit {
   private studentService = inject(StudentService);
   private cdr = inject(ChangeDetectorRef);
-  
+
   examData: any[] = [];
   loading = true;
 
@@ -21,6 +21,7 @@ export class Viewresults implements OnInit {
   }
 
   loadMyMarks() {
+
     this.studentService.getMyMarks().subscribe({
       next: (data) => {
         this.examData = data || [];

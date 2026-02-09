@@ -6,56 +6,83 @@
   <!-- Main -->
   <div class="flex-grow-1 p-4 bg-light">
 
-    <div class="top-bar">
+    <div class="top-bar mb-3">
       <div class="title">
-        <h3>Mark Attendance</h3>
-        <p>Select student and mark attendance</p>
+        <h3>Attendance Sheet</h3>
+        <p>Mark monthly attendance</p>
       </div>
     </div>
 
     <div class="card p-4 border-0 rounded-4 shadow-sm">
-      <form (ngSubmit)="onSubmit()">
-        <div class="row g-3">
 
-          <!-- Student -->
-          <div class="col-md-4">
-            <label class="form-label">Student</label>
-            <select class="form-select" [(ngModel)]="attendanceData.studentId" name="studentId" required>
-              <option value="">Select Student</option>
-
-              @for (student of students; track student._id) {
-              <option [value]="student._id">
-                {{ student.userId?.username }}
-              </option>
-              }
-            </select>
-          </div>
-
-          <!-- Date -->
-          <div class="col-md-4">
-            <label class="form-label">Date</label>
-            <input type="date" class="form-control" [(ngModel)]="attendanceData.date" name="date" required />
-          </div>
-
-          <!-- Status -->
-          <div class="col-md-4">
-            <label class="form-label">Status</label>
-            <select class="form-select" [(ngModel)]="attendanceData.status" name="status" required>
-              <option value="Present">Present</option>
-              <option value="Absent">Absent</option>
-            </select>
-          </div>
-
-          <!-- Submit -->
-          <div class="col-md-12 text-end mt-3">
-            <button type="submit" class="btn btn-success" [disabled]="loading">
-              {{ loading ? 'Saving...' : 'Mark Attendance' }}
-            </button>
-          </div>
-
+      <!-- Month Selector -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Select Month</label>
+          <input type="month" class="form-control" [(ngModel)]="selectedMonth" (change)="generateDates()" />
         </div>
-      </form>
-    </div>
+      </div>
 
+      <!-- Attendance Table -->
+      @if (loading) {
+      <div class="text-center p-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2 text-muted">Processing students...</p>
+      </div>
+      } @else if (selectedMonth && monthDates.length > 0) {
+      <div class="table-responsive mt-3" style="max-height: 500px; overflow-y: auto;">
+        <table class="table table-bordered table-hover text-center align-middle">
+          <thead class="table-dark sticky-top">
+            <tr>
+              <th style="min-width: 150px; position: sticky; left: 0; z-index: 10; background: #212529;">Student Name
+              </th>
+              @for (date of monthDates; track date) {
+              <th style="min-width: 45px;">
+                <small>{{ date | date:'EEE' }}</small><br>
+                {{ date | date:'dd' }}
+              </th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (student of students; track student._id) {
+            <tr>
+              <td class="fw-semibold text-start" style="position: sticky; left: 0; background: white; z-index: 5;">
+                {{ student.userId?.username }}
+              </td>
+              @for (date of monthDates; track date) {
+              <td>
+                <input type="checkbox" class="form-check-input" [(ngModel)]="attendance[student._id][date]"
+                  name="{{ student._id + date }}" [id]="student._id + date" />
+              </td>
+              }
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Save Button -->
+      <div class="text-end mt-4">
+        <button class="btn btn-primary px-4 py-2 fw-bold shadow-sm" (click)="saveAttendance()" [disabled]="loading">
+          <i class="fas fa-save me-2"></i>
+          {{ loading ? 'Saving...' : 'Save Attendance' }}
+        </button>
+      </div>
+      } @else if (selectedMonth) {
+      <div class="alert alert-info mt-3">
+        Initializing attendance sheet for the selected month...
+      </div>
+      } @else {
+      <div class="text-center p-5 text-muted">
+        <i class="fas fa-calendar-alt fa-3x mb-3 opacity-25"></i>
+        <p>Please select a month to mark attendance</p>
+      </div>
+      }
+
+
+    </div>
   </div>
 </div>

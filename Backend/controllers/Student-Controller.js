@@ -49,7 +49,8 @@ const getStudentAttendance = async (req, res) => {
       studentId: { $in: [studentProfile._id, userId] }
     })
       .populate('teacherId', 'username')
-      .sort({ date: -1 });
+      .sort({ date: -1 })
+
 
     res.json(attendance);
   } catch (error) {
@@ -59,18 +60,36 @@ const getStudentAttendance = async (req, res) => {
 
 const getStudentMarks = async (req, res) => {
   try {
-    const userId = req.user?.id;
+    // get student user id from auth middleware
+    const userId = req.user?.id || req.user?._id;
+
     if (!userId) {
-      return res.status(401).json({ error: 'Student not authenticated' });
+      return res.status(401).json({
+        error: 'Student not authenticated'
+      });
+    }
+    const studentProfile = await StudentProfile.findOne({ userId });
+    if (!studentProfile) {
+      return res.status(404).json({ error: 'Student profile not found' });
     }
 
-    // Find marks directly using userId since ExamMark.studentId references User model
-    const marks = await ExamMark.find({ studentId: userId })
-      .sort({ examType: 1, subject: 1 });
+    const examData = await ExamMark.find({
+      studentId: { $in: [studentProfile._id, userId] }
+    })
+      .populate('studentId', 'username')
+      .sort({ subject: 1, examType: 1, marks: -1 });
+    console.log(examData);
 
-    res.json(marks);
+
+
+    // return empty array if no marks found (safe for frontend)
+    return res.status(200).json(examData);
+
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error fetching student marks:', error);
+    return res.status(500).json({
+      error: 'Failed to fetch marks'
+    });
   }
 };
 

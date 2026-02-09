@@ -1,4 +1,4 @@
-import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID, afterNextRender } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -15,11 +15,25 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor() {
+    // Initialize from localStorage during construction (browser only)
     if (isPlatformBrowser(this.platformId)) {
+      this.initializeFromLocalStorage();
+    }
+
+    // Also initialize after client-side hydration (handles SSR case)
+    afterNextRender(() => {
+      this.initializeFromLocalStorage();
+    });
+  }
+
+  private initializeFromLocalStorage() {
+    try {
       const user = localStorage.getItem('currentUser');
-      if (user) {
+      if (user && !this.currentUserSubject.value) {
         this.currentUserSubject.next(JSON.parse(user));
       }
+    } catch (e) {
+      console.error('Error initializing from localStorage:', e);
     }
   }
 
@@ -54,10 +68,54 @@ export class AuthService {
   }
 
   getUserRole(): string {
-    return this.currentUserSubject.value?.role || '';
+    if (this.currentUserSubject.value?.role) {
+      return this.currentUserSubject.value.role;
+    }
+
+    // Fallback to localStorage for page refresh scenarios
+    // Only access localStorage in browser context (not during SSR)
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        const user = localStorage.getItem('currentUser');
+        if (user) {
+          const parsedUser = JSON.parse(user);
+          // Also update the BehaviorSubject so it's in sync
+          if (!this.currentUserSubject.value) {
+            this.currentUserSubject.next(parsedUser);
+          }
+          return parsedUser.role || '';
+        }
+      } catch (e) {
+        console.error('Error accessing localStorage:', e);
+      }
+    }
+
+    return '';
   }
 
   getUserId(): string {
-    return this.currentUserSubject.value?._id || '';
+    if (this.currentUserSubject.value?._id) {
+      return this.currentUserSubject.value._id;
+    }
+
+    // Fallback to localStorage for page refresh scenarios
+    // Only access localStorage in browser context (not during SSR)
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        const user = localStorage.getItem('currentUser');
+        if (user) {
+          const parsedUser = JSON.parse(user);
+          // Also update the BehaviorSubject so it's in sync
+          if (!this.currentUserSubject.value) {
+            this.currentUserSubject.next(parsedUser);
+          }
+          return parsedUser._id || '';
+        }
+      } catch (e) {
+        console.error('Error accessing localStorage in getUserId:', e);
+      }
+    }
+
+    return '';
   }
 }

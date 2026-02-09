@@ -95,7 +95,12 @@ export class AdminService {
     return this.http.post<any>('http://localhost:3000/teacher/addattendance', attendanceData);
   }
 
+  bulkMarkAttendance(attendanceRecords: any[]) {
+    return this.http.post<any>('http://localhost:3000/teacher/bulk-attendance', { attendanceRecords });
+  }
+
   viewAttendance() {
+
     return this.http.get<any>('http://localhost:3000/teacher/attendance');
   }
 
@@ -139,6 +144,12 @@ export class AdminService {
     return this.http.put<any>(`http://localhost:3000/teacher/leaves/${leaveId}/status`, { status });
   }
 
+  bulkAddMarks(examData: any[]) {
+    return this.http.post<any>(
+      'http://localhost:3000/teacher/bulk-marks',
+      { examData }
+    );
+  }
 
 
 }
