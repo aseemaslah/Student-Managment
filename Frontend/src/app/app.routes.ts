@@ -29,6 +29,7 @@ import { authGuard } from './services/auth.guard';
 
 export const routes: Routes = [
 
+
     {
         path: "main",
         component: Main
@@ -45,17 +46,20 @@ export const routes: Routes = [
     {
         path: "admin",
         component: Admin,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Admin'] }
     },
     {
         path: "teacher",
-        component:Teacher,
-        canActivate: [authGuard]
+        component: Teacher,
+        canActivate: [authGuard],
+        data: { roles: ['Teacher'] }
     },
     {
         path: "student",
         component: Student,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Student'] }
     },
     {
         path: "registration",
@@ -64,103 +68,119 @@ export const routes: Routes = [
     {
         path: "addteacher",
         component: Addteacher,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Admin'] }
     },
     {
         path: "addadmin",
         component: Addadmin,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Admin'] }
     },
     {
         path: "addstudents",
         component: Addstudents,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Teacher'] }
     },
     {
         path: "assignteachers",
         component: Assignteacher,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Admin'] }
     },
     {
         path: "createclass",
         component: Createclass,
-        canActivate: [authGuard]   
+        canActivate: [authGuard],
+        data: { roles: ['Admin'] }
     },
     {
         path: "markattendance",
         component: Markattendance,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Teacher'] }
     },
     {
         path: "attendancereport",
         component: Attendancereport,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Teacher'] }
     },
     {
         path: "entermarks",
         component: Entermarks,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Teacher'] }
     },
     {
         path: "viewstudents",
         component: Viewstudents,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Teacher', 'Admin'] }
     },
     {
         path: "teacherviewstudents",
         component: Teacherviewstudents,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Teacher'] }
     },
     {
         path: "viewresults",
         component: Viewresults,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Student'] }
     },
     {
         path: "viewteachers",
         component: Viewteachers,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Admin'] }
     },
     {
         path: "viewadmins",
         component: Viewadmins,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Admin'] }
     },
     {
         path: "viewattendance",
         component: Viewattendance,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Student'] }
     },
 
     {
         path: "reqleave",
         component: Reqleave,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Student'] }
     },
     {
         path: "viewleave",
         component: Viewleave,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Teacher', 'Admin'] }
     },
     {
         path: "adminsidebar",
         component: Adminsidebar,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Admin'] }
     },
     {
         path: "teachersidebar",
         component: Teachersidebar,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Teacher'] }
     },
     {
         path: "studentsidebar",
         component: Studentsidebar,
-        canActivate: [authGuard]
-    },
-    {
-        path: "student",
-        component: Student,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        data: { roles: ['Student'] }
     }
 
+
 ];
+

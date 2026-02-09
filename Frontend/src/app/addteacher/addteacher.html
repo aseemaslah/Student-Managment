@@ -34,7 +34,7 @@
           <input [type]="showPassword ? 'text' : 'password'" class="form-control" name="password"
             [(ngModel)]="teacherData.password" #password="ngModel" required minlength="3" />
 
-          <button type="button" class="btn btn-outline-secondary" (click)="togglePassword()">
+          <button type="button" class="btn btn-outline-secondary " (click)="togglePassword()">
             {{ showPassword ? 'Hide' : 'Show' }}
           </button>
         </div>

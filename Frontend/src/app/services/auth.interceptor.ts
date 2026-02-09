@@ -9,11 +9,11 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let token = null;
-    
+
     if (isPlatformBrowser(this.platformId)) {
       token = localStorage.getItem('token');
     }
-    
+
     console.log('Auth Interceptor - Token:', token ? 'Present' : 'Missing');
     console.log('Auth Interceptor - Request URL:', req.url);
 

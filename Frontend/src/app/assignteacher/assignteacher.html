@@ -23,21 +23,16 @@
           <!-- Teacher -->
           <div class="col-md-6">
             <label class="form-label">Teacher</label>
-            <select
-              class="form-select"
-              [(ngModel)]="assignmentData.teacherId"
-              name="teacherId"
-              required
-            >
+            <select class="form-select" [(ngModel)]="assignmentData.teacherId" name="teacherId" required>
               @if (loadingTeachers) {
-                <option value="">Loading teachers...</option>
+              <option value="">Loading teachers...</option>
               } @else {
-                <option value="">Select Teacher</option>
-                @for (teacher of teachers; track teacher._id) {
-                  <option [value]="teacher._id">
-                    {{ teacher.username }}
-                  </option>
-                }
+              <option value="">Select Teacher</option>
+              @for (teacher of teachers; track teacher._id) {
+              <option [value]="teacher._id">
+                {{ teacher.username }}
+              </option>
+              }
               }
             </select>
           </div>
@@ -45,27 +40,22 @@
           <!-- Class -->
           <div class="col-md-6">
             <label class="form-label">Class</label>
-            <select
-              class="form-select"
-              [(ngModel)]="assignmentData.classId"
-              name="classId"
-              required
-            >
+            <select class="form-select" [(ngModel)]="assignmentData.classId" name="classId" required>
               @if (loadingClasses) {
-                <option value="">Loading classes...</option>
+              <option value="">Loading classes...</option>
               } @else {
-                <option value="">Select Class</option>
-                @for (cls of classes; track cls._id) {
-                  <option [value]="cls._id">
-                    {{ cls.Class }} {{ cls.Division }} ({{ cls.AcademicYear }})
-                  </option>
-                }
+              <option value="">Select Class</option>
+              @for (cls of classes; track cls._id) {
+              <option [value]="cls._id">
+                {{ cls.Class }} {{ cls.Division }} ({{ cls.AcademicYear }})
+              </option>
+              }
               }
             </select>
           </div>
 
           <!-- Subjects -->
-          <div class="col-md-12">
+          <!-- <div class="col-md-12">
             <label class="form-label">Subjects</label>
 
             <div class="input-group mb-2">
@@ -104,15 +94,11 @@
                 }
               </div>
             }
-          </div>
+          </div> -->
 
           <!-- Submit -->
           <div class="col-md-12 text-end mt-4">
-            <button
-              type="submit"
-              class="btn btn-primary px-4"
-              [disabled]="assignForm.invalid"
-            >
+            <button type="submit" class="btn btn-primary px-4" [disabled]="assignForm.invalid">
               Assign
             </button>
           </div>
