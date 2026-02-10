@@ -65,7 +65,6 @@ export class Viewteachers implements OnInit {
       }
     });
   }
-
   loadClasses() {
     this.adminService.getClasses().subscribe({
       next: (data: any) => {

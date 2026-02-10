@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Adminsidebar } from '../adminsidebar/adminsidebar';
 import { AdminService } from '../services/admin-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-createclass',
@@ -13,6 +14,7 @@ import { AdminService } from '../services/admin-service';
 export class Createclass implements OnInit {
 
   private adminService = inject(AdminService);
+  private router = inject(Router);
 
   // Form model
   classData = {
@@ -71,6 +73,7 @@ export class Createclass implements OnInit {
           Division: '',
           AcademicYear: ''
         };
+        this.router.navigate(['/assignteachers']);
       },
       error: (error) => {
         console.error('Full error object:', error);

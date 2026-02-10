@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { Adminsidebar } from "../adminsidebar/adminsidebar";
 import { AdminService } from '../services/admin-service';
 import { FormsModule } from '@angular/forms';
@@ -17,6 +17,7 @@ export class Addteacher {
   };
 
   private adminService = inject(AdminService)
+  private router = inject(Router)
 
   showPassword = false;
 
@@ -35,6 +36,7 @@ export class Addteacher {
 
         next: () => {
           alert('Teacher created successfully');
+          this.router.navigate(['/viewteachers']);
 
         },
 

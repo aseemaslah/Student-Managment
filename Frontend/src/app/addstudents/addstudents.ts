@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { Teachersidebar } from "../teachersidebar/teachersidebar";
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../services/admin-service';
@@ -14,11 +14,13 @@ import { CommonModule } from '@angular/common';
 export class Addstudents implements OnInit {
   private adminService = inject(AdminService);
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
 
   classes: any[] = [];
 
   studentData = {
     username: '',
+    name: '',
     password: '',
     rollNo: '',
     classId: ''
@@ -80,8 +82,9 @@ export class Addstudents implements OnInit {
       next: (response) => {
         console.log('Student creation response:', response);
         alert('Student added successfully!');
-        this.studentData = { username: '', password: '', rollNo: '', classId: '' };
+        this.studentData = { username: '', name: '', password: '', rollNo: '', classId: '' };
         this.cdr.markForCheck();
+        this.router.navigate(['/teacherviewstudents']);
       },
       error: (error) => {
         console.error('=== STUDENT CREATION ERROR ===');

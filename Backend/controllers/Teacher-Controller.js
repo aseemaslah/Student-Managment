@@ -11,9 +11,9 @@ const addStudent = async (req, res) => {
     console.log('=== CREATE STUDENT REQUEST ===');
     console.log('Request body:', JSON.stringify(req.body, null, 2));
 
-    const { username, password, rollNo, classId } = req.body;
+    const { username, password, name, rollNo, classId } = req.body;
 
-    if (!username || !password || !rollNo || !classId) {
+    if (!username || !password || !name || !rollNo || !classId) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -41,6 +41,7 @@ const addStudent = async (req, res) => {
     // Create student profile
     const studentProfile = await StudentProfile.create({
       userId: user._id,
+      name: name.toUpperCase().trim(),
       rollNo,
       classId
     });
@@ -64,7 +65,7 @@ const getStudents = async (req, res) => {
   if (!assignedClass) return res.status(404).json({ error: "No class assigned to teacher" });
 
   const students = await StudentProfile.find({ classId: assignedClass._id })
-    .populate('userId', 'username')
+    .populate('userId', 'name username')
     .populate('classId', 'Class Division AcademicYear');
   res.json(students);
 };

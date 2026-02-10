@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Adminsidebar } from "../adminsidebar/adminsidebar";
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../services/admin-service';
@@ -12,7 +12,7 @@ import { AdminService } from '../services/admin-service';
 })
 export class Addadmin {
   private adminService = inject(AdminService);
-
+  private router = inject(Router);
   adminData = {
     username: '',
     password: ''
@@ -33,10 +33,12 @@ export class Addadmin {
       next: (response) => {
         alert('Admin created successfully!');
         this.adminData = { username: '', password: '' };
+        this.router.navigate(['/viewadmins']);
       },
       error: (error) => {
         alert('Error creating admin: ' + error.message);
       }
+
     });
   }
 }

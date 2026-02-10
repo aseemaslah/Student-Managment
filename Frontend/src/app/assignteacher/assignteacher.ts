@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { Adminsidebar } from "../adminsidebar/adminsidebar";
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../services/admin-service';
@@ -14,12 +14,13 @@ import { CommonModule } from '@angular/common';
 export class Assignteacher implements OnInit {
   private adminService = inject(AdminService);
   private cdr = inject(ChangeDetectorRef);
-  
+  private router = inject(Router);
+
   teachers: any[] = [];
   classes: any[] = [];
   loadingTeachers = true;
   loadingClasses = true;
-  
+
   assignmentData = {
     teacherId: '',
     classId: '',
@@ -73,16 +74,16 @@ export class Assignteacher implements OnInit {
     });
   }
 
-  addSubject() {
-    if (this.selectedSubject && !this.assignmentData.subjects.includes(this.selectedSubject)) {
-      this.assignmentData.subjects.push(this.selectedSubject);
-      this.selectedSubject = '';
-    }
-  }
+  // addSubject() {
+  //   if (this.selectedSubject && !this.assignmentData.subjects.includes(this.selectedSubject)) {
+  //     this.assignmentData.subjects.push(this.selectedSubject);
+  //     this.selectedSubject = '';
+  //   }
+  // }
 
-  removeSubject(index: number) {
-    this.assignmentData.subjects.splice(index, 1);
-  }
+  // removeSubject(index: number) {
+  //   this.assignmentData.subjects.splice(index, 1);
+  // }
 
   onSubmit() {
     this.adminService.assignTeacher(this.assignmentData).subscribe({
@@ -90,6 +91,7 @@ export class Assignteacher implements OnInit {
         alert('Teacher assigned successfully!');
         this.assignmentData = { teacherId: '', classId: '', subjects: [] };
         this.cdr.markForCheck();
+        this.router.navigate(['/viewteachers']);
       },
       error: (error) => {
         alert('Error assigning teacher: ' + error.message);
