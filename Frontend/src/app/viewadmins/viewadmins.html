@@ -95,8 +95,10 @@
                     <div class="mb-4">
                         <label class="form-label fw-semibold">New Password</label>
                         <input type="password" class="form-control rounded-3" formControlName="password"
-                            placeholder="Leave blank to keep current password" />
-                        <small class="text-muted mt-1 d-block">Only fill if you want to change the password.</small>
+                            placeholder="Leave blank to keep current password" minlength="3" />
+                        @if (editAdminForm.get('password')?.hasError('minlength')) {
+                        <small class="text-danger">Minimum 3 characters required</small>
+                        }
                     </div>
 
                 </div>

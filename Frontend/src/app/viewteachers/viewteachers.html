@@ -108,8 +108,11 @@
           <!-- Password -->
           <div class="mb-3">
             <label class="form-label">New Password</label>
-            <input type="password" class="form-control" formControlName="password"
+            <input type="password" class="form-control" formControlName="password" minlength="3"
               placeholder="Leave blank to keep old password" />
+            @if (editTeacherForm.get('password')?.hasError('minlength')) {
+            <small class="text-danger">Minimum 3 characters required</small>
+            }
           </div>
 
           <hr />

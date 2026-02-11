@@ -20,17 +20,50 @@
 
           <div class="col-md-6">
             <label>User Name</label>
-            <input class="form-control" [(ngModel)]="studentData.username" name="username" required>
+            <input class="form-control" [(ngModel)]="studentData.username" name="username" required minlength="3"
+              #usernameRef="ngModel">
+            @if (usernameRef.invalid && usernameRef.touched) {
+            <small class="text-danger">
+              @if (usernameRef.errors?.['required']) {
+              Username is required
+              }
+              @if (usernameRef.errors?.['minlength']) {
+              Minimum 3 characters required
+              }
+            </small>
+            }
           </div>
 
           <div class="col-md-6">
             <label> Name</label>
-            <input class="form-control" [(ngModel)]="studentData.name" name="name" required>
+            <input class="form-control" [(ngModel)]="studentData.name" name="name" required minlength="3"
+              #nameRef="ngModel">
+            @if (nameRef.invalid && nameRef.touched) {
+            <small class="text-danger">
+              @if (nameRef.errors?.['required']) {
+              Name is required
+              }
+              @if (nameRef.errors?.['minlength']) {
+              Minimum 3 characters required
+              }
+            </small>
+            }
           </div>
 
           <div class="col-md-6">
             <label>Roll No</label>
-            <input class="form-control" [(ngModel)]=" studentData.rollNo" name="rollNo" required>
+            <input class="form-control" [(ngModel)]=" studentData.rollNo" name="rollNo" required minlength="3"
+              #rollNoRef="ngModel">
+            @if (rollNoRef.invalid && rollNoRef.touched) {
+            <small class="text-danger">
+              @if (rollNoRef.errors?.['required']) {
+              Roll No is required
+              }
+              @if (rollNoRef.errors?.['minlength']) {
+              Minimum 3 characters required
+              }
+            </small>
+            }
           </div>
 
           <div class="col-md-6">
@@ -66,8 +99,22 @@
 
           <div class="col-md-6">
             <label>Password</label>
-            <input type="password" class="form-control" [(ngModel)]="studentData.password" name="password" required>
+
+            <input type="password" class="form-control" [(ngModel)]="studentData.password" name="password" required
+              minlength="3" #passwordRef="ngModel">
+
+            @if (passwordRef.invalid && passwordRef.touched) {
+            <small class="text-danger">
+              @if (passwordRef.errors?.['required']) {
+              Password is required
+              }
+              @if (passwordRef.errors?.['minlength']) {
+              Minimum 3 characters required
+              }
+            </small>
+            }
           </div>
+
 
           <div class="col-md-12 text-end mt-3">
             <button type="submit" class="btn btn-primary">

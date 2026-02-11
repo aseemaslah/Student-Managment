@@ -3,7 +3,7 @@
     <div class="row align-items-center">
 
       <!-- Left -->
-      <div class="col-md-6 text-white">
+      <div class="col-md-6 text-white hero-left">
         <img src="assets/logo.png" alt="EduManage Logo" class="mb-4" style="width: 250px;">
         <h1 class="display-4 fw-bold">EduManage</h1>
         <p class="lead mt-3">
@@ -15,38 +15,88 @@
       <!-- Right -->
       <div class="col-md-5 offset-md-1">
         <div class="login-card p-4">
+
           <h4 class="text-center mb-3">Login</h4>
 
-          <form (ngSubmit)="login()">
+          <!-- ERROR MESSAGE -->
+          @if (errorMessage) {
+          <div class="alert alert-danger fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ errorMessage }}
+          </div>
+          }
+
+          <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+
+            <!-- Username -->
             <div class="mb-3">
               <label class="form-label fw-semibold">Username</label>
+
               <div class="input-group">
                 <span class="input-group-text border-end-0 bg-white text-muted">
                   <i class="bi bi-person"></i>
                 </span>
-                <input type="text" class="form-control border-start-0" placeholder="Enter username"
-                  [(ngModel)]="username" name="username">
+
+                <input type="text" class="form-control border-start-0" placeholder="Enter username" name="username"
+                  [(ngModel)]="username" required minlength="3" #usernameRef="ngModel">
               </div>
+
+              @if (usernameRef.invalid && usernameRef.touched) {
+              <small class="text-danger">
+                @if (usernameRef.errors?.['required']) {
+                Username is required
+                }
+                @if (usernameRef.errors?.['minlength']) {
+                Minimum 3 characters required
+                }
+              </small>
+              }
             </div>
 
+            <!-- Password -->
             <div class="mb-3">
               <label class="form-label fw-semibold">Password</label>
+
               <div class="input-group">
                 <span class="input-group-text border-end-0 bg-white text-muted">
                   <i class="bi bi-lock"></i>
                 </span>
+
                 <input [type]="showPassword ? 'text' : 'password'" class="form-control border-start-0"
-                  placeholder="Enter password" [(ngModel)]="password" name="password">
-                <button class="btn btn-outline-secondary border-start-0 bg-white text-muted" type="button"
+                  placeholder="Enter password" name="password" [(ngModel)]="password" required minlength="3"
+                  #passwordRef="ngModel">
+
+                <button type="button" class="btn btn-outline-secondary border-start-0 bg-white text-muted"
                   (click)="showPassword = !showPassword">
                   <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
                 </button>
               </div>
+
+              @if (passwordRef.invalid && passwordRef.touched) {
+              <small class="text-danger">
+                @if (passwordRef.errors?.['required']) {
+                Password is required
+                }
+                @if (passwordRef.errors?.['minlength']) {
+                Minimum 3 characters required
+                }
+              </small>
+              }
             </div>
 
-            <button class="btn btn-primary w-100 py-2 fw-bold mt-2" type="submit">
+            <!-- Submit -->
+            <button class="btn btn-primary w-100 py-2 fw-bold mt-2" type="submit"
+              [disabled]="loginForm.invalid || loading">
+
+              @if (loading) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              Logging in...
+              } @else {
               <i class="bi bi-box-arrow-in-right me-2"></i>Login
+              }
+
             </button>
+
           </form>
 
         </div>
@@ -55,4 +105,5 @@
     </div>
   </div>
 </section>
+
 <app-footer></app-footer>

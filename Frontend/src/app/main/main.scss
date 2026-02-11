@@ -263,3 +263,26 @@ input[type="password"] {
 .login-card .input-group .form-control {
   border-right: none;
 }
+
+/* Error message animation */
+.alert {
+  animation: fadeSlide 0.3s ease;
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Disable button style */
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
