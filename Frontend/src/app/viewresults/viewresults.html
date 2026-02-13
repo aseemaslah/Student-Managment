@@ -28,7 +28,7 @@
       } @else {
       <div class="table-responsive">
         <table class="table table-hover align-middle">
-          <thead class="table-dark">
+          <thead class="table-dark text-center">
             <tr>
               <th>Subject</th>
               <th>Exam Type</th>
@@ -41,10 +41,10 @@
           <tbody>
             @for (exam of examData; track exam._id) {
             <tr>
-              <td>
+              <td class="text-center">
                 <strong>{{ exam.subject }}</strong>
               </td>
-              <td>
+              <td class="text-center">
                 <span class="badge bg-info">{{ exam.examType }}</span>
               </td>
               <td class="text-center">
@@ -72,7 +72,7 @@
       </div>
 
       <!-- Summary Stats -->
-      <div class="row mt-4 summary-stats">
+      <!-- <div class="row mt-4 summary-stats">
         <div class="col-md-4">
           <div class="text-center p-3 bg-primary text-white rounded">
             <h6>Total Subjects</h6>
@@ -91,7 +91,7 @@
             <h4>{{ getGrade(getAveragePercentage()) }}</h4>
           </div>
         </div>
-      </div>
+      </div> -->
       }
     </div>
 
