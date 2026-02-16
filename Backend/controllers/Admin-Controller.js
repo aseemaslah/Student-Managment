@@ -6,21 +6,76 @@ const ExamMark = require("../model/Exam-Marks-Model");
 const bcrypt = require("bcryptjs");
 const Teacher = require("../model/Teacher-Model");
 
+// const createTeacher = async (req, res) => {
+//   try {
+//     const hash = await bcrypt.hash(req.body.password, 10);
+
+//     const username = req.body.username.toUpperCase().trim();
+//     await User.create({
+//       username: username,
+//       password: hash,
+//       role: "Teacher"
+//     });
+//     res.json("Teacher created");
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 const createTeacher = async (req, res) => {
   try {
-    const hash = await bcrypt.hash(req.body.password, 10);
+    console.log('=== CREATE Teacher REQUEST ===');
+    console.log('Request body:', JSON.stringify(req.body, null, 2));
 
-    const username = req.body.username.toUpperCase().trim();
-    await User.create({
-      username: username,
+    const { username, password, name } = req.body;
+
+    if (!username || !password || !name) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const normalizedUsername = username.toUpperCase().trim();
+
+    // Check if username already exists
+    const existingUser = await User.findOne({ username: normalizedUsername });
+    if (existingUser) {
+      return res.status(400).json({ error: `Username '${normalizedUsername}' already exists. Please choose a different username.` });
+    }
+
+    // Create user account
+    const hash = await bcrypt.hash(password, 10);
+    const user = await User.create({
+      username: normalizedUsername,
       password: hash,
       role: "Teacher"
     });
-    res.json("Teacher created");
+    console.log('User created:', user._id);
+
+    // Drop legacy index if it exists to prevent duplicate key error on null EmployeeID
+    try {
+      await Teacher.collection.dropIndex('EmployeeID_1');
+    } catch (err) {
+      // Index doesn't exist or already dropped
+    }
+
+    // Create student profile
+    const teacherProfile = await Teacher.create({
+      userId: user._id,
+      name: name.toUpperCase().trim()
+    });
+    console.log('Teacher profile created:', teacherProfile);
+
+    res.json({ message: "Teacher created successfully" });
   } catch (error) {
+    console.error("Error creating teacher:", error);
+    if (error.code === 11000) {
+      if (error.message.includes('username')) {
+        return res.status(400).json({ error: 'Username already exists. Please choose a different username.' });
+      }
+      return res.status(400).json({ error: 'Duplicate entry found.' });
+    }
     res.status(500).json({ error: error.message });
   }
 };
+
 
 const createAdmin = async (req, res) => {
   try {
@@ -88,12 +143,15 @@ const getTeachers = async (req, res) => {
 
     // Find assigned class for each teacher
     const teachersWithClasses = await Promise.all(teachers.map(async (teacher) => {
-      const assignedClass = await Class.findOne({ assignedTeacher: teacher._id })
+      const teacherProfile = await Teacher.findOne({ userId: teacher._id }).select('name');
+      const assignedClasses = await Class.find({ assignedTeacher: teacher._id })
         .select('_id Class Division AcademicYear');
 
       return {
         ...teacher.toObject(),
-        assignedClass: assignedClass || null
+        name: teacherProfile ? teacherProfile.name : null,
+        assignedClasses: assignedClasses || [],
+        assignedClass: assignedClasses.length > 0 ? assignedClasses[0] : null
       };
     }));
 

@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 export class Addteacher {
   teacherData = {
     username: '',
+    name: '',
     password: ''
   };
 
@@ -27,7 +28,7 @@ export class Addteacher {
 
   createTeacher() {
 
-    if (!this.teacherData.username || !this.teacherData.password) {
+    if (!this.teacherData.username || !this.teacherData.password || !this.teacherData.name) {
       alert('Please fill all required fields');
       return;
     }

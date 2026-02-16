@@ -26,6 +26,24 @@
         }
       </div>
 
+      <!-- Name -->
+      <div class="col-md-6">
+        <label>Name</label>
+        <input class="form-control" name="name" [(ngModel)]="teacherData.name" #name="ngModel" required minlength="3" />
+
+        @if (name.touched && name.errors?.['required']) {
+        <small class="text-danger">
+          Name is required
+        </small>
+        }
+
+        @if (name.touched && name.errors?.['minlength']) {
+        <small class="text-danger">
+          Name must be at least 3 characters
+        </small>
+        }
+      </div>
+
       <!-- Password -->
       <div class="col-md-6">
         <label>Password</label>
