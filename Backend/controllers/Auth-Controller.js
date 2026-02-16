@@ -7,7 +7,7 @@ const login = async (req, res) => {
     console.log('=== LOGIN REQUEST ===');
     console.log('Request body:', req.body);
 
-    const user = await User.findOne({ username: req.body.username.toUpperCase().trim() });
+    const user = await User.findOne({ username: req.body.username.toLowerCase().trim() });
     console.log('User found:', user ? 'Yes' : 'No');
 
     if (!user) return res.status(401).json({ error: "Invalid credentials" });

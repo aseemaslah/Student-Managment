@@ -43,6 +43,7 @@ export class Viewteachers implements OnInit {
   initForm() {
     this.editTeacherForm = this.fb.group({
       username: ['', Validators.required],
+      name: ['', Validators.required],
       password: [''],
       assignedClass: [null]
     });
@@ -82,6 +83,7 @@ export class Viewteachers implements OnInit {
 
     this.editTeacherForm.patchValue({
       username: teacher.userId?.username || teacher.username,
+      name: teacher.userId?.name || teacher.name,
       password: '',
       assignedClass: teacher.assignedClass?._id || null
     });
@@ -98,6 +100,7 @@ export class Viewteachers implements OnInit {
 
     const payload: any = {
       username: this.editTeacherForm.value.username,
+      name: this.editTeacherForm.value.name,
       classId: this.editTeacherForm.value.assignedClass
     };
 

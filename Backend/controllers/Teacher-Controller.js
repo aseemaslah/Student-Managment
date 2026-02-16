@@ -32,7 +32,7 @@ const addStudent = async (req, res) => {
     // Create user account
     const hash = await bcrypt.hash(password, 10);
     const user = await User.create({
-      username: username.toUpperCase().trim(),
+      username: username.toLowerCase().trim(),
       password: hash,
       role: "Student"
     });
@@ -178,7 +178,7 @@ const DeleteStudent = async (req, res) => {
 const updateStudent = async (req, res) => {
   try {
     const { id } = req.params; // This is the StudentProfile ID
-    const { username, password, rollNo, classId } = req.body;
+    const { username, password, name, rollNo, classId } = req.body;
 
     // Find the student profile
     const studentProfile = await StudentProfile.findById(id);
@@ -191,13 +191,13 @@ const updateStudent = async (req, res) => {
     if (username) {
       // Check if username is already taken by another user
       const existingUser = await User.findOne({
-        username: username.toUpperCase().trim(),
+        username: username.toLowerCase().trim(),
         _id: { $ne: studentProfile.userId } // Exclude current user
       });
       if (existingUser) {
         return res.status(400).json({ error: 'Username already exists' });
       }
-      userUpdateData.username = username.toUpperCase().trim();
+      userUpdateData.username = username.toLowerCase().trim();
     }
 
     if (password) {
@@ -212,6 +212,7 @@ const updateStudent = async (req, res) => {
 
     // Update student profile if rollNo or classId provided
     const profileUpdateData = {};
+    if (name) profileUpdateData.name = name.toUpperCase().trim();
     if (rollNo) profileUpdateData.rollNo = rollNo;
     if (classId) profileUpdateData.classId = classId;
 

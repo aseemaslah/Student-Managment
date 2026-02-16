@@ -51,6 +51,7 @@ export class Teacherviewstudents implements OnInit {
   initForm() {
     this.editForm = this.fb.group({
       username: ['', Validators.required],
+      name: ['', Validators.required],
       password: [''] // optional
     });
   }
@@ -92,6 +93,7 @@ export class Teacherviewstudents implements OnInit {
 
     this.editForm.patchValue({
       username: student.userId?.username || '',
+      name: student.name || '',
       password: ''
     });
 
@@ -105,7 +107,8 @@ export class Teacherviewstudents implements OnInit {
     if (this.editForm.invalid) return;
 
     const payload: any = {
-      username: this.editForm.value.username.toLowerCase().trim()
+      username: this.editForm.value.username.toLowerCase().trim(),
+      name: this.editForm.value.name.toUpperCase().trim()
     };
 
     // 🔐 update password ONLY if entered

@@ -52,15 +52,11 @@
 
           <div class="col-md-6">
             <label>Roll No</label>
-            <input class="form-control" [(ngModel)]=" studentData.rollNo" name="rollNo" required minlength="3"
-              #rollNoRef="ngModel">
+            <input class="form-control" [(ngModel)]=" studentData.rollNo" name="rollNo" required #rollNoRef="ngModel">
             @if (rollNoRef.invalid && rollNoRef.touched) {
             <small class="text-danger">
               @if (rollNoRef.errors?.['required']) {
               Roll No is required
-              }
-              @if (rollNoRef.errors?.['minlength']) {
-              Minimum 3 characters required
               }
             </small>
             }

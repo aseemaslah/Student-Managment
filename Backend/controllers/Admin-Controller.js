@@ -32,7 +32,7 @@ const createTeacher = async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const normalizedUsername = username.toUpperCase().trim();
+    const normalizedUsername = username.toLowerCase().trim();
 
     // Check if username already exists
     const existingUser = await User.findOne({ username: normalizedUsername });
@@ -81,7 +81,7 @@ const createAdmin = async (req, res) => {
   try {
     const hash = await bcrypt.hash(req.body.password, 10);
     await User.create({
-      username: req.body.username.toUpperCase(),
+      username: req.body.username.toLowerCase().trim(),
       password: hash,
       role: "Admin"
     });
@@ -473,9 +473,9 @@ const DeleteTeacher = async (req, res) => {
 const updateTeacher = async (req, res) => {
   try {
     const { id } = req.params;
-    const { username, password, classId } = req.body;
+    const { username, password, name, classId } = req.body;
 
-    const updateData = { username: username.toUpperCase().trim() };
+    const updateData = { username: username.toLowerCase().trim() };
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
       updateData.password = hashedPassword;
@@ -483,6 +483,15 @@ const updateTeacher = async (req, res) => {
 
     // Update teacher user info
     await User.findByIdAndUpdate(id, updateData, { new: true });
+
+    // Update teacher profile with new name if provided
+    if (name) {
+      await Teacher.findOneAndUpdate(
+        { userId: id },
+        { name: name.toUpperCase().trim() },
+        { upsert: true, new: true }
+      );
+    }
 
     // Handle class assignment if classId is provided
     if (classId !== undefined) {
@@ -514,7 +523,7 @@ const updateAdmin = async (req, res) => {
   try {
     const { id } = req.params;
     const { username, password } = req.body;
-    const updateData = { username: username.toUpperCase().trim() };
+    const updateData = { username: username.toLowerCase().trim() };
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
       updateData.password = hashedPassword;
